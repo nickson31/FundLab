@@ -21,18 +21,18 @@ export default function Sidebar() {
 
     return (
         <motion.div
-            className="fixed left-0 top-0 h-full bg-white dark:bg-gray-900 border-r border-gray-200 dark:border-gray-800 z-50 flex flex-col"
-            initial={{ width: '60px' }}
-            animate={{ width: isHovered ? '240px' : '60px' }}
-            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="fixed left-0 top-0 h-full bg-background/80 backdrop-blur-xl border-r border-border z-50 flex flex-col shadow-xl"
+            initial={{ width: '70px' }}
+            animate={{ width: isHovered ? '260px' : '70px' }}
+            transition={{ type: "spring", stiffness: 300, damping: 30 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
         >
-            <div className="p-4 flex items-center justify-center h-16 border-b border-gray-100 dark:border-gray-800">
-                <Menu className="w-6 h-6 text-gray-500" />
+            <div className="p-4 flex items-center justify-center h-20 border-b border-border/50">
+                <Menu className="w-6 h-6 text-muted-foreground" />
             </div>
 
-            <nav className="flex-1 py-6 space-y-2 px-2">
+            <nav className="flex-1 py-8 space-y-2 px-3">
                 {navItems.map((item) => {
                     const isActive = pathname === item.href;
                     return (
@@ -40,16 +40,24 @@ export default function Sidebar() {
                             key={item.href}
                             href={item.href}
                             className={cn(
-                                "flex items-center px-3 py-3 rounded-lg transition-colors group",
+                                "flex items-center px-3 py-3 rounded-xl transition-all duration-300 group overflow-hidden relative",
                                 isActive
-                                    ? "bg-indigo-50 text-indigo-600 dark:bg-indigo-900/20 dark:text-indigo-400"
-                                    : "text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800"
+                                    ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                             )}
                         >
-                            <item.icon className={cn("w-6 h-6 min-w-[24px]", isActive ? "text-indigo-600" : "text-gray-500")} />
+                            {/* Active Shine Effect */}
+                            {isActive && (
+                                <motion.div
+                                    layoutId="active-nav-glow"
+                                    className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent opacity-20"
+                                />
+                            )}
+
+                            <item.icon className={cn("w-6 h-6 min-w-[24px] z-10", isActive ? "text-primary-foreground" : "text-muted-foreground group-hover:text-foreground")} strokeWidth={1.5} />
 
                             <motion.span
-                                className="ml-4 font-medium whitespace-nowrap overflow-hidden"
+                                className="ml-4 font-medium whitespace-nowrap overflow-hidden z-10"
                                 initial={{ opacity: 0, width: 0 }}
                                 animate={{ opacity: isHovered ? 1 : 0, width: isHovered ? 'auto' : 0 }}
                                 transition={{ duration: 0.2 }}
@@ -61,9 +69,9 @@ export default function Sidebar() {
                 })}
             </nav>
 
-            <div className="p-4 border-t border-gray-100 dark:border-gray-800">
+            <div className="p-4 border-t border-border/50 bg-muted/20">
                 <div className="flex items-center">
-                    <div className="w-8 h-8 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold text-xs">
+                    <div className="w-10 h-10 rounded-full bg-linear-to-tr from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-xs ring-2 ring-background">
                         FL
                     </div>
                     <motion.div
@@ -71,8 +79,8 @@ export default function Sidebar() {
                         initial={{ opacity: 0, width: 0 }}
                         animate={{ opacity: isHovered ? 1 : 0, width: isHovered ? 'auto' : 0 }}
                     >
-                        <p className="text-sm font-medium text-gray-900 dark:text-white">Founder</p>
-                        <p className="text-xs text-gray-500">Free Plan</p>
+                        <p className="text-sm font-medium text-foreground">Founder</p>
+                        <p className="text-xs text-muted-foreground">Free Plan</p>
                     </motion.div>
                 </div>
             </div>
