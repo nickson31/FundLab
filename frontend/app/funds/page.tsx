@@ -87,17 +87,17 @@ export default function FundsPage() {
     );
 
     return (
-        <div className="max-w-5xl mx-auto px-6 py-8">
+        <div className="max-w-7xl mx-auto px-6 py-8">
             <div className="flex items-center justify-between mb-8">
-                <h1 className="text-3xl font-bold text-gray-900 dark:text-white">Investment Funds</h1>
+                <h1 className="text-3xl font-medium text-white tracking-tight">Investment Funds</h1>
                 <div className="relative w-64">
-                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" />
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500" />
                     <input
                         type="text"
                         placeholder="Filter by name..."
                         value={search}
                         onChange={(e) => setSearch(e.target.value)}
-                        className="w-full pl-10 pr-4 py-2 bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                        className="w-full pl-10 pr-4 py-2 bg-black/20 text-white border border-white/10 rounded-lg focus:outline-none focus:ring-1 focus:ring-indigo-500 placeholder-gray-600 transition-all"
                     />
                 </div>
             </div>
@@ -105,27 +105,27 @@ export default function FundsPage() {
             {loading ? (
                 <div className="text-center py-20 text-gray-500">Loading saved funds...</div>
             ) : filteredFunds.length === 0 ? (
-                <div className="text-center py-20 bg-gray-50 dark:bg-gray-800 rounded-2xl border border-dashed border-gray-300 dark:border-gray-700">
-                    <p className="text-gray-500">No saved funds found.</p>
+                <div className="text-center py-20 glass-panel rounded-xl border border-dashed border-white/10">
+                    <p className="text-gray-400">No saved funds found.</p>
                 </div>
             ) : (
                 <div className="space-y-4">
                     {filteredFunds.map((fund) => (
-                        <div key={fund.id} className="bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                        <div key={fund.id} className="glass-panel rounded-xl border border-white/5 overflow-hidden transition-all hover:border-white/10">
                             <div
-                                className="p-6 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors flex items-center justify-between"
+                                className="p-6 cursor-pointer hover:bg-white/[0.02] transition-colors flex items-center justify-between"
                                 onClick={() => toggleFund(fund.id, fund.name)}
                             >
                                 <div>
-                                    <h3 className="text-xl font-bold text-gray-900 dark:text-white">{fund.name}</h3>
-                                    <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-1">{fund.short_description || fund.description}</p>
+                                    <h3 className="text-xl font-medium text-white tracking-tight">{fund.name}</h3>
+                                    <p className="text-sm text-gray-400 mt-1 line-clamp-1 font-light">{fund.short_description || fund.description}</p>
                                     <div className="flex items-center space-x-4 mt-3 text-xs text-gray-500">
                                         <span>{(fund.location_identifiers || []).join(', ')}</span>
                                         {fund.contact_email && <span>• {fund.contact_email}</span>}
                                     </div>
                                 </div>
-                                <div className="text-gray-400">
-                                    {expandedFundId === fund.id ? <ChevronUp /> : <ChevronDown />}
+                                <div className="text-gray-500">
+                                    {expandedFundId === fund.id ? <ChevronUp className="w-5 h-5" /> : <ChevronDown className="w-5 h-5" />}
                                 </div>
                             </div>
 
@@ -135,22 +135,22 @@ export default function FundsPage() {
                                         initial={{ height: 0 }}
                                         animate={{ height: 'auto' }}
                                         exit={{ height: 0 }}
-                                        className="overflow-hidden bg-gray-50 dark:bg-gray-900/50 border-t border-gray-100 dark:border-gray-700"
+                                        className="overflow-hidden bg-black/20 border-t border-white/5"
                                     >
                                         <div className="p-6">
-                                            <h4 className="text-sm font-bold text-gray-500 uppercase tracking-wide mb-4">Key People</h4>
+                                            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-4">Key People</h4>
                                             {employees[fund.id]?.length > 0 ? (
-                                                <div className="grid md:grid-cols-2 gap-4">
+                                                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
                                                     {employees[fund.id].map(emp => (
-                                                        <div key={emp.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700 flex items-start space-x-3">
-                                                            <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold shrink-0">
+                                                        <div key={emp.id} className="bg-white/5 p-4 rounded-lg border border-white/5 flex items-start space-x-3 hover:bg-white/10 transition-colors">
+                                                            <div className="w-10 h-10 bg-indigo-500/10 rounded-full flex items-center justify-center text-indigo-400 font-medium shrink-0 text-sm border border-indigo-500/20">
                                                                 {emp.profilePic ? <img src={emp.profilePic} className="w-full h-full rounded-full object-cover" /> : (emp.fullName || 'U')[0]}
                                                             </div>
                                                             <div>
-                                                                <div className="font-bold text-gray-900 dark:text-white">{emp.fullName}</div>
+                                                                <div className="font-medium text-gray-200 text-sm">{emp.fullName}</div>
                                                                 <div className="text-xs text-gray-500">{emp.jobTitle}</div>
                                                                 <div className="mt-2 flex space-x-2">
-                                                                    <span className="text-[10px] bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                                                                    <span className="text-[10px] bg-green-500/10 text-green-400 px-2 py-0.5 rounded border border-green-500/20">
                                                                         Score: {emp.score_combinado}
                                                                     </span>
                                                                 </div>
@@ -159,7 +159,7 @@ export default function FundsPage() {
                                                     ))}
                                                 </div>
                                             ) : (
-                                                <p className="text-sm text-gray-500 italic">No employees found for this fund.</p>
+                                                <p className="text-sm text-gray-600 italic">No employees found for this fund.</p>
                                             )}
                                         </div>
                                     </motion.div>
