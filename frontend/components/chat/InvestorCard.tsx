@@ -1,10 +1,11 @@
 'use client';
 
+import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Linkedin, Building2, MapPin } from 'lucide-react';
+import { ExternalLink, Linkedin, Building2, MapPin, Maximize2 } from 'lucide-react';
 
 interface InvestorCardProps {
     investor: any;
@@ -15,88 +16,96 @@ interface InvestorCardProps {
 }
 
 export default function InvestorCard({ investor, type, score, breakdown, onDraftMessage }: InvestorCardProps) {
+    const [isHovered, setIsHovered] = useState(false);
     const name = investor.fullName || investor.name;
     const headline = investor.headline || investor.short_description;
     const about = investor.about || investor.description;
     const location = investor.addressWithCountry || (investor.location_identifiers || []).join(', ');
 
     return (
-        <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, transition: { duration: 0.2 } }}
-            className="group glass-panel border border-white/5 p-6 rounded-xl transition-all duration-300 relative overflow-hidden"
+        <div
+            className="group relative flex flex-col items-start gap-4 p-5 rounded-2xl glass-panel border border-white/5 hover:border-white/10 hover:bg-white/[0.02] transition-all cursor-pointer overflow-hidden"
+            onMouseEnter={() => setIsHovered(true)}
+            onMouseLeave={() => setIsHovered(false)}
         >
-            {/* Gradient Glow on Hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/5 via-transparent to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            <div className="flex items-start justify-between mb-5 relative z-10">
-                <div className="flex items-center space-x-4">
-                    <Avatar className="w-14 h-14 border-2 border-white/10 shadow-md">
-                        <AvatarImage src={investor.profilePic} alt={name} />
-                        <AvatarFallback className="bg-primary/10 text-primary font-bold">
-                            {name?.substring(0, 2).toUpperCase()}
-                        </AvatarFallback>
-                    </Avatar>
+            <div className="flex items-start w-full gap-4 relative z-10">
+                {/* Refined Picture Section */}
+                <div className="relative shrink-0">
+                    <div className="w-16 h-16 rounded-xl overflow-hidden border border-white/10 shadow-lg group-hover:shadow-indigo-500/20 transition-all group-hover:scale-105 duration-300">
+                        {investor.profilePic ? (
+                            <img src={investor.profilePic} alt={name} className="w-full h-full object-cover" />
+                        ) : (
+                            <div className="w-full h-full bg-gradient-to-br from-indigo-500/20 to-purple-600/20 flex items-center justify-center text-white font-bold text-lg">
+                                {name?.charAt(0)}
+                            </div>
+                        )}
+                    </div>
+                    {score > 0 && (
+                        <div className="absolute -bottom-2 -right-2 bg-black/60 backdrop-blur-md border border-white/10 text-[10px] font-bold text-white px-2 py-0.5 rounded-full shadow-lg">
+                            {Math.round(score)}%
+                        </div>
+                    )}
+                </div>
 
-                    <div>
-                        <h3 className="font-bold text-foreground text-lg leading-tight group-hover:text-primary transition-colors">
+                <div className="flex-1 min-w-0 pt-1">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                        <h3 className="text-base font-semibold text-white tracking-tight truncate group-hover:text-indigo-400 transition-colors">
                             {name}
                         </h3>
-                        <p className="text-sm text-muted-foreground line-clamp-1 mt-1">{headline}</p>
+                        {/* Action Buttons Overlay */}
+                        <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                            {investor.linkedinUrl && (
+                                <a
+                                    href={investor.linkedinUrl}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                                >
+                                    <Linkedin className="w-3.5 h-3.5" />
+                                </a>
+                            )}
+                            {investor.website && (
+                                <a
+                                    href={investor.website}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors"
+                                >
+                                    <ExternalLink className="w-3.5 h-3.5" />
+                                </a>
+                            )}
+                            {onDraftMessage && (
+                                <button
+                                    onClick={() => onDraftMessage(investor)}
+                                    className="p-1.5 rounded-lg text-indigo-400 hover:text-indigo-300 hover:bg-indigo-500/10 transition-colors"
+                                >
+                                    <Maximize2 className="w-3.5 h-3.5" />
+                                </button>
+                            )}
+                        </div>
+                    </div>
+
+                    <p className="text-sm text-gray-400 line-clamp-2 font-light leading-relaxed mb-3">
+                        {headline || about || "No description available."}
+                    </p>
+
+                    <div className="flex flex-wrap gap-2">
+                        {(investor.location_identifiers || []).slice(0, 1).map((loc: string, i: number) => (
+                            <span key={i} className="inline-flex items-center gap-1 text-[10px] uppercase font-medium tracking-wider text-gray-500 bg-white/5 px-2 py-1 rounded-md border border-white/5">
+                                <MapPin className="w-3 h-3" />
+                                {loc}
+                            </span>
+                        ))}
+                        {type === 'angel' && investor.angel_score && (
+                            <span className="inline-flex items-center gap-1 text-[10px] uppercase font-medium tracking-wider text-blue-400 bg-blue-500/10 px-2 py-1 rounded-md border border-blue-500/20">
+                                Score: {investor.angel_score}
+                            </span>
+                        )}
                     </div>
                 </div>
-
-                <div className="text-right">
-                    <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
-                        {Math.round(score * 100)}%
-                    </div>
-                    <Badge variant="secondary" className="text-[10px] uppercase tracking-wider font-semibold bg-white/5 hover:bg-white/10 text-muted-foreground border-0">
-                        Match
-                    </Badge>
-                </div>
             </div>
-
-            <p className="text-sm text-foreground/80 mb-6 line-clamp-3 leading-relaxed relative z-10 min-h-[4.5em]">
-                {about || "No description available."}
-            </p>
-
-            <div className="flex items-center justify-between pt-4 border-t border-white/5 relative z-10">
-                <div className="flex items-center space-x-3 text-xs text-muted-foreground font-medium">
-                    <span className="flex items-center"><MapPin className="w-3 h-3 mr-1" /> {location || 'Global'}</span>
-                    {type === 'angel' && (
-                        <span className="flex items-center px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500">
-                            Angel Score: {investor.angel_score}
-                        </span>
-                    )}
-                </div>
-
-                <div className="flex items-center space-x-2">
-                    {investor.linkedinUrl && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-[#0077b5] hover:bg-white/5" asChild>
-                            <a href={investor.linkedinUrl} target="_blank" rel="noopener noreferrer">
-                                <Linkedin className="w-4 h-4" />
-                            </a>
-                        </Button>
-                    )}
-                    {investor.website && (
-                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-white/5" asChild>
-                            <a href={investor.website} target="_blank" rel="noopener noreferrer">
-                                <ExternalLink className="w-4 h-4" />
-                            </a>
-                        </Button>
-                    )}
-                    {onDraftMessage && (
-                        <Button
-                            onClick={() => onDraftMessage(investor)}
-                            size="sm"
-                            className="ml-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20"
-                        >
-                            Draft
-                        </Button>
-                    )}
-                </div>
-            </div>
-        </motion.div>
+        </div>
     );
 }

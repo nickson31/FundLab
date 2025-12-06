@@ -2,8 +2,8 @@
 
 import React from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Home, Users, Building2, FileText, Settings, Search, MoreHorizontal } from 'lucide-react';
+import { useRouter, usePathname } from 'next/navigation';
+import { Home, Users, Building2, FileText, Settings, Search, MoreHorizontal, ChevronLeft } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Button } from '@/components/ui/button';
 
@@ -14,6 +14,7 @@ interface MacShellProps {
 
 export default function MacShell({ children, sidePanel }: MacShellProps) {
     const pathname = usePathname();
+    const router = useRouter();
 
     // Default Nav Items
     const navItems = [
@@ -30,14 +31,22 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
 
                 {/* Mac Title Bar */}
                 <div className="flex border-b border-white/5 pt-4 pr-5 pb-4 pl-5 items-center justify-between bg-black/40 z-50 select-none">
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 group">
                             <div className="w-3 h-3 rounded-full bg-[#FF5F57] shadow-sm border border-transparent group-hover:border-[#E0443E] transition-colors"></div>
                             <div className="w-3 h-3 rounded-full bg-[#FEBC2E] shadow-sm border border-transparent group-hover:border-[#D89E24] transition-colors"></div>
                             <div className="w-3 h-3 rounded-full bg-[#28C840] shadow-sm border border-transparent group-hover:border-[#1AAB29] transition-colors"></div>
                         </div>
+                        {/* Go Back Button */}
+                        <button
+                            onClick={() => router.back()}
+                            className="text-gray-500 hover:text-white transition-colors p-1 rounded-md hover:bg-white/5 active:scale-95 ml-2"
+                            title="Go Back"
+                        >
+                            <ChevronLeft className="w-4 h-4" />
+                        </button>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-medium text-white/30 uppercase tracking-[0.2em]">
+                    <div className="flex items-center gap-2 text-xs font-medium text-white/30 uppercase tracking-[0.2em] transform -translate-x-4">
                         FundLab AI
                     </div>
                     <div className="w-16"></div> {/* Spacer for balance */}

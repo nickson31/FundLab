@@ -120,21 +120,21 @@ export default function ChatPage() {
                         </div>
 
                         {/* Suggestions - Hide when user is writing (query has length) */}
-                        <AnimatePresence>
-                            {!query && (
+                        <AnimatePresence mode="wait">
+                            {query.length === 0 && (
                                 <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
-                                    exit={{ opacity: 0, y: -10 }}
+                                    exit={{ opacity: 0, y: -10, transition: { duration: 0.1 } }}
                                     className="grid grid-cols-2 gap-3 w-full max-w-md"
                                 >
                                     {['Seed Investors in London', 'Fintech VCs', 'Impact Funds', 'Angel Networks'].map((suggestion) => (
                                         <button
                                             key={suggestion}
                                             onClick={() => { setQuery(suggestion); /* trigger search logic if needed */ }}
-                                            className="p-3 rounded-xl bg-white/5 border border-white/5 text-sm text-gray-400 hover:bg-white/10 hover:text-white transition-all text-left"
+                                            className="p-4 rounded-xl bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white hover:border-indigo-500/30 transition-all text-left group shadow-lg shadow-black/20"
                                         >
-                                            {suggestion}
+                                            <span className="group-hover:translate-x-1 transition-transform inline-block">{suggestion}</span>
                                         </button>
                                     ))}
                                 </motion.div>
