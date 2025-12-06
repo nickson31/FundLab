@@ -7,6 +7,7 @@ import SearchToggle from './SearchToggle';
 import InvestorCard from './InvestorCard';
 import MessageModal from './MessageModal';
 import { Button } from '@/components/ui/button';
+import { supabase } from '@/lib/supabase';
 
 export default function ChatInterface() {
     const [query, setQuery] = useState('');
@@ -100,14 +101,21 @@ export default function ChatInterface() {
                                     </div>
                                 ) : (
                                     <>
-                                        <div className="prose prose-lg dark:prose-invert max-w-none glass-card px-8 py-6 rounded-2xl rounded-tl-md">
-                                            <p className="text-foreground m-0">
+                                        <div className="prose prose-lg dark:prose-invert max-w-none glass-premium px-8 py-6 rounded-2xl rounded-tl-md mb-8">
+                                            <p className="text-foreground m-0 font-body">
                                                 I found <strong className="text-primary">{results.length} {mode}</strong> matching your search.
                                                 I expanded your query to include terms like: <em className="text-muted-foreground">{keywords?.categoryKeywords?.slice(0, 5).join(', ')}</em>.
                                             </p>
                                         </div>
 
-                                        <div className="grid md:grid-cols-2 gap-6">
+                                        <motion.div
+                                            initial="hidden"
+                                            animate="visible"
+                                            variants={{
+                                                visible: { transition: { staggerChildren: 0.1 } }
+                                            }}
+                                            className="grid md:grid-cols-2 gap-6"
+                                        >
                                             {results.map((result: any, index: number) => (
                                                 <InvestorCard
                                                     key={index}
@@ -116,9 +124,25 @@ export default function ChatInterface() {
                                                     score={result.score}
                                                     breakdown={result.breakdown}
                                                     onDraftMessage={openModal}
+                                                    onSave={async (inv) => {
+                                                        // Mock userId - In real app, get from context/auth
+                                                        const userId = '00000000-0000-0000-0000-000000000000';
+                                                        try {
+                                                            await supabase.from('saved_investors').insert({
+                                                                user_id: userId,
+                                                                investor_id: inv.id,
+                                                                type: mode === 'angels' ? 'angel' : 'fund',
+                                                                saved_at: new Date().toISOString()
+                                                            });
+                                                            // Optional: Show toast
+                                                            console.log('Saved!', inv.name || inv.fullName);
+                                                        } catch (err) {
+                                                            console.error('Error saving:', err);
+                                                        }
+                                                    }}
                                                 />
                                             ))}
-                                        </div>
+                                        </motion.div>
                                     </>
                                 )}
                             </div>
