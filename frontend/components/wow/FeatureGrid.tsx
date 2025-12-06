@@ -14,12 +14,15 @@ const features = [
 
 export default function FeatureGrid() {
     return (
-        <section className="py-24 bg-gray-50 dark:bg-gray-800">
+        <section className="py-24 bg-muted/30">
             <div className="container mx-auto px-4">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-4">
+                    <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
                         Everything You Need to Close Your Round
                     </h2>
+                    <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
+                        Powerful tools designed to simplify your fundraising workflow.
+                    </p>
                 </div>
 
                 <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -31,13 +34,13 @@ export default function FeatureGrid() {
                             whileHover={{ y: -5 }}
                             transition={{ duration: 0.3 }}
                             viewport={{ once: true }}
-                            className="bg-white dark:bg-gray-900 p-8 rounded-xl shadow-sm hover:shadow-md transition-all"
+                            className="bg-card p-8 rounded-xl border border-border shadow-sm hover:shadow-xl transition-all group"
                         >
-                            <div className="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-lg flex items-center justify-center mb-6 text-indigo-600 dark:text-indigo-400">
+                            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
                                 <feature.icon className="w-6 h-6" />
                             </div>
-                            <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">{feature.title}</h3>
-                            <p className="text-gray-600 dark:text-gray-400">{feature.desc}</p>
+                            <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
+                            <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
                         </motion.div>
                     ))}
                 </div>
