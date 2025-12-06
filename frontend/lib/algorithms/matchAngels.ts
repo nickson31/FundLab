@@ -41,7 +41,7 @@ export async function matchAngels(
     const matches: AngelMatch[] = angels
         .filter(angel => !seenIds.has(angel.id))
         .map(angel => {
-            const data = angel.data;
+            const data = angel.data || angel;
 
             // Category Score (40%)
             const categoryScore = calculateCategoryScore(data, params.categoryKeywords);

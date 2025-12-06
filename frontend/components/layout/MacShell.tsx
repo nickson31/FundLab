@@ -16,6 +16,16 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
     const pathname = usePathname();
     const router = useRouter();
 
+    const [user, setUser] = React.useState<any>(null);
+
+    React.useEffect(() => {
+        const fetchUser = async () => {
+            const { data: { user } } = await import('@/lib/supabase').then(m => m.supabase.auth.getUser());
+            setUser(user);
+        };
+        fetchUser();
+    }, []);
+
     // Default Nav Items
     const navItems = [
         { icon: Home, label: 'Chat', href: '/chat' },
@@ -40,7 +50,7 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                         {/* Go Back Button */}
                         <button
                             onClick={() => router.back()}
-                            className="text-gray-500 hover:text-white transition-colors p-1 rounded-md hover:bg-white/5 active:scale-95 ml-2"
+                            className="text-gray-400 hover:text-white transition-colors p-1.5 rounded-md hover:bg-white/10 active:scale-95 ml-2 flex items-center justify-center"
                             title="Go Back"
                         >
                             <ChevronLeft className="w-4 h-4" />
@@ -94,11 +104,11 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                         <div className="border-t border-white/5 p-4 bg-black/10">
                             <div className="flex items-center gap-3">
                                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-lg ring-1 ring-white/10">
-                                    FL
+                                    {user?.email?.[0].toUpperCase() || 'F'}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="text-sm font-medium text-gray-200 truncate">Founder</div>
-                                    <div className="text-xs text-gray-500">Free Plan</div>
+                                    <div className="text-sm font-medium text-gray-200 truncate">{user?.confirmed_at ? user.email.split('@')[0] : 'Founder'}</div>
+                                    <div className="text-xs text-gray-500">{user?.email || 'Free Plan'}</div>
                                 </div>
                                 <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-white hover:bg-white/5">
                                     <Settings className="w-4 h-4" />

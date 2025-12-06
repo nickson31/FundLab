@@ -37,7 +37,7 @@ export async function matchFunds(
     const matches: FundMatch[] = funds
         .filter(fund => !seenIds.has(fund.id))
         .map(fund => {
-            const data = fund.data;
+            const data = fund.data || fund;
 
             // Category Score (50%)
             const categoryScore = calculateCategoryScore(data, params.categoryKeywords);

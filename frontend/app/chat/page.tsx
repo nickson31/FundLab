@@ -132,7 +132,7 @@ export default function ChatPage() {
                                         <button
                                             key={suggestion}
                                             onClick={() => { setQuery(suggestion); /* trigger search logic if needed */ }}
-                                            className="p-4 rounded-xl bg-white/5 border border-white/10 text-sm font-medium text-gray-300 hover:bg-white/10 hover:text-white hover:border-indigo-500/30 transition-all text-left group shadow-lg shadow-black/20"
+                                            className="p-4 rounded-xl bg-white/10 border border-white/10 text-sm font-medium text-white hover:bg-white/20 hover:border-indigo-500/50 transition-all text-left group shadow-lg shadow-black/20"
                                         >
                                             <span className="group-hover:translate-x-1 transition-transform inline-block">{suggestion}</span>
                                         </button>
