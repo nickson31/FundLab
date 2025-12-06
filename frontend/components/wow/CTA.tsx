@@ -2,46 +2,48 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
 
 export default function CTA() {
     return (
-        <section className="py-24 bg-gray-900 text-white relative overflow-hidden">
-            {/* Background Effects */}
-            <div className="absolute inset-0 opacity-20">
-                <div className="absolute top-0 left-0 w-full h-full bg-[url('/images/grid.svg')] bg-center [mask-image:linear-gradient(180deg,white,rgba(255,255,255,0))]"></div>
+        <section className="py-32 relative overflow-hidden">
+            {/* Background Glow */}
+            <div className="absolute inset-0 pointer-events-none">
+                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen animate-pulse"></div>
             </div>
 
-            <div className="container mx-auto px-4 text-center relative z-10">
-                <motion.h2
-                    initial={{ opacity: 0, y: 20 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6 }}
-                    className="text-4xl md:text-5xl font-bold mb-6"
-                >
-                    Ready to Find Your Investors?
-                </motion.h2>
-
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    transition={{ delay: 0.2, duration: 0.6 }}
-                    className="text-xl text-gray-300 mb-10 max-w-2xl mx-auto"
-                >
-                    Start searching for free in under 60 seconds. No commitment, no credit card.
-                </motion.p>
-
+            <div className="container mx-auto px-4 text-center relative z-10 max-w-4xl">
                 <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.8 }}
+                    className="glass-card p-12 md:p-20 rounded-3xl border border-white/10 shadow-2xl relative overflow-hidden"
                 >
-                    <Link href="/chat" className="inline-flex items-center justify-center px-8 py-4 text-lg font-bold text-indigo-600 bg-white rounded-full hover:bg-gray-100 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.3)]">
-                        Get Started Now →
-                    </Link>
-                </motion.div>
+                    {/* Inner texture/grid */}
+                    <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-10 mix-blend-overlay"></div>
 
-                <p className="mt-6 text-sm text-gray-400">
-                    🔒 Your data is secure • ✅ GDPR Compliant • 🚀 Used by startups across Europe
-                </p>
+                    <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight text-white">
+                        Ready to Find Your Investors?
+                    </h2>
+
+                    <p className="text-xl text-blue-100/80 mb-12 max-w-2xl mx-auto leading-relaxed">
+                        Start searching for free in under 60 seconds. No commitment, no credit card.
+                    </p>
+
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <Button size="lg" className="rounded-full px-10 text-lg h-16 shadow-2xl shadow-blue-500/20 hover:shadow-blue-500/40 bg-white text-blue-900 hover:bg-blue-50 transition-all duration-300" asChild>
+                            <Link href="/chat">
+                                Start Building Free
+                            </Link>
+                        </Button>
+                    </div>
+
+                    <p className="mt-8 text-sm text-blue-200/40 flex items-center justify-center gap-4">
+                        <span>🔒 Secure Data</span>
+                        <span>•</span>
+                        <span>✅ GDPR Compliant</span>
+                    </p>
+                </motion.div>
             </div>
         </section>
     );

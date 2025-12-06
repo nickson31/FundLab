@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { X, Copy, Save, RefreshCw, Send, ChevronRight, Check } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import { Sparkles, Search } from 'lucide-react';
 
 interface MessageModalProps {
     isOpen: boolean;
@@ -33,8 +35,6 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
     }, [isOpen, preSelectedInvestor]);
 
     const fetchRecipients = async () => {
-        // Fetch saved investors to populate list
-        // For MVP, just fetching angels. Ideally fetch funds/employees too.
         const { data: saved } = await supabase
             .from('saved_investors')
             .select('investor_id, type')
@@ -91,7 +91,6 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
                 })
             });
             onClose();
-            // Show toast success
         } catch (error) {
             console.error('Save error:', error);
         } finally {
@@ -99,149 +98,172 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
         }
     };
 
-    if (!isOpen) return null;
-
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-white dark:bg-gray-900 w-full max-w-2xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[90vh]"
-            >
-                {/* Header */}
-                <div className="p-6 border-b border-gray-100 dark:border-gray-800 flex justify-between items-center">
-                    <h2 className="text-xl font-bold text-gray-900 dark:text-white">
-                        {step === 1 ? 'Select Recipient' : step === 2 ? 'Provide Context' : 'Review Message'}
-                    </h2>
-                    <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
-                        <X className="w-6 h-6" />
-                    </button>
-                </div>
+        <AnimatePresence>
+            {isOpen && (
+                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={onClose}
+                        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+                    />
 
-                {/* Content */}
-                <div className="p-6 overflow-y-auto flex-1">
-                    {step === 1 && (
-                        <div className="space-y-2">
-                            <input
-                                type="text"
-                                placeholder="Search saved investors..."
-                                className="w-full px-4 py-3 rounded-xl bg-gray-50 dark:bg-gray-800 border-none focus:ring-2 focus:ring-indigo-500 mb-4"
-                            />
-                            <div className="space-y-2">
-                                {recipients.map(r => (
-                                    <div
-                                        key={r.id}
-                                        onClick={() => { setSelectedRecipient(r); setStep(2); }}
-                                        className="flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-800 rounded-xl cursor-pointer transition-colors"
-                                    >
-                                        <div className="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold mr-4">
-                                            {(r.fullName || 'U')[0]}
-                                        </div>
-                                        <div>
-                                            <div className="font-bold text-gray-900 dark:text-white">{r.fullName}</div>
-                                            <div className="text-sm text-gray-500">{r.headline}</div>
-                                        </div>
-                                        <ChevronRight className="ml-auto text-gray-400 w-5 h-5" />
-                                    </div>
-                                ))}
-                                {recipients.length === 0 && (
-                                    <p className="text-center text-gray-500 py-8">No saved investors found.</p>
-                                )}
-                            </div>
-                        </div>
-                    )}
-
-                    {step === 2 && (
-                        <div className="space-y-6">
-                            <div className="bg-indigo-50 dark:bg-indigo-900/20 p-4 rounded-xl flex items-center">
-                                <div className="w-8 h-8 bg-indigo-100 rounded-full flex items-center justify-center text-indigo-600 font-bold mr-3">
-                                    {(selectedRecipient?.fullName || 'U')[0]}
-                                </div>
-                                <div>
-                                    <div className="text-sm text-gray-500">Drafting for:</div>
-                                    <div className="font-bold text-indigo-900 dark:text-indigo-300">{selectedRecipient?.fullName}</div>
-                                </div>
-                            </div>
-
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 20 }}
+                        transition={{ type: "spring", duration: 0.5, bounce: 0.3 }}
+                        className="glass-panel w-full max-w-2xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col max-h-[90vh] z-10 relative"
+                    >
+                        {/* Header */}
+                        <div className="p-6 border-b border-white/5 flex justify-between items-center bg-white/5">
                             <div>
-                                <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                                    Tell us about your company
-                                </label>
-                                <textarea
-                                    value={companyContext}
-                                    onChange={(e) => setCompanyContext(e.target.value)}
-                                    placeholder="We're building a mobile fintech app for Gen Z users in Spain..."
-                                    className="w-full h-40 p-4 rounded-xl bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 focus:ring-2 focus:ring-indigo-500 resize-none"
-                                />
-                                <p className="text-xs text-gray-500 mt-2 text-right">
-                                    {companyContext.length} chars
+                                <h2 className="text-xl font-bold text-white">
+                                    {step === 1 ? 'Select Recipient' : step === 2 ? 'Provide Context' : 'Review Message'}
+                                </h2>
+                                <p className="text-sm text-muted-foreground mt-1">
+                                    {step === 1 ? 'Who are you reaching out to?' : step === 2 ? 'Help the AI understand your pitch.' : 'Polish and send.'}
                                 </p>
                             </div>
+                            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-white/10 text-muted-foreground hover:text-white">
+                                <X className="w-5 h-5" />
+                            </Button>
                         </div>
-                    )}
 
-                    {step === 3 && (
-                        <div className="space-y-6">
-                            {isGenerating ? (
-                                <div className="flex flex-col items-center justify-center py-12 space-y-4">
-                                    <motion.div
-                                        animate={{ rotate: 360 }}
-                                        transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                        className="w-8 h-8 border-4 border-indigo-600 border-t-transparent rounded-full"
+                        {/* Content */}
+                        <div className="p-6 overflow-y-auto flex-1">
+                            {step === 1 && (
+                                <div className="space-y-4">
+                                    <input
+                                        type="text"
+                                        placeholder="Search saved investors..."
+                                        className="w-full px-4 py-3 rounded-xl bg-white/5 border border-white/10 focus:ring-2 focus:ring-primary/50 focus:border-transparent outline-none transition-all placeholder:text-muted-foreground text-foreground"
                                     />
-                                    <p className="text-gray-500 animate-pulse">Crafting personalized message...</p>
+                                    <div className="space-y-2">
+                                        {recipients.map(r => (
+                                            <div
+                                                key={r.id}
+                                                onClick={() => { setSelectedRecipient(r); setStep(2); }}
+                                                className="flex items-center p-3 hover:bg-white/5 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-white/10 group"
+                                            >
+                                                <Avatar className="h-10 w-10 mr-4 border border-white/10">
+                                                    <AvatarFallback className="bg-primary/20 text-primary">{(r.fullName || 'U')[0]}</AvatarFallback>
+                                                </Avatar>
+                                                <div>
+                                                    <div className="font-semibold text-white">{r.fullName}</div>
+                                                    <div className="text-sm text-muted-foreground">{r.headline}</div>
+                                                </div>
+                                                <ChevronRight className="ml-auto text-muted-foreground group-hover:text-primary transition-colors w-5 h-5" />
+                                            </div>
+                                        ))}
+                                        {recipients.length === 0 && (
+                                            <div className="text-center py-12">
+                                                <div className="w-16 h-16 bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                    <Search className="w-8 h-8 text-muted-foreground" />
+                                                </div>
+                                                <p className="text-muted-foreground">No saved investors found yet.</p>
+                                                <Button variant="ghost" className="mt-2 text-primary hover:bg-primary/10 pl-0 hover:text-primary">Go to Search</Button>
+                                            </div>
+                                        )}
+                                    </div>
                                 </div>
-                            ) : (
-                                <div className="bg-gray-50 dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 whitespace-pre-wrap font-sans text-gray-800 dark:text-gray-200 leading-relaxed">
-                                    {generatedMessage}
+                            )}
+
+                            {step === 2 && (
+                                <div className="space-y-6">
+                                    <div className="bg-primary/10 p-4 rounded-xl flex items-center border border-primary/20">
+                                        <Avatar className="h-10 w-10 mr-3 border border-primary/20">
+                                            <AvatarFallback className="bg-primary/50 text-white">{(selectedRecipient?.fullName || 'U')[0]}</AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <div className="text-xs text-primary font-medium uppercase tracking-wider">Drafting Message To</div>
+                                            <div className="font-bold text-white">{selectedRecipient?.fullName}</div>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-white mb-2">
+                                            What's the core of your pitch?
+                                        </label>
+                                        <textarea
+                                            value={companyContext}
+                                            onChange={(e) => setCompanyContext(e.target.value)}
+                                            placeholder="Example: We're building a B2B SaaS for legal teams in Europe. We have €10k MRR and just signed a pilot with a major firm..."
+                                            className="w-full h-48 p-4 rounded-xl bg-black/20 border border-white/10 focus:ring-2 focus:ring-primary/50 focus:border-transparent resize-none outline-none text-white placeholder:text-muted-foreground/50 leading-relaxed"
+                                        />
+                                        <div className="flex justify-between mt-2">
+                                            <span className="text-xs text-muted-foreground">Be specific about metrics and traction.</span>
+                                            <span className="text-xs text-muted-foreground">{companyContext.length} chars</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {step === 3 && (
+                                <div className="space-y-6 h-full flex flex-col">
+                                    {isGenerating ? (
+                                        <div className="flex flex-col items-center justify-center py-16 space-y-6">
+                                            <div className="relative">
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                                    className="w-16 h-16 border-4 border-primary/20 border-t-primary rounded-full"
+                                                />
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <Sparkles className="w-6 h-6 text-primary animate-pulse" />
+                                                </div>
+                                            </div>
+                                            <p className="text-muted-foreground font-medium animate-pulse">Analyzing investor profile...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="bg-black/20 p-6 rounded-xl border border-white/5 whitespace-pre-wrap font-sans text-white leading-relaxed flex-1 overflow-y-auto shadow-inner text-sm md:text-base">
+                                            {generatedMessage}
+                                        </div>
+                                    )}
                                 </div>
                             )}
                         </div>
-                    )}
-                </div>
 
-                {/* Footer */}
-                <div className="p-6 border-t border-gray-100 dark:border-gray-800 flex justify-between bg-gray-50 dark:bg-gray-900/50">
-                    {step > 1 && (
-                        <button
-                            onClick={() => setStep(step - 1)}
-                            className="text-gray-500 hover:text-gray-700 font-medium"
-                        >
-                            Back
-                        </button>
-                    )}
-
-                    <div className="ml-auto flex space-x-3">
-                        {step === 2 && (
-                            <Button
-                                onClick={handleGenerate}
-                                disabled={!companyContext}
-                                className="bg-indigo-600 hover:bg-indigo-700 text-white"
-                            >
-                                Generate Message <SparklesIcon className="w-4 h-4 ml-2" />
-                            </Button>
-                        )}
-
-                        {step === 3 && !isGenerating && (
-                            <>
-                                <Button variant="outline" onClick={handleGenerate}>
-                                    <RefreshCw className="w-4 h-4 mr-2" /> Regenerate
+                        {/* Footer */}
+                        <div className="p-6 border-t border-white/5 flex justify-between bg-white/5 items-center">
+                            {step > 1 ? (
+                                <Button
+                                    variant="ghost"
+                                    onClick={() => setStep(step - 1)}
+                                    className="text-muted-foreground hover:text-white pl-0 hover:bg-transparent"
+                                >
+                                    Back
                                 </Button>
-                                <Button onClick={handleSave} disabled={isSaving}>
-                                    <Save className="w-4 h-4 mr-2" /> Save Draft
-                                </Button>
-                            </>
-                        )}
-                    </div>
+                            ) : <div></div>}
+
+                            <div className="flex space-x-3">
+                                {step === 2 && (
+                                    <Button
+                                        onClick={handleGenerate}
+                                        disabled={!companyContext}
+                                        className="bg-primary hover:bg-primary/90 text-primary-foreground min-w-[150px] shadow-lg shadow-primary/20"
+                                    >
+                                        Generate Draft <Sparkles className="w-4 h-4 ml-2" />
+                                    </Button>
+                                )}
+
+                                {step === 3 && !isGenerating && (
+                                    <>
+                                        <Button variant="outline" onClick={handleGenerate} className="border-white/10 hover:bg-white/5 text-muted-foreground hover:text-white bg-transparent">
+                                            <RefreshCw className="w-4 h-4 mr-2" /> Try Again
+                                        </Button>
+                                        <Button onClick={handleSave} disabled={isSaving} className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-lg shadow-primary/20">
+                                            <Save className="w-4 h-4 mr-2" /> Save Draft
+                                        </Button>
+                                    </>
+                                )}
+                            </div>
+                        </div>
+                    </motion.div>
                 </div>
-            </motion.div>
-        </div>
+            )}
+        </AnimatePresence>
     );
-}
-
-function SparklesIcon({ className }: { className?: string }) {
-    return (
-        <svg className={className} xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z" /><path d="M5 3v4" /><path d="M9 3v4" /><path d="M3 5h4" /><path d="M3 9h4" /></svg>
-    )
 }

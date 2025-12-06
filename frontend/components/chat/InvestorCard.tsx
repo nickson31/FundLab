@@ -1,20 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'; // Need to create UI components or use raw
-import { Badge } from '@/components/ui/badge'; // Need to create UI components or use raw
-import { Button } from '@/components/ui/button'; // Need to create UI components or use raw
-import { ExternalLink, Linkedin } from 'lucide-react';
-
-// Simplified UI components for now if they don't exist
-function SimpleAvatar({ src, name }: { src?: string, name: string }) {
-    const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().slice(0, 2);
-    return (
-        <div className="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 font-bold overflow-hidden shrink-0">
-            {src ? <img src={src} alt={name} className="w-full h-full object-cover" /> : initials}
-        </div>
-    );
-}
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { ExternalLink, Linkedin, Building2, MapPin } from 'lucide-react';
 
 interface InvestorCardProps {
     investor: any;
@@ -34,50 +24,76 @@ export default function InvestorCard({ investor, type, score, breakdown, onDraft
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4, boxShadow: "0 12px 24px rgba(0,0,0,0.1)" }}
-            className="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-100 dark:border-gray-700 shadow-sm transition-all"
+            whileHover={{ y: -4, transition: { duration: 0.2 } }}
+            className="group glass-panel border border-white/5 p-6 rounded-xl transition-all duration-300 relative overflow-hidden"
         >
-            <div className="flex items-start justify-between mb-4">
+            {/* Gradient Glow on Hover */}
+            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-purple-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
+
+            <div className="flex items-start justify-between mb-5 relative z-10">
                 <div className="flex items-center space-x-4">
-                    <SimpleAvatar src={investor.profilePic} name={name} />
+                    <Avatar className="w-14 h-14 border-2 border-white/10 shadow-md">
+                        <AvatarImage src={investor.profilePic} alt={name} />
+                        <AvatarFallback className="bg-primary/10 text-primary font-bold">
+                            {name?.substring(0, 2).toUpperCase()}
+                        </AvatarFallback>
+                    </Avatar>
+
                     <div>
-                        <h3 className="font-bold text-gray-900 dark:text-white text-lg">{name}</h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">{headline}</p>
+                        <h3 className="font-bold text-foreground text-lg leading-tight group-hover:text-primary transition-colors">
+                            {name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground line-clamp-1 mt-1">{headline}</p>
                     </div>
                 </div>
+
                 <div className="text-right">
-                    <div className="text-2xl font-bold text-indigo-600">{Math.round(score * 100)}%</div>
-                    <div className="text-xs text-gray-400 uppercase">Match</div>
+                    <div className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-500 to-purple-500">
+                        {Math.round(score * 100)}%
+                    </div>
+                    <Badge variant="secondary" className="text-[10px] uppercase tracking-wider font-semibold bg-white/5 hover:bg-white/10 text-muted-foreground border-0">
+                        Match
+                    </Badge>
                 </div>
             </div>
 
-            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2">
-                {about}
+            <p className="text-sm text-foreground/80 mb-6 line-clamp-3 leading-relaxed relative z-10 min-h-[4.5em]">
+                {about || "No description available."}
             </p>
 
-            <div className="flex items-center justify-between pt-4 border-t border-gray-50 dark:border-gray-700">
-                <div className="flex items-center space-x-2 text-xs text-gray-500">
-                    <span>{location}</span>
-                    {type === 'angel' && <span>• Angel Score: {investor.angel_score}</span>}
+            <div className="flex items-center justify-between pt-4 border-t border-white/5 relative z-10">
+                <div className="flex items-center space-x-3 text-xs text-muted-foreground font-medium">
+                    <span className="flex items-center"><MapPin className="w-3 h-3 mr-1" /> {location || 'Global'}</span>
+                    {type === 'angel' && (
+                        <span className="flex items-center px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-500">
+                            Angel Score: {investor.angel_score}
+                        </span>
+                    )}
                 </div>
 
-                <div className="flex space-x-2">
+                <div className="flex items-center space-x-2">
                     {investor.linkedinUrl && (
-                        <a href={investor.linkedinUrl} target="_blank" rel="noopener noreferrer" className="p-2 text-gray-400 hover:text-blue-600 transition-colors">
-                            <Linkedin className="w-4 h-4" />
-                        </a>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-[#0077b5] hover:bg-white/5" asChild>
+                            <a href={investor.linkedinUrl} target="_blank" rel="noopener noreferrer">
+                                <Linkedin className="w-4 h-4" />
+                            </a>
+                        </Button>
                     )}
                     {investor.website && (
-                        <a href={investor.website} target="_blank" rel="noopener noreferrer" className="p-2 text-gray-400 hover:text-gray-900 transition-colors">
-                        </a>
+                        <Button variant="ghost" size="icon" className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-white/5" asChild>
+                            <a href={investor.website} target="_blank" rel="noopener noreferrer">
+                                <ExternalLink className="w-4 h-4" />
+                            </a>
+                        </Button>
                     )}
                     {onDraftMessage && (
-                        <button
+                        <Button
                             onClick={() => onDraftMessage(investor)}
-                            className="ml-2 px-3 py-1 bg-indigo-50 text-indigo-600 text-xs font-bold rounded-lg hover:bg-indigo-100 transition-colors"
+                            size="sm"
+                            className="ml-2 bg-primary text-primary-foreground hover:bg-primary/90 shadow-md shadow-primary/20"
                         >
                             Draft
-                        </button>
+                        </Button>
                     )}
                 </div>
             </div>

@@ -14,10 +14,10 @@ const features = [
 
 export default function FeatureGrid() {
     return (
-        <section className="py-24 bg-muted/30">
-            <div className="container mx-auto px-4">
+        <section className="py-24 relative">
+            <div className="container mx-auto px-4 relative z-10">
                 <div className="text-center mb-16">
-                    <h2 className="text-3xl md:text-5xl font-bold text-foreground mb-4">
+                    <h2 className="text-3xl md:text-5xl font-bold text-white mb-4">
                         Everything You Need to Close Your Round
                     </h2>
                     <p className="text-muted-foreground text-lg max-w-2xl mx-auto">
@@ -25,7 +25,7 @@ export default function FeatureGrid() {
                     </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {features.map((feature, index) => (
                         <motion.div
                             key={index}
@@ -34,13 +34,13 @@ export default function FeatureGrid() {
                             whileHover={{ y: -5 }}
                             transition={{ duration: 0.3 }}
                             viewport={{ once: true }}
-                            className="bg-card p-8 rounded-xl border border-border shadow-sm hover:shadow-xl transition-all group"
+                            className="glass-card p-6 rounded-xl hover:bg-white/5 transition-all group"
                         >
-                            <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center mb-6 text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-300">
+                            <div className="w-12 h-12 bg-white/5 rounded-lg flex items-center justify-center mb-6 text-blue-300 group-hover:bg-blue-500/20 group-hover:text-blue-200 transition-colors duration-300 ring-1 ring-white/10">
                                 <feature.icon className="w-6 h-6" />
                             </div>
-                            <h3 className="text-xl font-bold text-foreground mb-3">{feature.title}</h3>
-                            <p className="text-muted-foreground leading-relaxed">{feature.desc}</p>
+                            <h3 className="text-lg font-bold text-white mb-2">{feature.title}</h3>
+                            <p className="text-muted-foreground leading-relaxed text-sm">{feature.desc}</p>
                         </motion.div>
                     ))}
                 </div>
