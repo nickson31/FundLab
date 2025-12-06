@@ -1,0 +1,12 @@
+<svg width="180" height="40" viewBox="0 0 180 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- FundLab - Pure Wordmark Logo (no symbols, minimal color) -->
+  
+  <text x="0" y="30" 
+        font-family="'Inter', 'SF Pro Display', -apple-system, system-ui, sans-serif" 
+        font-size="36" 
+        font-weight="700" 
+        fill="#111827" 
+        letter-spacing="-2">
+    FundLab
+  </text>
+</svg>

@@ -1,0 +1,15 @@
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- FundLab Icon - Just "F" lettermark -->
+  
+  <rect width="40" height="40" rx="8" fill="#111827"/>
+  
+  <text x="20" y="29" 
+        font-family="'Inter', 'SF Pro Display', -apple-system, system-ui, sans-serif" 
+        font-size="24" 
+        font-weight="700" 
+        fill="white" 
+        text-anchor="middle"
+        letter-spacing="-1">
+    F
+  </text>
+</svg>
