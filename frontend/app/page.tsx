@@ -187,6 +187,237 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Feature Highlights - Interactive Cards */}
+      <section className="py-32 px-6 relative border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+
+          {/* Section Header */}
+          <div className="flex justify-center mb-8">
+            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-4 py-2 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+              <Sparkles className="h-4 w-4 text-indigo-300" strokeWidth={2} />
+              <span className="text-sm font-bold text-indigo-200/90 uppercase tracking-wider">Feature Highlights</span>
+            </div>
+          </div>
+
+          <h2 className="text-4xl md:text-6xl font-bold font-heading text-center text-white tracking-tight mb-6">
+            Everything You Need to
+            <span className="block mt-2">Close Your Round</span>
+          </h2>
+          <p className="mx-auto max-w-2xl text-center text-lg text-gray-400 font-light mb-16">
+            From AI-powered matching to hyper-personalized outreach—FundLab automates your fundraising pipeline so you can focus on building relationships.
+          </p>
+
+          {/* Feature Cards Grid */}
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+
+            {/* Card 1: AI Matching */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-6"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 via-transparent to-transparent pointer-events-none"></div>
+              <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl"></div>
+
+              <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-5 ring-1 ring-white/10 backdrop-blur mb-6">
+                <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
+                  <BrainCircuit className="h-5 w-5 text-sky-300" strokeWidth={1.5} />
+                  <span className="font-bold">AI Semantic Matching</span>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="rounded-xl bg-white/[0.04] p-4 ring-1 ring-white/10">
+                    <div className="flex items-center justify-between mb-3">
+                      <p className="text-sm font-bold text-white/90">Your Startup</p>
+                      <span className="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-500/20">Fintech SaaS</span>
+                    </div>
+                    <p className="text-xs text-white/60 leading-relaxed">B2B payments platform for SMEs in Europe</p>
+                  </div>
+
+                  <div className="flex items-center justify-center">
+                    <ArrowRight className="w-5 h-5 text-indigo-400 animate-pulse" />
+                  </div>
+
+                  <div className="rounded-xl bg-white/[0.04] p-4 ring-1 ring-white/10">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
+                        JD
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-bold text-white/90">Javier Delgado</p>
+                        <p className="text-xs text-white/60">Ex-Revolut VP • 12 Fintech Exits</p>
+                      </div>
+                      <span className="text-xs font-bold text-green-400">98%</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h3 className="text-2xl font-bold font-heading text-white tracking-tight mb-3">Intelligent Investor Matching</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Our AI analyzes 500k+ investor profiles to find perfect thesis matches. No more manual LinkedIn searches—just describe your startup and we'll find the right angels and VCs.
+              </p>
+            </motion.div>
+
+            {/* Card 2: Outreach Automation */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-6"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent pointer-events-none"></div>
+              <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-purple-500/10 blur-3xl"></div>
+
+              <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-5 ring-1 ring-white/10 backdrop-blur mb-6">
+                <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
+                  <MessageSquare className="h-5 w-5 text-purple-300" strokeWidth={1.5} />
+                  <span className="font-bold">Hyper-Personalized Outreach</span>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="rounded-xl bg-white/[0.04] p-4 ring-1 ring-white/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-purple-300">LinkedIn Message</span>
+                      <span className="text-xs text-white/50">Generated in 2.3s</span>
+                    </div>
+                    <p className="text-xs text-white/70 leading-relaxed italic">
+                      "Hi Anna, I noticed you led the Series A for PayFlow in 2022. We're building similar infrastructure for SMEs in the Nordics..."
+                    </p>
+                  </div>
+
+                  <div className="flex items-center gap-2 text-xs text-white/60">
+                    <Check className="w-4 h-4 text-emerald-400" />
+                    <span>Personalized with investor history</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-xs text-white/60">
+                    <Check className="w-4 h-4 text-emerald-400" />
+                    <span>Optimized for response rate</span>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex items-center justify-between rounded-xl bg-indigo-500/10 border border-indigo-500/20 px-4 py-3">
+                  <div className="flex items-center gap-2">
+                    <Sparkles className="w-4 h-4 text-indigo-300" />
+                    <span className="text-xs font-bold text-indigo-200">1,000+ messages/week</span>
+                  </div>
+                  <span className="text-xs text-indigo-300/70">Automated</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl font-bold font-heading text-white tracking-tight mb-3">Outreach at Scale</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Draft and send 1,000+ hyper-personalized LinkedIn and email messages every week. Our AI tailors each message based on the investor's portfolio, thesis, and recent activity.
+              </p>
+            </motion.div>
+
+            {/* Card 3: Real-Time Dashboard */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-6"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent pointer-events-none"></div>
+              <div className="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl"></div>
+
+              <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-5 ring-1 ring-white/10 backdrop-blur mb-6">
+                <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
+                  <LayoutGrid className="h-5 w-5 text-emerald-300" strokeWidth={1.5} />
+                  <span className="font-bold">Pipeline Dashboard</span>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="grid grid-cols-3 gap-3">
+                    <div className="rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10 text-center">
+                      <p className="text-2xl font-bold text-white">47</p>
+                      <p className="text-xs text-white/60 mt-1">Contacted</p>
+                    </div>
+                    <div className="rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10 text-center">
+                      <p className="text-2xl font-bold text-emerald-400">12</p>
+                      <p className="text-xs text-white/60 mt-1">Responded</p>
+                    </div>
+                    <div className="rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10 text-center">
+                      <p className="text-2xl font-bold text-indigo-400">3</p>
+                      <p className="text-xs text-white/60 mt-1">Meetings</p>
+                    </div>
+                  </div>
+
+                  <div className="rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-bold text-white/80">Response Rate</span>
+                      <span className="text-xs text-emerald-400 font-bold">25.5%</span>
+                    </div>
+                    <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
+                      <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-500" style={{ width: '25.5%' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <h3 className="text-2xl font-bold font-heading text-white tracking-tight mb-3">Track Every Interaction</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Monitor your entire fundraising pipeline in real-time. See who opened your messages, track response rates, and get AI insights on when to follow up.
+              </p>
+            </motion.div>
+
+            {/* Card 4: Global Collaboration */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-6"
+            >
+              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 via-transparent to-transparent pointer-events-none"></div>
+              <div className="absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-fuchsia-500/10 blur-3xl"></div>
+
+              <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-5 ring-1 ring-white/10 backdrop-blur mb-6">
+                <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
+                  <Users className="h-5 w-5 text-fuchsia-300" strokeWidth={1.5} />
+                  <span className="font-bold">Team Workspace</span>
+                </div>
+
+                <div className="space-y-3">
+                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" className="h-8 w-8 rounded-full ring-1 ring-white/20" alt="team" />
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-white/90">Sarah Chen</p>
+                      <p className="text-xs text-white/60">Assigned 12 investors</p>
+                    </div>
+                    <Check className="w-4 h-4 text-emerald-400" />
+                  </div>
+
+                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10">
+                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" className="h-8 w-8 rounded-full ring-1 ring-white/20" alt="team" />
+                    <div className="flex-1">
+                      <p className="text-sm font-bold text-white/90">Marcus Liu</p>
+                      <p className="text-xs text-white/60">Following up with VCs</p>
+                    </div>
+                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
+                  </div>
+                </div>
+
+                <div className="mt-4 flex items-center gap-2 text-xs text-white/60">
+                  <ShieldCheck className="w-4 h-4 text-indigo-300" />
+                  <span>Synced across your entire team</span>
+                </div>
+              </div>
+
+              <h3 className="text-2xl font-bold font-heading text-white tracking-tight mb-3">Collaborate Seamlessly</h3>
+              <p className="text-sm text-gray-400 leading-relaxed">
+                Keep your founding team aligned with shared dashboards, task assignments, and automated handoffs. Everyone sees the same pipeline in real-time.
+              </p>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
       {/* Footer CTA */}
       <section className="py-32 px-6 relative overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-t from-indigo-900/40 to-transparent pointer-events-none"></div>
