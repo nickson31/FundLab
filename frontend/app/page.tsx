@@ -137,15 +137,66 @@ export default function Home() {
         </div>
       </main>
 
-      {/* Social Proof */}
-      <section className="border-y border-white/5 bg-white/[0.01]">
-        <div className="max-w-7xl mx-auto px-6 py-12">
-          <p className="text-center text-xs font-bold text-indigo-200/50 mb-8 uppercase tracking-[0.2em]">Powering Founders At</p>
-          <div className="flex flex-wrap justify-center gap-x-16 gap-y-8 opacity-50 grayscale mix-blend-screen select-none">
-            {["Stripe", "Revolut", "Monzo", "Wise", "N26"].map((company, i) => (
-              <span key={i} className="text-xl font-bold font-heading text-white tracking-tighter">{company}</span>
+      {/* Social Proof - Premium */}
+      <section className="py-24 px-6 relative overflow-hidden border-y border-white/[0.05]">
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          {/* Trust Badge */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <p className="text-sm font-medium text-gray-500 uppercase tracking-[0.25em] mb-2">
+              Trusted by 500+ Founders Worldwide
+            </p>
+          </motion.div>
+
+          {/* Stats Grid */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-20">
+            {[
+              { value: "€50M+", label: "Capital Raised", sublabel: "by our users" },
+              { value: "500+", label: "Active Founders", sublabel: "on the platform" },
+              { value: "25%", label: "Response Rate", sublabel: "avg. from investors" },
+              { value: "3x", label: "Faster", sublabel: "than manual outreach" }
+            ].map((stat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="text-center group"
+              >
+                <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2 group-hover:text-indigo-400 transition-colors duration-500">
+                  {stat.value}
+                </div>
+                <div className="text-sm font-medium text-gray-400">{stat.label}</div>
+                <div className="text-xs text-gray-600">{stat.sublabel}</div>
+              </motion.div>
             ))}
           </div>
+
+          {/* Company Logos */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.4 }}
+            className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6"
+          >
+            <p className="text-xs text-gray-600 uppercase tracking-widest mr-4">Alumni from</p>
+            {["Y Combinator", "Techstars", "500 Startups", "Seedcamp", "Antler"].map((company, i) => (
+              <span
+                key={i}
+                className="text-lg font-bold font-heading text-gray-500 hover:text-white transition-colors duration-300 cursor-default"
+              >
+                {company}
+              </span>
+            ))}
+          </motion.div>
         </div>
       </section>
 
@@ -432,6 +483,321 @@ export default function Home() {
             </div>
           </motion.div>
 
+        </div>
+      </section>
+
+      {/* Use Cases Section */}
+      <section className="py-40 px-6 relative overflow-hidden">
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-indigo-950/5 to-black"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tight mb-6">
+              Built for Every Stage.
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Whether you're raising your first check or closing a Series A, FundLab adapts to your needs.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                stage: "Pre-Seed",
+                amount: "€50k - €500k",
+                title: "Find Your First Angels",
+                description: "Access 50,000+ angel investors actively looking for early-stage deals. Perfect for first-time founders.",
+                features: ["Angel investor database", "Warm intro suggestions", "Pitch deck review AI"],
+                gradient: "from-emerald-500/20 to-teal-500/20",
+                border: "border-emerald-500/30",
+                accent: "text-emerald-400"
+              },
+              {
+                stage: "Seed",
+                amount: "€500k - €3M",
+                title: "Connect with Early VCs",
+                description: "Match with seed-stage VCs who've invested in your vertical. Get personalized outreach that converts.",
+                features: ["VC fund matching", "LP network access", "Due diligence prep"],
+                gradient: "from-indigo-500/20 to-purple-500/20",
+                border: "border-indigo-500/30",
+                accent: "text-indigo-400"
+              },
+              {
+                stage: "Series A+",
+                amount: "€3M+",
+                title: "Scale Your Round",
+                description: "Reach institutional investors and growth funds. Manage complex cap tables and syndicate deals.",
+                features: ["Institutional access", "Syndicate builder", "Term sheet analyzer"],
+                gradient: "from-orange-500/20 to-rose-500/20",
+                border: "border-orange-500/30",
+                accent: "text-orange-400"
+              }
+            ].map((useCase, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.5 }}
+                className="group relative"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-b ${useCase.gradient} rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500`}></div>
+                <div className={`relative bg-black/60 backdrop-blur-sm border ${useCase.border} rounded-3xl p-8 hover:border-white/20 transition-all duration-500 h-full`}>
+
+                  <div className="flex items-center justify-between mb-6">
+                    <span className={`text-xs font-bold uppercase tracking-wider ${useCase.accent}`}>{useCase.stage}</span>
+                    <span className="text-xs text-gray-500">{useCase.amount}</span>
+                  </div>
+
+                  <h3 className="text-2xl font-bold font-heading text-white mb-3">{useCase.title}</h3>
+                  <p className="text-gray-400 text-sm mb-6 leading-relaxed">{useCase.description}</p>
+
+                  <ul className="space-y-2">
+                    {useCase.features.map((feature, j) => (
+                      <li key={j} className="flex items-center gap-2 text-sm text-gray-500">
+                        <Check className="w-4 h-4 text-gray-600" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Testimonials Section */}
+      <section className="py-40 px-6 relative overflow-hidden border-t border-white/[0.05]">
+        <div className="max-w-6xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tight mb-6">
+              Founders Love Us.
+            </h2>
+            <p className="text-xl text-gray-400">
+              Join hundreds of founders who've closed their rounds with FundLab.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                quote: "FundLab helped us find 47 perfectly matched angels in under an hour. We closed our pre-seed in 3 weeks instead of 3 months.",
+                name: "Sarah Chen",
+                role: "CEO, Finova",
+                raised: "€650k Pre-Seed"
+              },
+              {
+                quote: "The AI-generated messages had a 35% response rate. That's unheard of for cold outreach. Game changer for our seed round.",
+                name: "Marcus Rodriguez",
+                role: "Founder, DataStack",
+                raised: "€2.1M Seed"
+              },
+              {
+                quote: "I was spending 20 hours a week on investor research. Now it's 2 hours. FundLab is like having a full-time fundraising associate.",
+                name: "Elena Kowalski",
+                role: "Co-founder, HealthTech AI",
+                raised: "€1.5M Seed"
+              }
+            ].map((testimonial, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1, duration: 0.5 }}
+                className="group"
+              >
+                <div className="bg-white/[0.03] border border-white/[0.08] rounded-2xl p-8 hover:border-white/[0.15] transition-all duration-500 h-full flex flex-col">
+                  <div className="flex gap-1 mb-6">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <Sparkles key={star} className="w-4 h-4 text-yellow-500" />
+                    ))}
+                  </div>
+
+                  <p className="text-white/80 leading-relaxed mb-8 flex-grow italic">
+                    "{testimonial.quote}"
+                  </p>
+
+                  <div className="flex items-center gap-4">
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold">
+                      {testimonial.name.split(' ').map(n => n[0]).join('')}
+                    </div>
+                    <div>
+                      <div className="font-bold text-white">{testimonial.name}</div>
+                      <div className="text-sm text-gray-500">{testimonial.role}</div>
+                      <div className="text-xs text-indigo-400 font-medium">{testimonial.raised}</div>
+                    </div>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section id="faq" className="py-40 px-6 relative overflow-hidden border-t border-white/[0.05]">
+        <div className="max-w-3xl mx-auto">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tight mb-6">
+              Questions?
+            </h2>
+            <p className="text-xl text-gray-400">
+              Everything you need to know about FundLab.
+            </p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: "How does the AI matching work?",
+                a: "Our AI analyzes your startup description, industry, stage, and location against 500,000+ investor profiles. We use semantic matching to find investors whose thesis and portfolio align with your company—not just keyword matching."
+              },
+              {
+                q: "Is my data secure?",
+                a: "Absolutely. We're GDPR compliant and SOC 2 certified. Your data is encrypted at rest and in transit. We never sell your information or share it with third parties."
+              },
+              {
+                q: "How much does FundLab cost?",
+                a: "We offer a free tier with 10 investor matches per month. Pro plans start at €49/month for unlimited matches, personalized outreach, and analytics. Enterprise plans are custom-priced."
+              },
+              {
+                q: "Can I export my investor list?",
+                a: "Yes! Export your matched investors, messages, and analytics to CSV, Excel, or directly to your CRM. Pro and Enterprise users get unlimited exports."
+              },
+              {
+                q: "What types of investors are in your database?",
+                a: "We have 300,000+ angel investors, 150,000+ VC professionals, and 50,000+ family office contacts. Our data is refreshed weekly from LinkedIn, Crunchbase, and proprietary sources."
+              }
+            ].map((faq, i) => (
+              <motion.details
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.05 }}
+                className="group bg-white/[0.02] border border-white/[0.08] rounded-2xl overflow-hidden hover:border-white/[0.12] transition-colors"
+              >
+                <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
+                  <span className="font-bold text-white pr-8">{faq.q}</span>
+                  <Plus className="w-5 h-5 text-gray-500 group-open:rotate-45 transition-transform duration-300" />
+                </summary>
+                <div className="px-6 pb-6 text-gray-400 leading-relaxed">
+                  {faq.a}
+                </div>
+              </motion.details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Pricing Section */}
+      <section id="pricing" className="py-40 px-6 relative overflow-hidden border-t border-white/[0.05]">
+        <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent"></div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-20"
+          >
+            <h2 className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tight mb-6">
+              Simple Pricing.
+            </h2>
+            <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+              Start free. Upgrade when you're ready to scale your fundraise.
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {[
+              {
+                name: "Free",
+                price: "€0",
+                period: "forever",
+                description: "Perfect for exploring the platform",
+                features: ["10 investor matches/month", "Basic AI search", "5 message drafts", "Email support"],
+                cta: "Get Started",
+                popular: false
+              },
+              {
+                name: "Pro",
+                price: "€49",
+                period: "/month",
+                description: "For serious fundraisers",
+                features: ["Unlimited matches", "Advanced AI matching", "Unlimited messages", "CRM export", "Response tracking", "Priority support"],
+                cta: "Start Pro Trial",
+                popular: true
+              },
+              {
+                name: "Enterprise",
+                price: "Custom",
+                period: "",
+                description: "For teams and accelerators",
+                features: ["Everything in Pro", "Team collaboration", "Custom integrations", "Dedicated success manager", "SLA guarantee", "White-label options"],
+                cta: "Contact Sales",
+                popular: false
+              }
+            ].map((plan, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={`relative ${plan.popular ? 'md:-mt-4 md:mb-4' : ''}`}
+              >
+                {plan.popular && (
+                  <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-indigo-500 text-white text-xs font-bold uppercase tracking-wider rounded-full">
+                    Most Popular
+                  </div>
+                )}
+                <div className={`h-full bg-black/60 backdrop-blur-sm border rounded-3xl p-8 ${plan.popular ? 'border-indigo-500/50 ring-1 ring-indigo-500/20' : 'border-white/[0.08]'}`}>
+                  <div className="mb-6">
+                    <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-4xl font-bold font-heading text-white">{plan.price}</span>
+                      <span className="text-gray-500">{plan.period}</span>
+                    </div>
+                    <p className="text-sm text-gray-500 mt-2">{plan.description}</p>
+                  </div>
+
+                  <ul className="space-y-3 mb-8">
+                    {plan.features.map((feature, j) => (
+                      <li key={j} className="flex items-center gap-3 text-sm text-gray-400">
+                        <Check className="w-4 h-4 text-indigo-400 shrink-0" />
+                        {feature}
+                      </li>
+                    ))}
+                  </ul>
+
+                  <Button
+                    className={`w-full rounded-full font-bold ${plan.popular ? 'bg-white text-black hover:bg-gray-100' : 'bg-white/10 text-white hover:bg-white/20 border border-white/10'}`}
+                    asChild
+                  >
+                    <Link href="/chat">{plan.cta}</Link>
+                  </Button>
+                </div>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </section>
 

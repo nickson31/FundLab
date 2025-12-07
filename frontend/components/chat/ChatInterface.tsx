@@ -1,8 +1,8 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { Send, Sparkles, PenSquare } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Send, Sparkles, PenSquare, Search, AlertCircle, Zap, TrendingUp, Users, Building2 } from 'lucide-react';
 import SearchToggle from './SearchToggle';
 import InvestorCard from './InvestorCard';
 import MessageModal from './MessageModal';
@@ -18,10 +18,17 @@ export default function ChatInterface() {
     const [keywords, setKeywords] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInvestor, setSelectedInvestor] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [isTyping, setIsTyping] = useState(false);
 
     const openModal = (investor?: any) => {
         setSelectedInvestor(investor);
         setIsModalOpen(true);
+    };
+
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setQuery(e.target.value);
+        setIsTyping(e.target.value.length > 0);
     };
 
     const handleSearch = async (e?: React.FormEvent) => {
@@ -30,46 +37,106 @@ export default function ChatInterface() {
 
         setIsLoading(true);
         setHasSearched(true);
-        setResults([]); // Clear previous results
+        setResults([]);
+        setError(null);
 
         try {
-            // Mock userId for MVP
             const userId = '00000000-0000-0000-0000-000000000000';
-
             const res = await fetch('/api/search', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ query, mode, userId }),
             });
 
+            if (!res.ok) throw new Error('Search failed');
+
             const data = await res.json();
-            if (data.results) {
+            if (data.results && data.results.length > 0) {
                 setResults(data.results);
                 setKeywords(data.keywords);
+            } else {
+                setError('No investors found matching your criteria. Try broadening your search.');
             }
-        } catch (error) {
-            console.error('Search error:', error);
+        } catch (err) {
+            console.error('Search error:', err);
+            setError('Something went wrong. Please try again.');
         } finally {
             setIsLoading(false);
         }
     };
+
+    const searchSuggestions = [
+        { icon: TrendingUp, text: "Fintech investors in Europe", category: "Fintech" },
+        { icon: Zap, text: "Pre-seed angels for SaaS startups", category: "SaaS" },
+        { icon: Users, text: "VCs who invested in AI last year", category: "AI" },
+        { icon: Building2, text: "Climate tech seed funds", category: "Climate" }
+    ];
 
     return (
         <div className="max-w-5xl mx-auto px-4 py-8 h-full flex flex-col relative w-full">
             {/* Header / Welcome */}
             {!hasSearched && (
                 <div className="flex-1 flex flex-col items-center justify-center text-center mb-12">
-                    <div className="w-20 h-20 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-3xl flex items-center justify-center mb-8 shadow-inner border border-white/10 ring-1 ring-black/5 dark:ring-white/10 backdrop-blur-3xl">
+                    <motion.div
+                        initial={{ scale: 0.8, opacity: 0 }}
+                        animate={{ scale: 1, opacity: 1 }}
+                        transition={{ duration: 0.5 }}
+                        className="w-20 h-20 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-3xl flex items-center justify-center mb-8 shadow-inner border border-white/10 ring-1 ring-black/5 dark:ring-white/10 backdrop-blur-3xl"
+                    >
                         <Sparkles className="w-10 h-10 text-primary" />
-                    </div>
-                    <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight">
+                    </motion.div>
+                    <motion.h1
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.1, duration: 0.5 }}
+                        className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight"
+                    >
                         How can I help you <br />
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">fundraise today?</span>
-                    </h1>
-                    <p className="text-lg text-muted-foreground max-w-lg leading-relaxed">
+                    </motion.h1>
+                    <motion.p
+                        initial={{ y: 20, opacity: 0 }}
+                        animate={{ y: 0, opacity: 1 }}
+                        transition={{ delay: 0.2, duration: 0.5 }}
+                        className="text-lg text-muted-foreground max-w-lg leading-relaxed mb-10"
+                    >
                         Find the perfect investors for your startup using AI-powered matching.
-                        Just tell me who you're looking for.
-                    </p>
+                    </motion.p>
+
+                    {/* Search Recommendations */}
+                    <AnimatePresence>
+                        {!isTyping && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: -10 }}
+                                transition={{ delay: 0.3, duration: 0.4 }}
+                                className="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full max-w-2xl"
+                            >
+                                {searchSuggestions.map((suggestion, i) => (
+                                    <motion.button
+                                        key={i}
+                                        initial={{ opacity: 0, y: 20 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        transition={{ delay: 0.3 + i * 0.05 }}
+                                        onClick={() => {
+                                            setQuery(suggestion.text);
+                                            setIsTyping(true);
+                                        }}
+                                        className="flex items-center gap-3 px-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 text-left group"
+                                    >
+                                        <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                                            <suggestion.icon className="w-4 h-4" />
+                                        </div>
+                                        <div>
+                                            <p className="text-sm text-foreground/80 group-hover:text-foreground transition-colors">{suggestion.text}</p>
+                                            <p className="text-xs text-muted-foreground">{suggestion.category}</p>
+                                        </div>
+                                    </motion.button>
+                                ))}
+                            </motion.div>
+                        )}
+                    </AnimatePresence>
                 </div>
             )}
 
@@ -91,20 +158,70 @@ export default function ChatInterface() {
                             </div>
                             <div className="space-y-6 w-full">
                                 {isLoading ? (
-                                    <div className="flex items-center space-x-3 text-muted-foreground glass-card px-6 py-4 rounded-2xl rounded-tl-md w-fit">
-                                        <motion.div
-                                            animate={{ rotate: 360 }}
-                                            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                            className="w-5 h-5 border-2 border-primary border-t-transparent rounded-full"
-                                        />
-                                        <span className="font-medium">Analyzing 500+ investor profiles...</span>
-                                    </div>
-                                ) : (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="glass-premium px-6 py-5 rounded-2xl rounded-tl-md w-full max-w-md"
+                                    >
+                                        <div className="flex items-center gap-4 mb-4">
+                                            <motion.div
+                                                animate={{ rotate: 360 }}
+                                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                                                className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full shrink-0"
+                                            />
+                                            <span className="font-medium text-foreground">Searching investors...</span>
+                                        </div>
+                                        <div className="space-y-2">
+                                            {[
+                                                { text: "Analyzing your query with AI", delay: 0 },
+                                                { text: "Scanning 500,000+ investor profiles", delay: 0.5 },
+                                                { text: "Calculating match scores", delay: 1 }
+                                            ].map((step, i) => (
+                                                <motion.div
+                                                    key={i}
+                                                    initial={{ opacity: 0, x: -10 }}
+                                                    animate={{ opacity: 1, x: 0 }}
+                                                    transition={{ delay: step.delay }}
+                                                    className="flex items-center gap-2 text-sm text-muted-foreground"
+                                                >
+                                                    <motion.div
+                                                        animate={{ scale: [1, 1.2, 1] }}
+                                                        transition={{ duration: 0.5, repeat: Infinity, delay: step.delay }}
+                                                        className="w-1.5 h-1.5 rounded-full bg-primary/50"
+                                                    />
+                                                    {step.text}
+                                                </motion.div>
+                                            ))}
+                                        </div>
+                                    </motion.div>
+                                ) : error ? (
+                                    <motion.div
+                                        initial={{ opacity: 0, y: 10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        className="glass-premium px-6 py-5 rounded-2xl rounded-tl-md border border-red-500/20"
+                                    >
+                                        <div className="flex items-center gap-3 text-red-400 mb-2">
+                                            <AlertCircle className="w-5 h-5" />
+                                            <span className="font-medium">Search Error</span>
+                                        </div>
+                                        <p className="text-sm text-muted-foreground mb-4">{error}</p>
+                                        <Button
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => { setHasSearched(false); setError(null); }}
+                                            className="text-sm"
+                                        >
+                                            Try Again
+                                        </Button>
+                                    </motion.div>
+                                ) : results.length > 0 ? (
                                     <>
                                         <div className="prose prose-lg dark:prose-invert max-w-none glass-premium px-8 py-6 rounded-2xl rounded-tl-md mb-8">
                                             <p className="text-foreground m-0 font-body">
                                                 I found <strong className="text-primary">{results.length} {mode}</strong> matching your search.
-                                                I expanded your query to include terms like: <em className="text-muted-foreground">{keywords?.categoryKeywords?.slice(0, 5).join(', ')}</em>.
+                                                {keywords?.categoryKeywords?.length > 0 && (
+                                                    <> I expanded your query to include terms like: <em className="text-muted-foreground">{keywords?.categoryKeywords?.slice(0, 5).join(', ')}</em>.</>
+                                                )}
                                             </p>
                                         </div>
 
@@ -144,7 +261,7 @@ export default function ChatInterface() {
                                             ))}
                                         </motion.div>
                                     </>
-                                )}
+                                ) : null}
                             </div>
                         </div>
                     </div>
@@ -177,7 +294,7 @@ export default function ChatInterface() {
                             <input
                                 type="text"
                                 value={query}
-                                onChange={(e) => setQuery(e.target.value)}
+                                onChange={handleInputChange}
                                 placeholder={`Ask FundLab... (e.g., 'Fintech seed investors in Madrid')`}
                                 className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none placeholder:text-muted-foreground/50 text-foreground"
                             />

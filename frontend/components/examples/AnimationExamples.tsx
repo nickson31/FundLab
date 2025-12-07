@@ -170,12 +170,11 @@ export function MagneticButton({ children }: { children: React.ReactNode }) {
     const magneticRef = useMagneticHover(0.4);
 
     return (
-        <button
-            ref={magneticRef}
-            className="px-8 py-4 bg-white text-black rounded-full font-bold"
-        >
-            {children}
-        </button>
+        <div ref={magneticRef} className="inline-block">
+            <button className="px-8 py-4 bg-white text-black rounded-full font-bold">
+                {children}
+            </button>
+        </div>
     );
 }
 
