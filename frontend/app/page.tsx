@@ -149,272 +149,289 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Features Grid */}
-      <section id="features" className="py-32 px-6 relative">
-        <div className="max-w-7xl mx-auto">
-          <div className="mb-20 md:text-center max-w-3xl mx-auto">
-            <h2 className="text-4xl md:text-5xl font-bold font-heading text-white tracking-tight mb-6">Intelligence at Scale.</h2>
-            <p className="text-xl text-gray-400 font-light text-balance">
+      {/* Intelligence at Scale - Futuristic Redesign */}
+      <section id="features" className="py-40 px-6 relative overflow-hidden">
+        {/* Ambient Background Effects */}
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-indigo-900/20 via-black to-black"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-indigo-600/5 rounded-full blur-[120px] pointer-events-none"></div>
+
+        <div className="max-w-6xl mx-auto relative z-10">
+
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-24"
+          >
+            <h2 className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tight mb-6 leading-[1.1]">
+              Intelligence at Scale.
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed">
               Stop manually searching LinkedIn. Our AI digests millions of data points to find the investors actually interested in your vertical.
             </p>
-          </div>
+          </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              { icon: Database, title: "500k+ Profiles", desc: "Access the world's most comprehensive database of Angels, VCs, and Family Offices." },
-              { icon: BrainCircuit, title: "Semantic Matching", desc: "Don't rely on keywords. Describe your startup in plain English and let AI find the perfect thesis match." },
-              { icon: ShieldCheck, title: "Privacy First", desc: "GDPR compliant. Your data is secure, and we never resell your contact info." }
-            ].map((feature, i) => (
-              <motion.div
-                key={i}
-                whileHover={{ y: -10 }}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: i * 0.2 }}
-                className="glass-premium p-8 rounded-3xl relative overflow-hidden group"
-              >
-                <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6 text-indigo-400 group-hover:scale-110 transition-transform duration-300">
-                  <feature.icon className="w-7 h-7" strokeWidth={1.5} />
+          {/* Feature Cards - Minimalist Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+
+            {/* Card 1: 500k+ Profiles */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="group relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-white/[0.07] to-white/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative bg-black/40 backdrop-blur-sm border border-white/[0.08] rounded-2xl p-8 hover:border-white/[0.15] transition-all duration-500">
+
+                {/* Icon Container */}
+                <div className="mb-8">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center group-hover:scale-110 group-hover:border-indigo-400/50 transition-all duration-500">
+                    <Database className="w-6 h-6 text-indigo-400" strokeWidth={1.5} />
+                  </div>
                 </div>
-                <h3 className="text-2xl font-bold font-heading text-white mb-3">{feature.title}</h3>
-                <p className="text-base text-gray-400 leading-relaxed font-body">
-                  {feature.desc}
+
+                {/* Content */}
+                <h3 className="text-2xl font-bold font-heading text-white mb-3 tracking-tight">
+                  500k+ Profiles
+                </h3>
+                <p className="text-gray-400 leading-relaxed text-[15px]">
+                  Access the world's most comprehensive database of Angels, VCs, and Family Offices.
                 </p>
-              </motion.div>
-            ))}
+
+                {/* Subtle Hover Indicator */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+            </motion.div>
+
+            {/* Card 2: Semantic Matching */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="group relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-white/[0.07] to-white/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative bg-black/40 backdrop-blur-sm border border-white/[0.08] rounded-2xl p-8 hover:border-white/[0.15] transition-all duration-500">
+
+                {/* Icon Container */}
+                <div className="mb-8">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center group-hover:scale-110 group-hover:border-indigo-400/50 transition-all duration-500">
+                    <BrainCircuit className="w-6 h-6 text-indigo-400" strokeWidth={1.5} />
+                  </div>
+                </div>
+
+                {/* Content */}
+                <h3 className="text-2xl font-bold font-heading text-white mb-3 tracking-tight">
+                  Semantic Matching
+                </h3>
+                <p className="text-gray-400 leading-relaxed text-[15px]">
+                  Don't rely on keywords. Describe your startup in plain English and let AI find the perfect thesis match.
+                </p>
+
+                {/* Subtle Hover Indicator */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+            </motion.div>
+
+            {/* Card 3: Privacy First */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="group relative"
+            >
+              <div className="absolute inset-0 bg-gradient-to-b from-white/[0.07] to-white/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              <div className="relative bg-black/40 backdrop-blur-sm border border-white/[0.08] rounded-2xl p-8 hover:border-white/[0.15] transition-all duration-500">
+
+                {/* Icon Container */}
+                <div className="mb-8">
+                  <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-indigo-500/20 to-purple-500/20 border border-indigo-500/30 flex items-center justify-center group-hover:scale-110 group-hover:border-indigo-400/50 transition-all duration-500">
+                    <ShieldCheck className="w-6 h-6 text-indigo-400" strokeWidth={1.5} />
+                  </div>
+                </div>
+
+                {/* Content */}
+                <h3 className="text-2xl font-bold font-heading text-white mb-3 tracking-tight">
+                  Privacy First
+                </h3>
+                <p className="text-gray-400 leading-relaxed text-[15px]">
+                  GDPR compliant. Your data is secure, and we never resell your contact info.
+                </p>
+
+                {/* Subtle Hover Indicator */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+              </div>
+            </motion.div>
+
           </div>
         </div>
       </section>
 
-      {/* Feature Highlights - Interactive Cards */}
-      <section className="py-32 px-6 relative border-t border-white/5">
-        <div className="max-w-7xl mx-auto">
+      {/* How It Works - Futuristic Minimalist */}
+      <section className="py-40 px-6 relative overflow-hidden border-t border-white/[0.05]">
+        {/* Subtle Background */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black via-indigo-950/5 to-black"></div>
+
+        <div className="max-w-7xl mx-auto relative z-10">
 
           {/* Section Header */}
-          <div className="flex justify-center mb-8">
-            <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/20 bg-indigo-500/10 px-4 py-2 backdrop-blur-md shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-              <Sparkles className="h-4 w-4 text-indigo-300" strokeWidth={2} />
-              <span className="text-sm font-bold text-indigo-200/90 uppercase tracking-wider">Feature Highlights</span>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-32"
+          >
+            <h2 className="text-5xl md:text-7xl font-bold font-heading text-white tracking-tight mb-6 leading-[1.1]">
+              How It Works.
+            </h2>
+            <p className="text-xl md:text-2xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed">
+              From AI-powered matching to hyper-personalized outreach—automate your entire fundraising pipeline.
+            </p>
+          </motion.div>
+
+          {/* Process Steps - Horizontal Timeline */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 md:gap-6">
+
+            {/* Step 1: Match */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.5 }}
+              className="relative group"
+            >
+              {/* Step Number */}
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold text-sm group-hover:bg-indigo-500/20 group-hover:border-indigo-400/50 transition-all duration-500">
+                  01
+                </div>
+              </div>
+
+              {/* Content */}
+              <h3 className="text-xl font-bold font-heading text-white mb-3 tracking-tight">
+                AI Matching
+              </h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                Describe your startup. Our AI analyzes 500k+ profiles to find investors with matching thesis and portfolio.
+              </p>
+
+              {/* Connection Line (hidden on mobile) */}
+              <div className="hidden md:block absolute top-5 left-full w-full h-[1px] bg-gradient-to-r from-indigo-500/30 to-transparent"></div>
+            </motion.div>
+
+            {/* Step 2: Draft */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              className="relative group"
+            >
+              {/* Step Number */}
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold text-sm group-hover:bg-indigo-500/20 group-hover:border-indigo-400/50 transition-all duration-500">
+                  02
+                </div>
+              </div>
+
+              {/* Content */}
+              <h3 className="text-xl font-bold font-heading text-white mb-3 tracking-tight">
+                Draft Messages
+              </h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                Generate hyper-personalized LinkedIn and email messages tailored to each investor's history and interests.
+              </p>
+
+              {/* Connection Line */}
+              <div className="hidden md:block absolute top-5 left-full w-full h-[1px] bg-gradient-to-r from-indigo-500/30 to-transparent"></div>
+            </motion.div>
+
+            {/* Step 3: Send */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3, duration: 0.5 }}
+              className="relative group"
+            >
+              {/* Step Number */}
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold text-sm group-hover:bg-indigo-500/20 group-hover:border-indigo-400/50 transition-all duration-500">
+                  03
+                </div>
+              </div>
+
+              {/* Content */}
+              <h3 className="text-xl font-bold font-heading text-white mb-3 tracking-tight">
+                Automate Outreach
+              </h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                Send 1,000+ messages per week. Track opens, responses, and schedule automated follow-ups.
+              </p>
+
+              {/* Connection Line */}
+              <div className="hidden md:block absolute top-5 left-full w-full h-[1px] bg-gradient-to-r from-indigo-500/30 to-transparent"></div>
+            </motion.div>
+
+            {/* Step 4: Close */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              className="relative group"
+            >
+              {/* Step Number */}
+              <div className="mb-6">
+                <div className="inline-flex items-center justify-center w-10 h-10 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-400 font-bold text-sm group-hover:bg-indigo-500/20 group-hover:border-indigo-400/50 transition-all duration-500">
+                  04
+                </div>
+              </div>
+
+              {/* Content */}
+              <h3 className="text-xl font-bold font-heading text-white mb-3 tracking-tight">
+                Track & Close
+              </h3>
+              <p className="text-gray-400 leading-relaxed text-sm">
+                Monitor your pipeline in real-time. See response rates, schedule meetings, and close your round faster.
+              </p>
+            </motion.div>
+
+          </div>
+
+          {/* Stats Bar */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.6, duration: 0.6 }}
+            className="mt-32 grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12"
+          >
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2">500k+</div>
+              <div className="text-sm text-gray-500 uppercase tracking-wider">Investor Profiles</div>
             </div>
-          </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2">1,000+</div>
+              <div className="text-sm text-gray-500 uppercase tracking-wider">Messages/Week</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2">3x</div>
+              <div className="text-sm text-gray-500 uppercase tracking-wider">Faster Fundraising</div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2">25%</div>
+              <div className="text-sm text-gray-500 uppercase tracking-wider">Response Rate</div>
+            </div>
+          </motion.div>
 
-          <h2 className="text-4xl md:text-6xl font-bold font-heading text-center text-white tracking-tight mb-6">
-            Everything You Need to
-            <span className="block mt-2">Close Your Round</span>
-          </h2>
-          <p className="mx-auto max-w-2xl text-center text-lg text-gray-400 font-light mb-16">
-            From AI-powered matching to hyper-personalized outreach—FundLab automates your fundraising pipeline so you can focus on building relationships.
-          </p>
-
-          {/* Feature Cards Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-            {/* Card 1: AI Matching */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.1 }}
-              className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-6"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-sky-500/10 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-sky-500/10 blur-3xl"></div>
-
-              <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-5 ring-1 ring-white/10 backdrop-blur mb-6">
-                <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
-                  <BrainCircuit className="h-5 w-5 text-sky-300" strokeWidth={1.5} />
-                  <span className="font-bold">AI Semantic Matching</span>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="rounded-xl bg-white/[0.04] p-4 ring-1 ring-white/10">
-                    <div className="flex items-center justify-between mb-3">
-                      <p className="text-sm font-bold text-white/90">Your Startup</p>
-                      <span className="text-xs text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-500/20">Fintech SaaS</span>
-                    </div>
-                    <p className="text-xs text-white/60 leading-relaxed">B2B payments platform for SMEs in Europe</p>
-                  </div>
-
-                  <div className="flex items-center justify-center">
-                    <ArrowRight className="w-5 h-5 text-indigo-400 animate-pulse" />
-                  </div>
-
-                  <div className="rounded-xl bg-white/[0.04] p-4 ring-1 ring-white/10">
-                    <div className="flex items-center gap-3 mb-2">
-                      <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center text-white font-bold text-sm">
-                        JD
-                      </div>
-                      <div className="flex-1">
-                        <p className="text-sm font-bold text-white/90">Javier Delgado</p>
-                        <p className="text-xs text-white/60">Ex-Revolut VP • 12 Fintech Exits</p>
-                      </div>
-                      <span className="text-xs font-bold text-green-400">98%</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <h3 className="text-2xl font-bold font-heading text-white tracking-tight mb-3">Intelligent Investor Matching</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Our AI analyzes 500k+ investor profiles to find perfect thesis matches. No more manual LinkedIn searches—just describe your startup and we'll find the right angels and VCs.
-              </p>
-            </motion.div>
-
-            {/* Card 2: Outreach Automation */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.2 }}
-              className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-6"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-purple-500/10 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute -left-24 -top-24 h-72 w-72 rounded-full bg-purple-500/10 blur-3xl"></div>
-
-              <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-5 ring-1 ring-white/10 backdrop-blur mb-6">
-                <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
-                  <MessageSquare className="h-5 w-5 text-purple-300" strokeWidth={1.5} />
-                  <span className="font-bold">Hyper-Personalized Outreach</span>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="rounded-xl bg-white/[0.04] p-4 ring-1 ring-white/10">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-purple-300">LinkedIn Message</span>
-                      <span className="text-xs text-white/50">Generated in 2.3s</span>
-                    </div>
-                    <p className="text-xs text-white/70 leading-relaxed italic">
-                      "Hi Anna, I noticed you led the Series A for PayFlow in 2022. We're building similar infrastructure for SMEs in the Nordics..."
-                    </p>
-                  </div>
-
-                  <div className="flex items-center gap-2 text-xs text-white/60">
-                    <Check className="w-4 h-4 text-emerald-400" />
-                    <span>Personalized with investor history</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-xs text-white/60">
-                    <Check className="w-4 h-4 text-emerald-400" />
-                    <span>Optimized for response rate</span>
-                  </div>
-                </div>
-
-                <div className="mt-4 flex items-center justify-between rounded-xl bg-indigo-500/10 border border-indigo-500/20 px-4 py-3">
-                  <div className="flex items-center gap-2">
-                    <Sparkles className="w-4 h-4 text-indigo-300" />
-                    <span className="text-xs font-bold text-indigo-200">1,000+ messages/week</span>
-                  </div>
-                  <span className="text-xs text-indigo-300/70">Automated</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl font-bold font-heading text-white tracking-tight mb-3">Outreach at Scale</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Draft and send 1,000+ hyper-personalized LinkedIn and email messages every week. Our AI tailors each message based on the investor's portfolio, thesis, and recent activity.
-              </p>
-            </motion.div>
-
-            {/* Card 3: Real-Time Dashboard */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.3 }}
-              className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-6"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/10 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute -right-24 -bottom-24 h-72 w-72 rounded-full bg-emerald-500/10 blur-3xl"></div>
-
-              <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-5 ring-1 ring-white/10 backdrop-blur mb-6">
-                <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
-                  <LayoutGrid className="h-5 w-5 text-emerald-300" strokeWidth={1.5} />
-                  <span className="font-bold">Pipeline Dashboard</span>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="grid grid-cols-3 gap-3">
-                    <div className="rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10 text-center">
-                      <p className="text-2xl font-bold text-white">47</p>
-                      <p className="text-xs text-white/60 mt-1">Contacted</p>
-                    </div>
-                    <div className="rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10 text-center">
-                      <p className="text-2xl font-bold text-emerald-400">12</p>
-                      <p className="text-xs text-white/60 mt-1">Responded</p>
-                    </div>
-                    <div className="rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10 text-center">
-                      <p className="text-2xl font-bold text-indigo-400">3</p>
-                      <p className="text-xs text-white/60 mt-1">Meetings</p>
-                    </div>
-                  </div>
-
-                  <div className="rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-xs font-bold text-white/80">Response Rate</span>
-                      <span className="text-xs text-emerald-400 font-bold">25.5%</span>
-                    </div>
-                    <div className="h-2 w-full rounded-full bg-white/10 overflow-hidden">
-                      <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-teal-500" style={{ width: '25.5%' }}></div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <h3 className="text-2xl font-bold font-heading text-white tracking-tight mb-3">Track Every Interaction</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Monitor your entire fundraising pipeline in real-time. See who opened your messages, track response rates, and get AI insights on when to follow up.
-              </p>
-            </motion.div>
-
-            {/* Card 4: Global Collaboration */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: 0.4 }}
-              className="group relative overflow-hidden rounded-3xl bg-white/[0.04] ring-1 ring-white/10 p-6"
-            >
-              <div className="absolute inset-0 bg-gradient-to-br from-fuchsia-500/10 via-transparent to-transparent pointer-events-none"></div>
-              <div className="absolute -left-24 -bottom-24 h-72 w-72 rounded-full bg-fuchsia-500/10 blur-3xl"></div>
-
-              <div className="rounded-2xl bg-gradient-to-b from-white/5 to-white/[0.03] p-5 ring-1 ring-white/10 backdrop-blur mb-6">
-                <div className="flex items-center gap-2 text-white/80 text-sm mb-4">
-                  <Users className="h-5 w-5 text-fuchsia-300" strokeWidth={1.5} />
-                  <span className="font-bold">Team Workspace</span>
-                </div>
-
-                <div className="space-y-3">
-                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop" className="h-8 w-8 rounded-full ring-1 ring-white/20" alt="team" />
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-white/90">Sarah Chen</p>
-                      <p className="text-xs text-white/60">Assigned 12 investors</p>
-                    </div>
-                    <Check className="w-4 h-4 text-emerald-400" />
-                  </div>
-
-                  <div className="flex items-center gap-3 rounded-xl bg-white/[0.04] p-3 ring-1 ring-white/10">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop" className="h-8 w-8 rounded-full ring-1 ring-white/20" alt="team" />
-                    <div className="flex-1">
-                      <p className="text-sm font-bold text-white/90">Marcus Liu</p>
-                      <p className="text-xs text-white/60">Following up with VCs</p>
-                    </div>
-                    <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></div>
-                  </div>
-                </div>
-
-                <div className="mt-4 flex items-center gap-2 text-xs text-white/60">
-                  <ShieldCheck className="w-4 h-4 text-indigo-300" />
-                  <span>Synced across your entire team</span>
-                </div>
-              </div>
-
-              <h3 className="text-2xl font-bold font-heading text-white tracking-tight mb-3">Collaborate Seamlessly</h3>
-              <p className="text-sm text-gray-400 leading-relaxed">
-                Keep your founding team aligned with shared dashboards, task assignments, and automated handoffs. Everyone sees the same pipeline in real-time.
-              </p>
-            </motion.div>
-
-          </div>
         </div>
       </section>
 
