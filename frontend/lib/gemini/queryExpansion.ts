@@ -5,6 +5,8 @@ export async function expandQuery(userQuery: string): Promise<{
     stageKeywords: string[];
     locationKeywords: string[];
 }> {
+    console.log('[Gemini] Starting query expansion for:', userQuery);
+
     const prompt = `
 You are an investor search query expander. Given a founder's search query, generate related keywords.
 
@@ -23,14 +25,34 @@ Return ONLY valid JSON, no markdown.
 `;
 
     try {
+        console.log('[Gemini] Sending request to model...');
         const result = await model.generateContent(prompt);
+        console.log('[Gemini] ✅ Response received successfully');
+
         const text = result.response.text();
+        console.log('[Gemini] Raw response length:', text.length);
+
         // Clean markdown code blocks if present
         const jsonStr = text.replace(/```json/g, '').replace(/```/g, '').trim();
-        return JSON.parse(jsonStr);
+        const parsed = JSON.parse(jsonStr);
+
+        console.log('[Gemini] ✅ Parsed keywords:', {
+            categories: parsed.categoryKeywords?.length || 0,
+            stages: parsed.stageKeywords?.length || 0,
+            locations: parsed.locationKeywords?.length || 0
+        });
+
+        return parsed;
     } catch (error) {
-        console.error("Gemini Query Expansion Error:", error);
+        console.error('[Gemini] ❌ Query Expansion Error:', error);
+        console.error('[Gemini] Error details:', {
+            name: (error as any)?.name,
+            message: (error as any)?.message,
+            status: (error as any)?.status
+        });
+
         // Fallback
+        console.log('[Gemini] Using fallback keywords');
         return {
             categoryKeywords: [userQuery],
             stageKeywords: [],
