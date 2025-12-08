@@ -1,9 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { expandQuery } from '@/lib/gemini/queryExpansion';
 import { matchAngels } from '@/lib/algorithms/matchAngels';
-import { NextRequest, NextResponse } from 'next/server';
-import { expandQuery } from '@/lib/gemini/queryExpansion';
-import { matchAngels } from '@/lib/algorithms/matchAngels';
 import { matchFunds } from '@/lib/algorithms/matchFunds';
 import { supabase } from '@/lib/supabase';
 
@@ -35,7 +32,7 @@ export async function POST(req: NextRequest) {
         } else {
             results = await matchFunds(keywords, userId);
         }
-        
+
         console.log('[Search API] ✅ Matching complete:', {
             resultsCount: results.length,
             topScore: results[0]?.score || 0
