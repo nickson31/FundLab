@@ -31,18 +31,24 @@ export async function POST(req: NextRequest) {
         // Let's implement auto-save here.
 
         if (results.length > 0) {
-            const type = mode === 'angels' ? 'angel' : 'fund';
             const saves = results.map((r: any) => ({
                 user_id: userId,
-                investor_id: r.angel?.id || r.fund?.id,
-                type: type
+                matched_investor_id: r.angel?.id, // Assuming angel object has id
+                matched_fund_id: r.fund?.id,     // Assuming fund object has id
+                relevance_score: r.score,
+                query: query,
+                summary: r.breakdown // Storing breakdown as summary for now
             }));
 
-            // Use upsert to avoid unique constraint errors
-            await supabase.from('saved_investors').upsert(saves, { onConflict: 'user_id, investor_id, type', ignoreDuplicates: true });
+            // Use search_results table
+            // We use upsert if there IS a conflict constraint, but search_results usually tracks history.
+            // If we want to avoid duplicates for the same query/investor, we'd need a constraint.
+            // For now, let's just INSERT to track search history matches.
+            const { error } = await supabase.from('search_results').insert(saves);
 
-            // Also mark as seen
-            await supabase.from('seen_investors').upsert(saves, { onConflict: 'user_id, investor_id, type', ignoreDuplicates: true });
+            if (error) {
+                console.error('Error auto-saving results:', error);
+            }
         }
 
         return NextResponse.json({ results, keywords });

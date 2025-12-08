@@ -77,23 +77,20 @@ export async function generateInvestorSummary(input: SummaryInput): Promise<stri
     const investor = input.investorData;
 
     const prompt = `
-Generate a 1-2 sentence summary explaining why this investor is a GOOD MATCH for the user's company.
+CRITICAL INSTRUCTION: READ ALL COLUMNS from the investor data below.
+Generate a 1-2 sentence summary explaining why this investor is a GOOD MATCH for the user's company (context below).
 
-INVESTOR DATA:
-Name: ${investor.fullName || investor.name}
-Focus: ${investor.industries || investor.investment_focus || investor.categories || 'N/A'}
-Stage: ${investor.investment_stages || investor.stages || 'N/A'}
-Location: ${investor.location || investor.addressWithCountry || investor.location_identifiers || 'N/A'}
-Portfolio: ${JSON.stringify(investor.portfolio_companies?.slice(0, 3) || investor.investments?.slice(0, 3) || [])}
+=== COMPLETE INVESTOR PROFILE ===
+${JSON.stringify(investor, null, 2)}
 
-USER'S COMPANY:
+=== USER'S COMPANY CONTEXT ===
 ${input.userCompany}
 
 RULES:
-- Maximum 2 sentences
-- Be specific about WHY they're a match
-- Reference their investment focus, portfolio, or stage preference
-- Make it actionable (why the user should reach out)
+- Maximum 2 sentences.
+- Be specific: Reference their actual portfolio, bio, or thesis tags from the data.
+- Explain the "WHY" (e.g. "Because they invested in X and focus on Y...").
+- Do not use generic phrases like "This investor matches because...". Dive straight into the reason.
 
 Return ONLY the summary text, no labels or formatting.
 `;

@@ -23,7 +23,7 @@ export async function matchAngels(
 ): Promise<AngelMatch[]> {
     // 1. Fetch ALL angels (MVP approach - optimize with RPC later if needed)
     const { data: angels } = await supabase
-        .from('angel_investors')
+        .from('angels')
         .select('*');
 
     if (!angels) return [];

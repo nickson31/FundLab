@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Outfit, Plus_Jakarta_Sans } from "next/font/google";
+import { Outfit, Plus_Jakarta_Sans, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
@@ -12,6 +12,12 @@ const outfit = Outfit({
 const jakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
   variable: "--font-body",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  variable: "--font-technical", // New font variable
   display: "swap",
 });
 
@@ -33,6 +39,7 @@ export default function RootLayout({
       <body className={cn(
         outfit.variable,
         jakarta.variable,
+        spaceGrotesk.variable,
         "min-h-screen bg-background font-body antialiased text-gray-400 selection:bg-indigo-500/30 selection:text-indigo-200"
       )}>
         {/* Cinematic Background Mesh */}

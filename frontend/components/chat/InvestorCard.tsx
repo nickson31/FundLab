@@ -22,10 +22,21 @@ export default function InvestorCard({ investor, type, score, breakdown, onDraft
     const [isHovered, setIsHovered] = useState(false);
     const [saved, setSaved] = useState(isSaved);
 
-    const name = investor.fullName || investor.name;
-    const headline = investor.headline || investor.short_description;
-    const about = investor.about || investor.description;
-    const location = investor.addressWithCountry || (investor.location_identifiers || []).join(', ');
+    const name = investor.fullName || investor.name || 'Unknown Investor';
+    const headline = investor.headline || investor.short_description || investor.description || '';
+    const about = investor.about || investor.description || '';
+
+    // Handle "messy" raw keys for funds/angels
+    const rawLocation = investor['location_identifiers/0/value'] ?
+        [investor['location_identifiers/0/value'], investor['location_identifiers/1/value'], investor['location_identifiers/2/value']].filter(Boolean).join(', ') :
+        null;
+
+    const location = investor.addressWithCountry || rawLocation || (investor.location_identifiers || []).join(', ') || 'Global';
+
+    const linkedinUrl = investor.linkedinUrl || investor['linkedin/value'] || '';
+    const websiteUrl = investor.websiteUrl || investor['website/value'] || '';
+    const email = investor.email || investor.contact_email || '';
+    const profilePic = investor.profilePic;
 
     const handleSave = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -111,52 +122,40 @@ export default function InvestorCard({ investor, type, score, breakdown, onDraft
                                         rel="noopener noreferrer"
                                         className="p-2 rounded-xl text-gray-400 hover:text-blue-400 hover:bg-white/5 transition-colors"
                                     >
-                                        <Linkedin className="w-4 h-4" />
-                                    </a>
-                                )}
-                                {investor.website && (
-                                    <a
-                                        href={investor.website}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-2 rounded-xl text-gray-400 hover:text-emerald-400 hover:bg-white/5 transition-colors"
-                                    >
-                                        <ExternalLink className="w-4 h-4" />
-                                    </a>
-                                )}
-                            </div>
-                        </div>
-                    </div>
 
-                    <p className="text-sm text-gray-400 line-clamp-2 font-normal leading-relaxed mb-4 text-balance">
-                        {headline || about || "No description available."}
-                    </p>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2">
-                        {(investor.location_identifiers || []).slice(0, 1).map((loc: string, i: number) => (
-                            <span key={i} className="inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-gray-400 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">
-                                <MapPin className="w-3 h-3 text-indigo-400" />
-                                {loc}
-                            </span>
-                        ))}
-                    </div>
-                </div>
+                                        {/* Tags */}
+                                        <div className="flex flex-wrap gap-2">
+                                            {/* Thesis Tags */}
+                                            {((investor.categories_strong_en || investor.categories_general_en || "").split(',').slice(0, 3) || []).map((tag: string, i: number) => (
+                                                <span key={`thesis-${i}`} className="inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-indigo-300 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
+                                                    <Building2 className="w-3 h-3 text-indigo-400" />
+                                                    {tag.trim()}
+                                                </span>
+                                            ))}
+                                            {/* Location Tags */}
+                                            {(investor.location_identifiers || []).slice(0, 1).map((loc: string, i: number) => (
+                                                <span key={`loc-${i}`} className="inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-gray-400 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">
+                                                    <MapPin className="w-3 h-3 text-gray-500" />
+                                                    {loc}
+                                                </span>
+                                            ))}
+                                        </div>
+                                    </div>
             </div>
 
-            {/* Quick Action Overlay (Draft Message) */}
-            {onDraftMessage && (
-                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
-                    <Button
-                        size="sm"
-                        onClick={(e) => { e.stopPropagation(); onDraftMessage(investor); }}
-                        className="bg-white text-black hover:bg-indigo-50 font-bold rounded-xl shadow-lg shadow-white/5"
-                    >
-                        <Maximize2 className="w-4 h-4 mr-2" />
-                        Draft
-                    </Button>
-                </div>
-            )}
-        </motion.div>
-    );
+                            {/* Quick Action Overlay (Draft Message) */}
+                            {onDraftMessage && (
+                                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                                    <Button
+                                        size="sm"
+                                        onClick={(e) => { e.stopPropagation(); onDraftMessage(investor); }}
+                                        className="bg-white text-black hover:bg-indigo-50 font-bold rounded-xl shadow-lg shadow-white/5"
+                                    >
+                                        <Maximize2 className="w-4 h-4 mr-2" />
+                                        Draft
+                                    </Button>
+                                </div>
+                            )}
+                        </motion.div>
+                        );
 }

@@ -31,7 +31,7 @@ export default function FundsPage() {
             const ids = saved.map(s => s.investor_id);
 
             const { data: fundDetails } = await supabase
-                .from('investment_funds')
+                .from('funds')
                 .select('*')
                 .in('id', ids);
 
@@ -53,7 +53,7 @@ export default function FundsPage() {
         setExpandedFundId(fundId);
 
         if (!employees[fundId]) {
-            const { data: allEmps } = await supabase.from('fund_employees').select('*');
+            const { data: allEmps } = await supabase.from('employees').select('*');
             if (allEmps) {
                 const fundEmps = allEmps
                     .map(e => ({ ...e.data, id: e.id }))

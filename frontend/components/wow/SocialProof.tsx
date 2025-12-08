@@ -4,60 +4,65 @@ import { motion } from 'framer-motion';
 
 export default function SocialProof() {
     return (
-        <section className="py-20 border-t border-white/5 relative z-10">
-            <div className="container mx-auto px-4 text-center">
-                <h2 className="text-2xl md:text-3xl font-bold mb-12 text-balance pointer-events-none">
-                    Join Ambitious Founders Raising Smarter
-                </h2>
+        <section className="py-24 px-6 relative overflow-hidden border-y border-white/[0.05]">
+            <div className="absolute inset-0 bg-gradient-to-b from-indigo-950/10 via-transparent to-transparent"></div>
 
-                <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto mb-16">
-                    <motion.div
-                        whileHover={{ y: -5 }}
-                        className="glass-card p-8 rounded-2xl text-left"
-                    >
-                        <p className="text-lg text-muted-foreground italic mb-6">
-                            "FundLab helped me find 12 relevant angels in one afternoon. I closed my pre-seed in 3 weeks."
-                        </p>
-                        <div className="font-bold text-foreground flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-indigo-600"></div>
-                            <div>
-                                <div className="text-sm">María S.</div>
-                                <div className="text-xs text-muted-foreground font-normal">SaaS Founder</div>
-                            </div>
-                        </div>
-                    </motion.div>
+            <div className="max-w-7xl mx-auto relative z-10">
+                {/* Trust Badge */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-16"
+                >
+                    <p className="text-sm font-medium text-gray-500 uppercase tracking-[0.25em] mb-2">
+                        Trusted by 500+ Founders Worldwide
+                    </p>
+                </motion.div>
 
-                    <motion.div
-                        whileHover={{ y: -5 }}
-                        className="glass-card p-8 rounded-2xl text-left"
-                    >
-                        <p className="text-lg text-muted-foreground italic mb-6">
-                            "The AI-generated messages actually got responses. 40% reply rate vs. my usual 5%."
-                        </p>
-                        <div className="font-bold text-foreground flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-400 to-pink-600"></div>
-                            <div>
-                                <div className="text-sm">David L.</div>
-                                <div className="text-xs text-muted-foreground font-normal">Fintech Startup</div>
+                {/* Stats Grid */}
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12 mb-20">
+                    {[
+                        { value: "€50M+", label: "Capital Raised", sublabel: "by our users" },
+                        { value: "500+", label: "Active Founders", sublabel: "on the platform" },
+                        { value: "25%", label: "Response Rate", sublabel: "avg. from investors" },
+                        { value: "3x", label: "Faster", sublabel: "than manual outreach" }
+                    ].map((stat, i) => (
+                        <motion.div
+                            key={i}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: i * 0.1, duration: 0.5 }}
+                            className="text-center group"
+                        >
+                            <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2 group-hover:text-indigo-400 transition-colors duration-500">
+                                {stat.value}
                             </div>
-                        </div>
-                    </motion.div>
+                            <div className="text-sm font-medium text-gray-400">{stat.label}</div>
+                            <div className="text-xs text-gray-600">{stat.sublabel}</div>
+                        </motion.div>
+                    ))}
                 </div>
 
-                <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto text-center divide-x divide-white/10">
-                    <div>
-                        <div className="text-4xl font-bold text-blue-400 mb-2">500+</div>
-                        <div className="text-xs md:text-sm text-muted-foreground uppercase tracking-wider">Investors Indexed</div>
-                    </div>
-                    <div>
-                        <div className="text-4xl font-bold text-purple-400 mb-2">3 Mins</div>
-                        <div className="text-xs md:text-sm text-muted-foreground uppercase tracking-wider">Avg Search Time</div>
-                    </div>
-                    <div>
-                        <div className="text-4xl font-bold text-pink-400 mb-2">85%</div>
-                        <div className="text-xs md:text-sm text-muted-foreground uppercase tracking-wider">Match Relevance</div>
-                    </div>
-                </div>
+                {/* Company Logos */}
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.4 }}
+                    className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6"
+                >
+                    <p className="text-xs text-gray-600 uppercase tracking-widest mr-4">Alumni from</p>
+                    {["Y Combinator", "Techstars", "500 Startups", "Seedcamp", "Antler"].map((company, i) => (
+                        <span
+                            key={i}
+                            className="text-lg font-bold font-heading text-gray-500 hover:text-white transition-colors duration-300 cursor-default"
+                        >
+                            {company}
+                        </span>
+                    ))}
+                </motion.div>
             </div>
         </section>
     );

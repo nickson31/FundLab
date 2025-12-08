@@ -21,7 +21,7 @@ export async function matchFunds(
     userId: string
 ): Promise<FundMatch[]> {
     const { data: funds } = await supabase
-        .from('investment_funds')
+        .from('funds')
         .select('*');
 
     if (!funds) return [];

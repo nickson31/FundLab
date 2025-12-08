@@ -39,7 +39,7 @@ export default function AngelsPage() {
 
         // 2. Get angel details
         const { data: angelDetails } = await supabase
-            .from('angel_investors')
+            .from('angels')
             .select('*')
             .in('id', ids);
 

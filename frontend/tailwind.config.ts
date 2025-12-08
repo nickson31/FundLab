@@ -56,6 +56,12 @@ const config: Config = {
                 md: "calc(var(--radius) - 2px)",
                 sm: "calc(var(--radius) - 4px)",
             },
+            fontFamily: {
+                // Add the new font here
+                heading: ["var(--font-heading)", "sans-serif"],
+                body: ["var(--font-body)", "sans-serif"],
+                technical: ["var(--font-technical)", "sans-serif"],
+            },
             keyframes: {
                 "accordion-down": {
                     from: { height: "0" },

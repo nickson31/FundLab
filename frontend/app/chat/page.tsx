@@ -8,6 +8,32 @@ import InvestorCard from '@/components/chat/InvestorCard';
 import MessageModal from '@/components/chat/MessageModal';
 import SearchToggle from '@/components/chat/SearchToggle';
 import MacShell from '@/components/layout/MacShell';
+import { useEffect } from 'react';
+
+const LOADING_MESSAGES = [
+    "Analyzing global investor database...",
+    "Matching investment thesis...",
+    "Checking portfolio conflicts...",
+    "Scoring alignment...",
+    "Formatting results..."
+];
+
+function LoadingMessage() {
+    const [msgIndex, setMsgIndex] = useState(0);
+
+    useEffect(() => {
+        const interval = setInterval(() => {
+            setMsgIndex((prev) => (prev + 1) % LOADING_MESSAGES.length);
+        }, 800);
+        return () => clearInterval(interval);
+    }, []);
+
+    return (
+        <span className="text-sm w-[200px] inline-block animate-[fadeIn_0.2s_ease-out] key={msgIndex}">
+            {LOADING_MESSAGES[msgIndex]}
+        </span>
+    );
+}
 
 export default function ChatPage() {
     const [query, setQuery] = useState('');
@@ -18,6 +44,7 @@ export default function ChatPage() {
     const [keywords, setKeywords] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInvestor, setSelectedInvestor] = useState<any>(null);
+    const [error, setError] = useState<string | null>(null);
 
     const openModal = (investor?: any) => {
         setSelectedInvestor(investor);
@@ -31,6 +58,7 @@ export default function ChatPage() {
         setIsLoading(true);
         setHasSearched(true);
         setResults([]);
+        setError(null);
 
         try {
             const userId = '00000000-0000-0000-0000-000000000000';
@@ -47,6 +75,8 @@ export default function ChatPage() {
             }
         } catch (error) {
             console.error('Search error:', error);
+            setError("I couldn't connect to the investor database. Please try again.");
+            setResults([]);
         } finally {
             setIsLoading(false);
         }
@@ -152,14 +182,18 @@ export default function ChatPage() {
 
                         {/* AI Response */}
                         <div className="flex items-start gap-4 animate-[fadeIn_0.5s_ease-out_0.2s_forwards] opacity-0">
-                            <div className="w-8 h-8 rounded-full bg-indigo-500 flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-indigo-500/20">
+                            <div className={cn("w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 shadow-lg", error ? "bg-red-500 shadow-red-500/20" : "bg-indigo-500 shadow-indigo-500/20")}>
                                 <Sparkles className="w-4 h-4 text-white" />
                             </div>
                             <div className="space-y-4 flex-1">
                                 {isLoading ? (
                                     <div className="flex items-center space-x-3 text-gray-400 bg-white/5 px-4 py-3 rounded-2xl rounded-tl-sm w-fit border border-white/5">
                                         <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                                        <span className="text-sm">Analyzing market data...</span>
+                                        <LoadingMessage />
+                                    </div>
+                                ) : error ? (
+                                    <div className="bg-red-500/10 border border-red-500/20 rounded-2xl rounded-tl-sm p-5 text-red-200 text-base leading-relaxed">
+                                        {error}
                                     </div>
                                 ) : (
                                     <div className="prose prose-invert max-w-none">
