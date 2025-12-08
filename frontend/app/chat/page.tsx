@@ -9,6 +9,7 @@ import MessageModal from '@/components/chat/MessageModal';
 import SearchToggle from '@/components/chat/SearchToggle';
 import MacShell from '@/components/layout/MacShell';
 import { useEffect } from 'react';
+import { cn } from '@/lib/utils';
 
 const LOADING_MESSAGES = [
     "Analyzing global investor database...",
