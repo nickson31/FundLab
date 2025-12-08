@@ -15,58 +15,35 @@ export interface AngelMatch {
         stageScore: number;
         locationScore: number;
     };
-}
-
-export async function matchAngels(
-    params: MatchParams,
-    userId: string
-): Promise<AngelMatch[]> {
-    // 1. Fetch ALL angels (MVP approach - optimize with RPC later if needed)
-    const { data: angels } = await supabase
-        .from('angels')
-        .select('*');
-
-    if (!angels) return [];
-
-    // 2. Filter + Score (removed seen_investors check - table doesn't exist yet)
-    const matches: AngelMatch[] = angels
-        .map(angel => {
-            const data = angel.data || angel;
-
-            // Category Score (40%)
-            const categoryScore = calculateCategoryScore(data, params.categoryKeywords);
-
-            // Angel Score (30%)
-            const angelScoreNormalized = parseFloat(data.angel_score || '0') / 100.0;
 
             // Stage Score (20%)
             const stageScore = calculateStageScore(data, params.stageKeywords);
 
-            // Location Score (10%)
-            const locationScore = calculateLocationScore(data, params.locationKeywords);
+// Location Score (10%)
+const locationScore = calculateLocationScore(data, params.locationKeywords);
 
-            const totalScore = (
-                categoryScore * 0.4 +
-                angelScoreNormalized * 0.3 +
-                stageScore * 0.2 +
-                locationScore * 0.1
-            );
+const totalScore = (
+    categoryScore * 0.4 +
+    angelScoreNormalized * 0.3 +
+    stageScore * 0.2 +
+    locationScore * 0.1
+);
 
-            return {
-                angel: { ...data, id: angel.id }, // Include DB ID
-                score: totalScore,
-                breakdown: {
-                    categoryScore,
-                    angelScore: angelScoreNormalized,
-                    stageScore,
-                    locationScore,
-                },
-            };
+return {
+    angel: { ...data, id: angel.id }, // Include DB ID
+    score: totalScore,
+    breakdown: {
+        categoryScore,
+        angelScore: angelScoreNormalized,
+        stageScore,
+        locationScore,
+    },
+};
         })
         .sort((a, b) => b.score - a.score)
-        .slice(0, 20);
+    .slice(0, 20);
 
-    return matches;
+return matches;
 }
 
 function calculateCategoryScore(angelData: any, queryKeywords: string[]): number {
