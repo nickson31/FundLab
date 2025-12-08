@@ -28,12 +28,12 @@ export default function Hero() {
                         The AI Co-Pilot for Founders
                     </div>
 
-                    <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold font-heading text-white tracking-tight mb-8 leading-[1.1] drop-shadow-2xl">
+                    <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-8xl font-bold font-heading text-white tracking-tight mb-6 md:mb-8 leading-[1.1] drop-shadow-2xl px-4">
                         Your First Round, <br />
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-white animate-gradient-x">Faster.</span>
                     </h1>
 
-                    <p className="text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-12 font-medium leading-relaxed text-balance">
+                    <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 md:mb-12 font-medium leading-relaxed text-balance px-4">
                         FundLab is the intelligence layer for your fundraise. We use LLMs to match you with the perfect investors, turning months of research into seconds.
                     </p>
                 </motion.div>
@@ -50,10 +50,10 @@ export default function Hero() {
                     <div className="relative glass-premium rounded-2xl p-2 transition-all duration-500 ring-1 ring-white/10 shadow-2xl">
 
                         {/* Search Mockup */}
-                        <div className="relative bg-[#0A0A0A] rounded-xl border border-white/5 px-6 py-5 flex items-center gap-4 shadow-inner">
-                            <Search className="text-indigo-400 w-5 h-5" strokeWidth={2} />
-                            <div className="flex-1 text-left">
-                                <span className="text-lg text-gray-200 font-medium font-heading">Find Pre-Seed Fintech Angels in London...</span>
+                        <div className="relative bg-[#0A0A0A] rounded-xl border border-white/5 px-4 sm:px-6 py-4 sm:py-5 flex items-center gap-3 sm:gap-4 shadow-inner">
+                            <Search className="text-indigo-400 w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" strokeWidth={2} />
+                            <div className="flex-1 text-left min-w-0">
+                                <span className="text-sm sm:text-base md:text-lg text-gray-200 font-medium font-heading truncate block">Find Pre-Seed Fintech Angels in London...</span>
                             </div>
                             <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                                 <ArrowRight className="text-white w-4 h-4" />

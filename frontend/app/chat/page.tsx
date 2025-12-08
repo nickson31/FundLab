@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Sparkles, MessageSquare, MoreHorizontal, Search } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import InvestorCard from '@/components/chat/InvestorCard';
+import FundCard from '@/components/chat/FundCard';
 import MessageModal from '@/components/chat/MessageModal';
 import SearchToggle from '@/components/chat/SearchToggle';
 import MacShell from '@/components/layout/MacShell';
@@ -106,13 +107,22 @@ export default function ChatPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.05 }}
                             >
-                                <InvestorCard
-                                    investor={result.angel || result.fund}
-                                    type={mode === 'angels' ? 'angel' : 'fund'}
-                                    score={result.score}
-                                    breakdown={result.breakdown}
-                                    onDraftMessage={openModal}
-                                />
+                                {mode === 'angels' ? (
+                                    <InvestorCard
+                                        investor={result.angel}
+                                        type="angel"
+                                        score={result.score}
+                                        breakdown={result.breakdown}
+                                        onDraftMessage={openModal}
+                                    />
+                                ) : (
+                                    <FundCard
+                                        fund={result.fund}
+                                        score={result.score}
+                                        breakdown={result.breakdown}
+                                        onDraftMessage={openModal}
+                                    />
+                                )}
                             </motion.div>
                         ))}
                         {isLoading && (

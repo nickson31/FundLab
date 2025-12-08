@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Linkedin, Building2, MapPin, Maximize2, Heart } from 'lucide-react';
+import { ExternalLink, Linkedin, MapPin, TrendingUp, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 interface InvestorCardProps {
@@ -18,25 +18,32 @@ interface InvestorCardProps {
     isSaved?: boolean;
 }
 
-export default function InvestorCard({ investor, type, score, breakdown, onDraftMessage, onSave, isSaved = false }: InvestorCardProps) {
+export default function InvestorCard({
+    investor,
+    type,
+    score,
+    breakdown,
+    onDraftMessage,
+    onSave,
+    isSaved = false
+}: InvestorCardProps) {
     const [isHovered, setIsHovered] = useState(false);
     const [saved, setSaved] = useState(isSaved);
 
+    // Map database columns to display values
     const name = investor.fullName || investor.name || 'Unknown Investor';
-    const headline = investor.headline || investor.short_description || investor.description || '';
-    const about = investor.about || investor.description || '';
+    const headline = investor.headline || '';
+    const location = investor.addressWithCountry || 'Global';
+    const linkedinUrl = investor.linkedinUrl || '';
+    const profilePic = investor.profilePic || '';
+    const angelScore = investor.angel_score ? parseFloat(investor.angel_score) : 0;
 
-    // Handle "messy" raw keys for funds/angels
-    const rawLocation = investor['location_identifiers/0/value'] ?
-        [investor['location_identifiers/0/value'], investor['location_identifiers/1/value'], investor['location_identifiers/2/value']].filter(Boolean).join(', ') :
-        null;
+    // Parse categories and stages
+    const categories = investor.categories_strong_es || investor.categories_strong_en || '';
+    const stages = investor.stages_strong_es || investor.stages_strong_en || '';
 
-    const location = investor.addressWithCountry || rawLocation || (investor.location_identifiers || []).join(', ') || 'Global';
-
-    const linkedinUrl = investor.linkedinUrl || investor['linkedin/value'] || '';
-    const websiteUrl = investor.websiteUrl || investor['website/value'] || '';
-    const email = investor.email || investor.contact_email || '';
-    const profilePic = investor.profilePic;
+    const categoryTags = categories.split(',').slice(0, 3).map((c: string) => c.trim()).filter(Boolean);
+    const stageTags = stages.split(',').slice(0, 2).map((s: string) => s.trim()).filter(Boolean);
 
     const handleSave = (e: React.MouseEvent) => {
         e.stopPropagation();
@@ -44,138 +51,140 @@ export default function InvestorCard({ investor, type, score, breakdown, onDraft
         if (onSave) onSave(investor);
     };
 
+    const getInitials = (name: string) => {
+        return name
+            .split(' ')
+            .map(n => n[0])
+            .join('')
+            .toUpperCase()
+            .slice(0, 2);
+    };
+
+    const scoreColor = score >= 0.7 ? 'text-green-400' : score >= 0.5 ? 'text-yellow-400' : 'text-gray-400';
+    const scoreBg = score >= 0.7 ? 'bg-green-500/10' : score >= 0.5 ? 'bg-yellow-500/10' : 'bg-gray-500/10';
+
     return (
         <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ scale: 1.02, y: -5 }}
-            transition={{ type: "spring", stiffness: 300, damping: 20 }}
-            className="group relative flex flex-col items-start gap-4 p-6 rounded-3xl glass-premium hover:border-white/20 hover:bg-white/[0.04] transition-all cursor-pointer overflow-hidden shadow-2xl shadow-indigo-500/5 ring-1 ring-white/5"
+            exit={{ opacity: 0, y: -20 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
+            className="group relative"
         >
-            {/* Cinematic Gradient Hover Effect */}
-            <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 via-purple-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-700 ease-in-out" />
+            {/* Hover glow effect */}
+            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.07] to-white/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            {/* Noise Texture */}
-            <div className="absolute inset-0 bg-[url('/images/noise.png')] opacity-[0.03] mix-blend-overlay" />
+            {/* Main card */}
+            <div className="relative bg-black/40 backdrop-blur-sm border border-white/[0.08] rounded-2xl p-4 md:p-6 hover:border-white/[0.15] transition-all duration-500">
 
-            {/* Header Section */}
-            <div className="flex items-start w-full gap-5 relative z-10">
-                {/* Avatar with Glow for High Match */}
-                <div className="relative shrink-0">
-                    <div className={cn(
-                        "w-16 h-16 rounded-2xl overflow-hidden shadow-2xl transition-all duration-500 group-hover:scale-105",
-                        score > 85 ? "ring-2 ring-indigo-500/50 shadow-indigo-500/20" : "border border-white/10"
-                    )}>
-                        {profilePic ? (
-                            <img src={profilePic} alt={name} className="w-full h-full object-cover" />
-                        ) : (
-                            <div className="w-full h-full bg-gradient-to-br from-gray-800 to-black flex items-center justify-center text-white/50 font-bold text-xl font-heading">
-                                {name?.charAt(0)}
-                            </div>
+                {/* Header */}
+                <div className="flex items-start gap-3 md:gap-4 mb-4">
+                    {/* Avatar */}
+                    <Avatar className="h-12 w-12 md:h-14 md:w-14 border-2 border-white/10 ring-2 ring-indigo-500/20">
+                        <AvatarImage src={profilePic} alt={name} />
+                        <AvatarFallback className="bg-gradient-to-br from-indigo-500/20 to-purple-500/20 text-white font-semibold">
+                            {getInitials(name)}
+                        </AvatarFallback>
+                    </Avatar>
+
+                    {/* Name & Score */}
+                    <div className="flex-1 min-w-0">
+                        <h3 className="text-base md:text-lg font-bold text-white truncate mb-1">
+                            {name}
+                        </h3>
+                        {headline && (
+                            <p className="text-xs md:text-sm text-gray-400 line-clamp-1">
+                                {headline}
+                            </p>
                         )}
                     </div>
-                    {/* Floating Match Score */}
-                    {score > 0 && (
-                        <motion.div
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            transition={{ delay: 0.2, type: "spring" }}
-                            className="absolute -bottom-3 -right-3 bg-[#0A0A0A] border border-white/10 text-[11px] font-bold text-white px-2.5 py-1 rounded-full shadow-lg flex items-center gap-1"
-                        >
-                            <span className={score > 80 ? "text-green-400" : "text-indigo-400"}>
-                                {Math.round(score)}%
-                            </span>
-                        </motion.div>
+
+                    {/* Match Score Badge */}
+                    <div className={cn(
+                        "flex items-center gap-1 px-2 md:px-3 py-1 rounded-full text-xs md:text-sm font-semibold",
+                        scoreBg, scoreColor
+                    )}>
+                        <TrendingUp className="w-3 h-3 md:w-4 md:h-4" />
+                        {Math.round(score * 100)}%
+                    </div>
+                </div>
+
+                {/* Angel Score */}
+                {angelScore > 0 && (
+                    <div className="flex items-center gap-2 mb-3 px-3 py-2 rounded-lg bg-indigo-500/10 border border-indigo-500/20">
+                        <Sparkles className="w-4 h-4 text-indigo-400" />
+                        <span className="text-sm text-indigo-300 font-medium">
+                            Angel Score: {angelScore}/100
+                        </span>
+                    </div>
+                )}
+
+                {/* Location */}
+                {location && (
+                    <div className="flex items-center gap-2 text-xs md:text-sm text-gray-400 mb-3">
+                        <MapPin className="w-3 h-3 md:w-4 md:h-4" />
+                        <span className="truncate">{location}</span>
+                    </div>
+                )}
+
+                {/* Tags */}
+                <div className="space-y-2 mb-4">
+                    {/* Category tags */}
+                    {categoryTags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                            {categoryTags.map((tag, i) => (
+                                <Badge
+                                    key={i}
+                                    variant="secondary"
+                                    className="bg-white/5 text-gray-300 border-white/10 text-xs px-2 py-0.5"
+                                >
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </div>
+                    )}
+
+                    {/* Stage tags */}
+                    {stageTags.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5">
+                            {stageTags.map((tag, i) => (
+                                <Badge
+                                    key={i}
+                                    variant="outline"
+                                    className="bg-indigo-500/10 text-indigo-300 border-indigo-500/30 text-xs px-2 py-0.5"
+                                >
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </div>
                     )}
                 </div>
 
-                <div className="flex-1 min-w-0 pt-0.5">
-                    <div className="flex items-center justify-between gap-2 mb-1">
-                        <h3 className="text-lg font-bold font-heading text-white tracking-tight truncate group-hover:text-indigo-300 transition-colors">
-                            {name}
-                        </h3>
-
-                        {/* Action Buttons */}
-                        <div className="flex items-center gap-1">
-                            {/* Save Button */}
-                            {onSave && (
-                                <motion.button
-                                    whileTap={{ scale: 0.8 }}
-                                    onClick={handleSave}
-                                    className={cn(
-                                        "p-2 rounded-xl transition-all duration-300",
-                                        saved ? "text-red-500 bg-red-500/10" : "text-gray-500 hover:text-red-400 hover:bg-white/5"
-                                    )}
-                                >
-                                    <Heart className={cn("w-4 h-4", saved && "fill-current")} />
-                                </motion.button>
-                            )}
-
-                            {/* External Links */}
-                            <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-2 group-hover:translate-x-0">
-                                {linkedinUrl && (
-                                    <a
-                                        href={linkedinUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-2 rounded-xl text-gray-400 hover:text-blue-400 hover:bg-white/5 transition-colors"
-                                    >
-                                        <Linkedin className="w-4 h-4" />
-                                    </a>
-                                )}
-                                {websiteUrl && (
-                                    <a
-                                        href={websiteUrl}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="p-2 rounded-xl text-gray-400 hover:text-emerald-400 hover:bg-white/5 transition-colors"
-                                    >
-                                        <ExternalLink className="w-4 h-4" />
-                                    </a>
-                                )}
-                            </div>
-                        </div>
-                    </div>
-
-                    <p className="text-sm text-gray-400 line-clamp-2 font-normal leading-relaxed mb-4 text-balance">
-                        {headline || about || "No description available."}
-                    </p>
-
-                    {/* Tags */}
-                    <div className="flex flex-wrap gap-2">
-                        {/* Thesis Tags */}
-                        {((investor.categories_strong_en || investor.categories_general_en || "").split(',').slice(0, 3) || []).map((tag: string, i: number) => (
-                            <span key={`thesis-${i}`} className="inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-indigo-300 bg-indigo-500/10 px-2.5 py-1 rounded-lg border border-indigo-500/20">
-                                <Building2 className="w-3 h-3 text-indigo-400" />
-                                {tag.trim()}
-                            </span>
-                        ))}
-                        {/* Location Tags */}
-                        {(investor.location_identifiers || []).slice(0, 1).map((loc: string, i: number) => (
-                            <span key={`loc-${i}`} className="inline-flex items-center gap-1.5 text-[10px] uppercase font-bold tracking-wider text-gray-400 bg-white/5 px-2.5 py-1 rounded-lg border border-white/5">
-                                <MapPin className="w-3 h-3 text-gray-500" />
-                                {loc}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-            </div>
-
-            {/* Quick Action Overlay (Draft Message) */}
-            {onDraftMessage && (
-                <div className="absolute bottom-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-2 group-hover:translate-y-0">
+                {/* Actions */}
+                <div className="flex gap-2">
                     <Button
-                        size="sm"
-                        onClick={(e) => { e.stopPropagation(); onDraftMessage(investor); }}
-                        className="bg-white text-black hover:bg-indigo-50 font-bold rounded-xl shadow-lg shadow-white/5"
+                        onClick={() => onDraftMessage && onDraftMessage(investor)}
+                        className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white text-sm h-9 md:h-10"
                     >
-                        <Maximize2 className="w-4 h-4 mr-2" />
-                        Draft
+                        Draft Message
                     </Button>
+
+                    {linkedinUrl && (
+                        <Button
+                            variant="outline"
+                            size="icon"
+                            className="border-white/10 hover:border-white/20 hover:bg-white/5 h-9 w-9 md:h-10 md:w-10"
+                            onClick={() => window.open(linkedinUrl, '_blank')}
+                        >
+                            <Linkedin className="w-4 h-4 text-blue-400" />
+                        </Button>
+                    )}
                 </div>
-            )}
+
+                {/* Subtle bottom indicator */}
+                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            </div>
         </motion.div>
     );
 }
