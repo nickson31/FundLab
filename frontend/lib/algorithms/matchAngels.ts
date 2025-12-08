@@ -28,18 +28,8 @@ export async function matchAngels(
 
     if (!angels) return [];
 
-    // 2. Fetch seen_investors
-    const { data: seen } = await supabase
-        .from('seen_investors')
-        .select('investor_id')
-        .eq('user_id', userId)
-        .eq('type', 'angel');
-
-    const seenIds = new Set(seen?.map(s => s.investor_id) || []);
-
-    // 3. Filter + Score
+    // 2. Filter + Score (removed seen_investors check - table doesn't exist yet)
     const matches: AngelMatch[] = angels
-        .filter(angel => !seenIds.has(angel.id))
         .map(angel => {
             const data = angel.data || angel;
 

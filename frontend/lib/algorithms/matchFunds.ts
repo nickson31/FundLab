@@ -26,16 +26,8 @@ export async function matchFunds(
 
     if (!funds) return [];
 
-    const { data: seen } = await supabase
-        .from('seen_investors')
-        .select('investor_id')
-        .eq('user_id', userId)
-        .eq('type', 'fund');
-
-    const seenIds = new Set(seen?.map(s => s.investor_id) || []);
-
+    // Filter + Score (removed seen_investors check - table doesn't exist yet)
     const matches: FundMatch[] = funds
-        .filter(fund => !seenIds.has(fund.id))
         .map(fund => {
             const data = fund.data || fund;
 
