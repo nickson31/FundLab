@@ -17,9 +17,12 @@ interface AngelMatchRaw {
 export async function matchAngels(
     params: MatchParams,
     userId: string,
-    client = supabase
+    injectedClient?: any
 ): Promise<SearchResult[]> {
     console.log('[MatchAngels] 🔍 Starting match for user:', userId);
+
+    // Use injected client (admin) if available, otherwise anon client
+    const client = injectedClient || supabase;
     const queryForLog = params.queryText || (params.categoryKeywords ? params.categoryKeywords.join(', ') : 'Unknown Query');
 
     // 1. Fetch Angels
@@ -73,26 +76,32 @@ export async function matchAngels(
         .slice(0, 15); // Return top 15
 
     // 4. Persist Results (Batch Insert)
-    const searchResultsToInsert = topMatches.map(match => ({
-        user_id: userId,
-        query: params.queryText || params.categoryKeywords.join(', '),
-        matched_angel_id: match.angel.id,
-        relevance_score: match.score,
-        summary: match.breakdown.reason_summary,
-        status: 'saved'
-    }));
+    // Only persist if we have a service role client (injectedClient is defined)
+    // Or if we are sure we have permissions. For now, strictly require injectedClient.
+    if (injectedClient) {
+        const searchResultsToInsert = topMatches.map(match => ({
+            user_id: userId,
+            query: params.queryText || params.categoryKeywords.join(', '),
+            matched_angel_id: match.angel.id,
+            relevance_score: match.score,
+            summary: match.breakdown.reason_summary,
+            status: 'saved'
+        }));
 
-    if (searchResultsToInsert.length > 0) {
-        const { data: insertedRows, error: insertError } = await client
-            .from('search_results')
-            .insert(searchResultsToInsert)
-            .select();
+        if (searchResultsToInsert.length > 0) {
+            const { data: insertedRows, error: insertError } = await client
+                .from('search_results')
+                .insert(searchResultsToInsert)
+                .select();
 
-        if (insertError) {
-            console.error('[MatchAngels] ❌ Error persisting results:', insertError);
-        } else {
-            console.log('[MatchAngels] ✅ Persisted', insertedRows?.length, 'matches');
+            if (insertError) {
+                console.warn('[MatchAngels] ⚠️ Could not persist results (likely RLS):', insertError.code);
+            } else {
+                console.log('[MatchAngels] ✅ Persisted', insertedRows?.length, 'matches');
+            }
         }
+    } else {
+        console.log('[MatchAngels] ℹ️ Skipping persistence (No Service Role Key)');
     }
 
     // 5. Return formatted SearchResults

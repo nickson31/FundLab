@@ -21,8 +21,9 @@ interface FundMatch {
 export async function matchFunds(
     params: MatchParams,
     userId: string,
-    client = supabase
+    injectedClient?: any
 ): Promise<SearchResult[]> {
+    const client = injectedClient || supabase;
     const { data: funds } = await client
         .from('funds')
         .select('*');
@@ -31,7 +32,7 @@ export async function matchFunds(
 
     // ... (scoring logic same as before) ...
     const matches: FundMatch[] = funds
-        .map(fund => {
+        .map((fund: any) => {
             const data = fund.data || fund;
             const categoryScore = calculateCategoryScore(data, params.categoryKeywords);
             const stageScore = calculateStageScore(data, params.stageKeywords);
@@ -54,21 +55,24 @@ export async function matchFunds(
                 },
             };
         })
-        .sort((a, b) => b.score - a.score)
+        .sort((a: FundMatch, b: FundMatch) => b.score - a.score)
         .slice(0, 20);
 
-    // Persist Results
-    const searchResultsToInsert = matches.map(match => ({
-        user_id: userId,
-        query: params.categoryKeywords.join(', '), // Simplified query tracking
-        matched_fund_id: match.fund.id,
-        relevance_score: match.score,
-        summary: `Matched on Keywords.`, // Simplified summary
-        status: 'saved'
-    }));
+    // Persist Results if admin client available
+    if (injectedClient) {
+        const searchResultsToInsert = matches.map(match => ({
+            user_id: userId,
+            query: params.categoryKeywords.join(', '), // Simplified query tracking
+            matched_fund_id: match.fund.id,
+            relevance_score: match.score,
+            summary: `Matched on Keywords.`, // Simplified summary
+            status: 'saved'
+        }));
 
-    if (searchResultsToInsert.length > 0) {
-        await client.from('search_results').insert(searchResultsToInsert);
+        if (searchResultsToInsert.length > 0) {
+            const { error } = await client.from('search_results').insert(searchResultsToInsert);
+            if (error) console.warn('[MatchFunds] ⚠️ Persistence skipped:', error.code);
+        }
     }
 
     // Return formatted for ChatInterface

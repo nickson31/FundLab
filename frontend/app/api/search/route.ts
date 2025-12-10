@@ -26,10 +26,18 @@ export async function POST(req: NextRequest) {
         });
 
         // Initialize Admin Client for RLS Bypass
-        const adminClient = createClient(
-            process.env.NEXT_PUBLIC_SUPABASE_URL!,
-            process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-        );
+        // Initialize Admin Client for RLS Bypass
+        const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+        let adminClient: any = null;
+
+        if (serviceRoleKey) {
+            adminClient = createClient(
+                process.env.NEXT_PUBLIC_SUPABASE_URL!,
+                serviceRoleKey
+            );
+        } else {
+            console.warn('[Search API] ⚠️ SUPABASE_SERVICE_ROLE_KEY missing. Search results will NOT be saved.');
+        }
 
         // 2. Run matching algorithm
         console.log('[Search API] Step 2: Running matching algorithm for mode:', mode);
