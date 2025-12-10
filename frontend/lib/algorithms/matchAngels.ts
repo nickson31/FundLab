@@ -30,6 +30,10 @@ export async function matchAngels(
         .from('angels') // Correct table name
         .select('*');
 
+    if (angels && angels.length > 0) {
+        console.log('[MatchAngels] First angel fetched:', JSON.stringify(angels[0], null, 2));
+    }
+
     if (error) {
         console.error('[MatchAngels] ❌ DB Error fetching angels:', error);
         return [];
@@ -76,6 +80,10 @@ export async function matchAngels(
         .slice(0, 15); // Return top 15
 
     // 4. Persist Results (Batch Insert)
+    if (topMatches.length > 0) {
+        console.log('[MatchAngels] Top match object:', JSON.stringify(topMatches[0], null, 2));
+        console.log('[MatchAngels] Top match angel ID:', topMatches[0].angel?.id);
+    }
     // Only persist if we have a service role client (injectedClient is defined)
     // Or if we are sure we have permissions. For now, strictly require injectedClient.
     if (injectedClient) {
