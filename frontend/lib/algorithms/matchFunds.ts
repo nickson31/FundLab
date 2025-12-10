@@ -73,6 +73,21 @@ export async function matchFunds(
             console.log('[MatchFunds] Attempting insert with payload sample:', JSON.stringify(searchResultsToInsert[0], null, 2));
             const { error } = await client.from('search_results').insert(searchResultsToInsert);
             if (error) console.warn('[MatchFunds] ⚠️ Persistence skipped:', error.code);
+            else console.log('[MatchFunds] ✅ Persisted to search_results');
+
+            // ALSO Save to saved_investors for user visibility
+            const savedInvestorsToInsert = searchResultsToInsert.map(r => ({
+                user_id: userId,
+                investor_id: r.matched_fund_id,
+                type: 'fund',
+                notes: r.summary,
+                created_at: new Date().toISOString()
+            }));
+
+            // We use upsert to avoid duplicates
+            const { error: savedError } = await client.from('saved_investors').upsert(savedInvestorsToInsert, { onConflict: 'user_id, investor_id', ignoreDuplicates: true });
+            if (savedError) console.warn('[MatchFunds] ⚠️ Could not populate saved_investors:', savedError.code, savedError.message);
+            else console.log('[MatchFunds] ✅ Populated saved_investors');
         }
     }
 
