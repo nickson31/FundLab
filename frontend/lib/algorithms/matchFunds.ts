@@ -11,9 +11,10 @@ interface FundMatch {
     fund: any;
     score: number;
     breakdown: {
-        categoryScore: number;
-        stageScore: number;
-        locationScore: number;
+        category_match: number;
+        stage_match: number;
+        location_match: number;
+        overall_score: number;
     };
 }
 
@@ -45,9 +46,10 @@ export async function matchFunds(
                 fund: { ...data, id: fund.id },
                 score: totalScore,
                 breakdown: {
-                    categoryScore,
-                    stageScore,
-                    locationScore,
+                    category_match: categoryScore,
+                    stage_match: stageScore,
+                    location_match: locationScore,
+                    overall_score: totalScore
                 },
             };
         })
