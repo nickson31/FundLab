@@ -22,7 +22,7 @@ export async function matchAngels(
 
     // 1. Fetch Angels
     const { data: angels, error } = await supabase
-        .from('angel_investors') // Ensure table name matches schema
+        .from('angels') // Correct table name
         .select('*');
 
     if (error) {
