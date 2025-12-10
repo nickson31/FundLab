@@ -26,12 +26,18 @@ export async function matchAngels(
     const queryForLog = params.queryText || (params.categoryKeywords ? params.categoryKeywords.join(', ') : 'Unknown Query');
 
     // 1. Fetch Angels
+    // DIAGNOSTIC 1: Check angel_investors table (The schema-compliant one)
+    const { count: properCount, error: properError } = await client.from('angel_investors').select('*', { count: 'exact', head: true });
+    console.log('[MatchAngels] Count in "angel_investors":', properCount, 'Error:', properError?.message);
+
+    // 1. Fetch Angels from 'angels' (The currently used one)
+    // Force select '*, id' to see if ID is hidden
     const { data: angels, error } = await client
-        .from('angels') // Correct table name
-        .select('*');
+        .from('angels')
+        .select('*, id');
 
     if (angels && angels.length > 0) {
-        console.log('[MatchAngels] First angel fetched:', JSON.stringify(angels[0], null, 2));
+        console.log('[MatchAngels] First angel fetched (with *, id):', JSON.stringify(angels[0], null, 2));
     }
 
     if (error) {
