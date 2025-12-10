@@ -40,7 +40,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
         // Fetch saved results from search_results table
         const { data: savedResults, error } = await supabase
             .from('search_results')
-            .select('matched_investor_id, matched_fund_id')
+            .select('matched_angel_id, matched_fund_id')
             .eq('status', 'saved')
             // .eq('user_id', ...) // In real app, filter by auth user
             .order('created_at', { ascending: false })
@@ -52,8 +52,8 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
         }
 
         const angelIds = savedResults
-            .filter(r => r.matched_investor_id)
-            .map(r => r.matched_investor_id);
+            .filter(r => r.matched_angel_id)
+            .map(r => r.matched_angel_id);
 
         if (angelIds.length > 0) {
             const { data: angels } = await supabase

@@ -26,18 +26,12 @@ export async function matchFunds(
 
     if (!funds) return [];
 
-    // Filter + Score (removed seen_investors check - table doesn't exist yet)
+    // ... (scoring logic same as before) ...
     const matches: FundMatch[] = funds
         .map(fund => {
             const data = fund.data || fund;
-
-            // Category Score (50%)
             const categoryScore = calculateCategoryScore(data, params.categoryKeywords);
-
-            // Stage Score (30%)
             const stageScore = calculateStageScore(data, params.stageKeywords);
-
-            // Location Score (20%)
             const locationScore = calculateLocationScore(data, params.locationKeywords);
 
             const totalScore = (
@@ -59,7 +53,27 @@ export async function matchFunds(
         .sort((a, b) => b.score - a.score)
         .slice(0, 20);
 
-    return matches;
+    // Persist Results
+    const searchResultsToInsert = matches.map(match => ({
+        user_id: userId,
+        query: params.categoryKeywords.join(', '), // Simplified query tracking
+        matched_fund_id: match.fund.id,
+        relevance_score: match.score,
+        summary: `Matched on Keywords.`, // Simplified summary
+        status: 'saved'
+    }));
+
+    if (searchResultsToInsert.length > 0) {
+        await supabase.from('search_results').insert(searchResultsToInsert);
+    }
+
+    // Return formatted for ChatInterface
+    return matches.map(match => ({
+        investor: match.fund, // Unified property
+        type: 'fund',
+        score: match.score,
+        breakdown: match.breakdown
+    }));
 }
 
 function calculateCategoryScore(fundData: any, queryKeywords: string[]): number {

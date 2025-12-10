@@ -74,7 +74,7 @@ export async function matchAngels(
     const searchResultsToInsert = topMatches.map(match => ({
         user_id: userId,
         query: params.queryText || params.categoryKeywords.join(', '),
-        matched_investor_id: match.angel.id,
+        matched_angel_id: match.angel.id,
         relevance_score: match.score,
         summary: match.breakdown.reason_summary,
         status: 'saved'

@@ -44,29 +44,8 @@ export async function POST(req: NextRequest) {
         // but the spec says "Auto-save results to saved_investors".
         // Let's implement auto-save here.
 
-        if (results.length > 0) {
-            console.log('[Search API] Step 3: Saving results to database...');
-            const saves = results.map((r: any) => ({
-                user_id: userId,
-                matched_investor_id: r.investor?.id,
-                // matched_fund_id: ... // Simplified to single column for now or handle type check
-                relevance_score: r.score,
-                query: query,
-                summary: JSON.stringify(r.breakdown) // Storing breakdown as summary for now
-            }));
-
-            // Use search_results table
-            // We use upsert if there IS a conflict constraint, but search_results usually tracks history.
-            // If we want to avoid duplicates for the same query/investor, we'd need a constraint.
-            // For now, let's just INSERT to track search history matches.
-            const { error } = await supabase.from('search_results').insert(saves);
-
-            if (error) {
-                console.error('[Search API] ⚠️ Error saving results:', error.message);
-            } else {
-                console.log('[Search API] ✅ Results saved successfully');
-            }
-        }
+        // 3. Auto-save is now handled within matchAngels / matchFunds
+        // to ensure correct ID mapping and Atomic persistence.
 
         console.log('[Search API] ✅ Returning response with', results.length, 'results');
         return NextResponse.json({ results, keywords });
