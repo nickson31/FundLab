@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import InvestorCard from '@/components/chat/InvestorCard';
 import { Search, Sparkles, FolderOpen, ArrowRight } from 'lucide-react';
@@ -14,11 +14,7 @@ export default function AngelsPage() {
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
 
-    useEffect(() => {
-        fetchAngels();
-    }, []);
-
-    async function fetchAngels() {
+    const fetchAngels = useCallback(async () => {
         // Mock userId for MVP
         const userId = '00000000-0000-0000-0000-000000000000';
 
@@ -47,7 +43,11 @@ export default function AngelsPage() {
             setAngels(angelDetails.map(a => ({ ...a.data, id: a.id })));
         }
         setLoading(false);
-    }
+    }, []);
+
+    useEffect(() => {
+        fetchAngels();
+    }, [fetchAngels]);
 
     const handleUnsave = async (investor: any) => {
         const userId = '00000000-0000-0000-0000-000000000000';

@@ -2,23 +2,22 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, Copy, Save, RefreshCw, Send, ChevronRight, Check } from 'lucide-react';
+import { X, RefreshCw, Save, ChevronRight, Sparkles, Search } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Sparkles, Search, Linkedin } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { Investor } from '@/types/investor';
 
 interface MessageModalProps {
     isOpen: boolean;
     onClose: () => void;
-    preSelectedInvestor?: any;
+    preSelectedInvestor?: Investor;
 }
 
 export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: MessageModalProps) {
     const [step, setStep] = useState(1);
-    const [recipients, setRecipients] = useState<any[]>([]);
-    const [selectedRecipient, setSelectedRecipient] = useState<any>(null);
+    const [recipients, setRecipients] = useState<Investor[]>([]);
+    const [selectedRecipient, setSelectedRecipient] = useState<Investor | null>(null);
     const [companyContext, setCompanyContext] = useState('');
     const [generatedMessage, setGeneratedMessage] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);

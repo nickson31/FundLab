@@ -1,0 +1,14 @@
+# Auto-detect text files and perform LF normalization
+* text=auto
+
+# Language Overrides
+frontend/**/* linguist-language=TypeScript
+frontend/**/*.tsx linguist-language=TypeScript
+
+# Ignore large generated files and dependencies from stats
+node_modules/ linguist-vendored
+dist/ linguist-vendored
+build/ linguist-vendored
+.next/ linguist-vendored
+out/ linguist-vendored
+public/ linguist-vendored

@@ -5,24 +5,23 @@ import { motion } from 'framer-motion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Linkedin, MapPin, TrendingUp, Sparkles } from 'lucide-react';
+import { Linkedin, MapPin, TrendingUp, Sparkles } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { Investor, MatchBreakdown } from '@/types/investor';
 
 interface InvestorCardProps {
-    investor: any;
+    investor: Investor;
     type: 'angel' | 'fund';
     score: number;
-    breakdown: any;
-    onDraftMessage?: (investor: any) => void;
-    onSave?: (investor: any) => void;
+    breakdown: MatchBreakdown;
+    onDraftMessage?: (investor: Investor) => void;
+    onSave?: (investor: Investor) => void;
     isSaved?: boolean;
 }
 
 export default function InvestorCard({
     investor,
-    type,
     score,
-    breakdown,
     onDraftMessage,
     onSave,
     isSaved = false
@@ -32,24 +31,20 @@ export default function InvestorCard({
 
     // Map database columns to display values
     const name = investor.fullName || investor.name || 'Unknown Investor';
-    const headline = investor.headline || '';
-    const location = investor.addressWithCountry || 'Global';
-    const linkedinUrl = investor.linkedinUrl || '';
-    const profilePic = investor.profilePic || '';
-    const angelScore = investor.angel_score ? parseFloat(investor.angel_score) : 0;
+    const headline = (investor.headline as string) || '';
+    const location = (investor.addressWithCountry as string) || 'Global';
+    const linkedinUrl = (investor.linkedinUrl as string) || '';
+    const profilePic = (investor.profilePic as string) || '';
+    const angelScore = investor.angel_score ? parseFloat(String(investor.angel_score)) : 0;
 
     // Parse categories and stages
-    const categories = investor.categories_strong_es || investor.categories_strong_en || '';
-    const stages = investor.stages_strong_es || investor.stages_strong_en || '';
+    const categories = (investor.categories_strong_es as string) || (investor.categories_strong_en as string) || '';
+    const stages = (investor.stages_strong_es as string) || (investor.stages_strong_en as string) || '';
 
     const categoryTags = categories.split(',').slice(0, 3).map((c: string) => c.trim()).filter(Boolean);
     const stageTags = stages.split(',').slice(0, 2).map((s: string) => s.trim()).filter(Boolean);
 
-    const handleSave = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setSaved(!saved);
-        if (onSave) onSave(investor);
-    };
+    // handleSave function removed as it's not used in the component
 
     const getInitials = (name: string) => {
         return name
@@ -133,7 +128,7 @@ export default function InvestorCard({
                     {/* Category tags */}
                     {categoryTags.length > 0 && (
                         <div className="flex flex-wrap gap-1.5">
-                            {categoryTags.map((tag, i) => (
+                            {categoryTags.map((tag: string, i: number) => (
                                 <Badge
                                     key={i}
                                     variant="secondary"
@@ -148,7 +143,7 @@ export default function InvestorCard({
                     {/* Stage tags */}
                     {stageTags.length > 0 && (
                         <div className="flex flex-wrap gap-1.5">
-                            {stageTags.map((tag, i) => (
+                            {stageTags.map((tag: string, i: number) => (
                                 <Badge
                                     key={i}
                                     variant="outline"
