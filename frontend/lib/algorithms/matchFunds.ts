@@ -20,9 +20,10 @@ interface FundMatch {
 
 export async function matchFunds(
     params: MatchParams,
-    userId: string
+    userId: string,
+    client = supabase
 ): Promise<SearchResult[]> {
-    const { data: funds } = await supabase
+    const { data: funds } = await client
         .from('funds')
         .select('*');
 
@@ -67,7 +68,7 @@ export async function matchFunds(
     }));
 
     if (searchResultsToInsert.length > 0) {
-        await supabase.from('search_results').insert(searchResultsToInsert);
+        await client.from('search_results').insert(searchResultsToInsert);
     }
 
     // Return formatted for ChatInterface

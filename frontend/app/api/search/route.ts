@@ -3,6 +3,7 @@ import { expandQuery } from '@/lib/gemini/queryExpansion';
 import { matchAngels } from '@/lib/algorithms/matchAngels';
 import { matchFunds } from '@/lib/algorithms/matchFunds';
 import { supabase } from '@/lib/supabase';
+import { createClient } from '@supabase/supabase-js';
 
 export async function POST(req: NextRequest) {
     try {
@@ -24,13 +25,19 @@ export async function POST(req: NextRequest) {
             locations: keywords.locationKeywords.length
         });
 
+        // Initialize Admin Client for RLS Bypass
+        const adminClient = createClient(
+            process.env.NEXT_PUBLIC_SUPABASE_URL!,
+            process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+        );
+
         // 2. Run matching algorithm
         console.log('[Search API] Step 2: Running matching algorithm for mode:', mode);
         let results;
         if (mode === 'angels') {
-            results = await matchAngels(keywords, userId);
+            results = await matchAngels(keywords, userId, adminClient);
         } else {
-            results = await matchFunds(keywords, userId);
+            results = await matchFunds(keywords, userId, adminClient);
         }
 
         console.log('[Search API] ✅ Matching complete:', {

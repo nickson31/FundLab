@@ -16,12 +16,13 @@ interface AngelMatchRaw {
 
 export async function matchAngels(
     params: MatchParams,
-    userId: string
+    userId: string,
+    client = supabase
 ): Promise<SearchResult[]> {
     console.log('[MatchAngels] 🔍 Starting match for user:', userId);
 
     // 1. Fetch Angels
-    const { data: angels, error } = await supabase
+    const { data: angels, error } = await client
         .from('angels') // Correct table name
         .select('*');
 
@@ -81,7 +82,7 @@ export async function matchAngels(
     }));
 
     if (searchResultsToInsert.length > 0) {
-        const { data: insertedRows, error: insertError } = await supabase
+        const { data: insertedRows, error: insertError } = await client
             .from('search_results')
             .insert(searchResultsToInsert)
             .select();
