@@ -189,8 +189,8 @@ export default function FundCard({
 
                 {/* Expanded Content */}
                 <div className={cn("grid transition-all duration-300 ease-in-out", isExpanded ? "grid-rows-[1fr] opacity-100 mb-4" : "grid-rows-[0fr] opacity-0")}>
-                    <div className="overflow-hidden">
-                        <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5 mb-4">
+                    <div className="overflow-hidden space-y-3">
+                        <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
                             <div>
                                 <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Ticket Size</p>
                                 <p className="text-sm text-gray-900 dark:text-white font-medium">{ticketSize}</p>
@@ -203,6 +203,21 @@ export default function FundCard({
                                 <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Sweet Spot</p>
                                 <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{sweetSpot}</p>
                             </div>
+
+                            {/* Contact Info */}
+                            {(fund.contact_email || fund.phone_number) && (
+                                <div className="col-span-2 pt-2 border-t border-gray-200 dark:border-white/10 mt-1">
+                                    <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Contact</p>
+                                    <div className="flex flex-col gap-1">
+                                        {fund.contact_email && (
+                                            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium select-text">{fund.contact_email}</span>
+                                        )}
+                                        {fund.phone_number && (
+                                            <span className="text-xs text-gray-500 dark:text-gray-400 select-text">{fund.phone_number}</span>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     </div>
                 </div>

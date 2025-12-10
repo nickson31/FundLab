@@ -150,13 +150,29 @@ export default function InvestorCard({
                 {/* Expanded Content */}
                 <div className={cn("grid transition-all duration-300 ease-in-out", isExpanded ? "grid-rows-[1fr] opacity-100 mb-4" : "grid-rows-[0fr] opacity-0")}>
                     <div className="overflow-hidden space-y-3">
+                        {/* Bio / About */}
+                        {('about' in investor) && (investor as any).about && (
+                            <div className="bg-gray-50 dark:bg-white/5 rounded-lg p-3 border border-gray-100 dark:border-white/5">
+                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">About</p>
+                                <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-4 hover:line-clamp-none transition-all">
+                                    {(investor as any).about}
+                                </p>
+                            </div>
+                        )}
+
                         <div className="bg-gray-50 dark:bg-white/5 rounded-lg p-3 border border-gray-100 dark:border-white/5">
-                            <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Recent Investments</p>
-                            <p className="text-xs text-gray-700 dark:text-white leading-relaxed">{recentInvestments || 'No public investments listed.'}</p>
+                            <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Recent Investments & Portfolio</p>
+                            <p className="text-xs text-gray-700 dark:text-white leading-relaxed">
+                                {recentInvestments ||
+                                    (('portfolio_companies' in investor && Array.isArray((investor as any).portfolio_companies))
+                                        ? (investor as any).portfolio_companies.join(', ')
+                                        : 'No public investments listed.')}
+                            </p>
                         </div>
+
                         <div className="flex gap-4">
                             <div className="flex-1 bg-gray-50 dark:bg-white/5 rounded-lg p-3 border border-gray-100 dark:border-white/5">
-                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Ticket</p>
+                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Ticket Size</p>
                                 <p className="text-xs text-gray-900 dark:text-white font-medium">{ticketSize}</p>
                             </div>
                         </div>
