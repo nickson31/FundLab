@@ -164,11 +164,11 @@ export default function FundCard({
                                 {Math.round(score * 100)}%
                             </div>
                         </div>
-                        {description && (
-                            <p className={cn("text-xs md:text-sm text-gray-500 dark:text-gray-400 transition-all", isExpanded ? "" : "line-clamp-2")}>
-                                {description}
-                            </p>
-                        )}
+
+                        {/* Summary / Short Description */}
+                        <p className={cn("text-xs md:text-sm text-gray-500 dark:text-gray-400 transition-all", isExpanded ? "" : "line-clamp-2")}>
+                            {(fund.short_description) || description}
+                        </p>
                     </div>
                 </div>
 

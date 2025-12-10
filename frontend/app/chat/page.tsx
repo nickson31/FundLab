@@ -280,7 +280,7 @@ export default function ChatPage() {
                                 </div>
                                 <div className="space-y-4 flex-1">
                                     <div className="bg-white/5 border border-white/5 rounded-2xl rounded-tl-sm p-6 w-full max-w-md">
-                                        <LoadingBar />
+                                        <LoadingState />
                                     </div>
                                 </div>
                             </div>
@@ -306,8 +306,26 @@ export default function ChatPage() {
             {/* Footer Composer */}
             <div className="p-6 bg-gradient-to-t from-black/40 to-transparent">
                 <form onSubmit={handleSearch} className="relative">
-                    <div className="absolute inset-0 bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10" />
-                    <div className="relative flex items-center px-4 py-3 gap-3">
+                    {/* Prompt Suggestions */}
+                    {!query && (
+                        <div className="absolute bottom-full left-0 mb-4 px-2 w-full flex gap-2 overflow-x-auto no-scrollbar mask-fade">
+                            {[
+                                "Find deeptech VCs in London",
+                                "Seed funds for B2B SaaS",
+                                "Angels in Fintech & AI"
+                            ].map((suggestion, i) => (
+                                <button
+                                    key={i}
+                                    onClick={() => setQuery(suggestion)}
+                                    className="whitespace-nowrap px-3 py-1.5 rounded-full bg-white/50 dark:bg-white/5 border border-gray-200 dark:border-white/10 text-xs text-gray-600 dark:text-gray-300 hover:bg-white/80 dark:hover:bg-white/10 transition-colors backdrop-blur-sm"
+                                >
+                                    {suggestion}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                    <div className="relative flex items-center bg-white/5 backdrop-blur-xl rounded-2xl border border-white/10 px-4 py-3 gap-3">
                         <Button size="icon" variant="ghost" className="text-gray-400 hover:text-white hover:bg-white/10 rounded-xl" type="button">
                             <MoreHorizontal className="w-5 h-5" />
                         </Button>

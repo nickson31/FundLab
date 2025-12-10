@@ -125,13 +125,20 @@ export default function InvestorCard({
 
                     <div className="flex-1 min-w-0">
                         <div className="flex justify-between items-start">
-                            <h3 className="text-sm font-bold text-gray-900 dark:text-white truncate pr-2">{name}</h3>
-                            <div className={cn("shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium", scoreBg, scoreColor)}>
+                            <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white truncate mb-1 pr-2">
+                                {name}
+                            </h3>
+                            <div className={cn(
+                                "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold shrink-0",
+                                scoreBg, scoreColor
+                            )}>
                                 <TrendingUp className="w-3 h-3" />
                                 {Math.round(score * 100)}%
                             </div>
                         </div>
-                        <p className={cn("text-xs text-gray-500 dark:text-gray-400 mt-0.5 transition-all", isExpanded ? "" : "line-clamp-1")}>{headline}</p>
+                        <p className={cn("text-xs md:text-sm text-gray-500 dark:text-gray-400 transition-all", isExpanded ? "" : "line-clamp-2")}>
+                            {isExpanded ? fullDescription : displaySummary}
+                        </p>
                     </div>
                 </div>
 
