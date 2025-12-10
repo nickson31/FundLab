@@ -34,7 +34,7 @@ export default function InvestorCard({
     const headline = (investor.headline as string) || '';
     const location = (investor.addressWithCountry as string) || 'Global';
     const linkedinUrl = (investor.linkedinUrl as string) || '';
-    const profilePic = (investor.profilePic as string) || '';
+    const profilePic = typeof investor.profilePic === 'string' ? investor.profilePic : '';
     const angelScore = investor.angel_score ? parseFloat(String(investor.angel_score)) : 0;
 
     // Parse categories and stages
