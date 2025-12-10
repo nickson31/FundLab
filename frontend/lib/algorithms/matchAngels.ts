@@ -97,6 +97,8 @@ export async function matchAngels(
         }));
 
         if (searchResultsToInsert.length > 0) {
+            console.log('[MatchAngels] Attempting insert with payload sample:', JSON.stringify(searchResultsToInsert[0], null, 2));
+
             const { data: insertedRows, error: insertError } = await client
                 .from('search_results')
                 .insert(searchResultsToInsert)

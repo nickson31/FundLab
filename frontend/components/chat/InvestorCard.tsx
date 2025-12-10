@@ -26,7 +26,13 @@ export default function InvestorCard({
     onSave,
     isSaved = false
 }: InvestorCardProps) {
-    if (!investor) return null;
+    // DIAGNOSTIC LOGGING
+    if (!investor) {
+        console.warn('InvestorCard received undefined investor');
+        return null;
+    }
+    // console.log('Rendering InvestorCard for:', investor.fullName || investor.name, score);
+
 
     const [isHovered, setIsHovered] = useState(false);
 

@@ -70,6 +70,7 @@ export async function matchFunds(
         }));
 
         if (searchResultsToInsert.length > 0) {
+            console.log('[MatchFunds] Attempting insert with payload sample:', JSON.stringify(searchResultsToInsert[0], null, 2));
             const { error } = await client.from('search_results').insert(searchResultsToInsert);
             if (error) console.warn('[MatchFunds] ⚠️ Persistence skipped:', error.code);
         }
