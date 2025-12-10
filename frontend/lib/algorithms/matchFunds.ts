@@ -1,4 +1,5 @@
 import { supabase } from '@/lib/supabase';
+import { SearchResult } from '@/types/investor';
 
 interface MatchParams {
     categoryKeywords: string[];
@@ -6,7 +7,7 @@ interface MatchParams {
     locationKeywords: string[];
 }
 
-export interface FundMatch {
+interface FundMatch {
     fund: any;
     score: number;
     breakdown: {
@@ -19,7 +20,7 @@ export interface FundMatch {
 export async function matchFunds(
     params: MatchParams,
     userId: string
-): Promise<FundMatch[]> {
+): Promise<SearchResult[]> {
     const { data: funds } = await supabase
         .from('funds')
         .select('*');
