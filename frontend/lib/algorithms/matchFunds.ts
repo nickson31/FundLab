@@ -58,37 +58,9 @@ export async function matchFunds(
         .sort((a: FundMatch, b: FundMatch) => b.score - a.score)
         .slice(0, 20);
 
-    // Persist Results if admin client available
+    // Persistence Removed as per user request
     if (injectedClient) {
-        const searchResultsToInsert = matches.map(match => ({
-            user_id: userId,
-            query: params.categoryKeywords.join(', '), // Simplified query tracking
-            matched_fund_id: match.fund.id,
-            relevance_score: match.score,
-            summary: `Matched on Keywords.`, // Simplified summary
-            status: 'saved'
-        }));
-
-        if (searchResultsToInsert.length > 0) {
-            console.log('[MatchFunds] Attempting insert with payload sample:', JSON.stringify(searchResultsToInsert[0], null, 2));
-            const { error } = await client.from('search_results').insert(searchResultsToInsert);
-            if (error) console.warn('[MatchFunds] ⚠️ Persistence skipped:', error.code);
-            else console.log('[MatchFunds] ✅ Persisted to search_results');
-
-            // ALSO Save to saved_investors for user visibility
-            const savedInvestorsToInsert = searchResultsToInsert.map(r => ({
-                user_id: userId,
-                investor_id: r.matched_fund_id,
-                type: 'fund',
-                notes: r.summary,
-                created_at: new Date().toISOString()
-            }));
-
-            // We use upsert to avoid duplicates
-            const { error: savedError } = await client.from('saved_investors').upsert(savedInvestorsToInsert, { onConflict: 'user_id, investor_id', ignoreDuplicates: true });
-            if (savedError) console.warn('[MatchFunds] ⚠️ Could not populate saved_investors:', savedError.code, savedError.message);
-            else console.log('[MatchFunds] ✅ Populated saved_investors');
-        }
+        console.log('[MatchFunds] ℹ️ Persistence skipped (User requested no saving)');
     }
 
     // Return formatted for ChatInterface

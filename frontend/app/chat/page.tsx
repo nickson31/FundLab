@@ -1,16 +1,17 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Sparkles, MessageSquare, MoreHorizontal, Search } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import InvestorCard from '@/components/chat/InvestorCard';
 import FundCard from '@/components/chat/FundCard';
 import MessageModal from '@/components/chat/MessageModal';
 import SearchToggle from '@/components/chat/SearchToggle';
 import MacShell from '@/components/layout/MacShell';
-import { useEffect } from 'react';
 import { cn } from '@/lib/utils';
+import { supabase } from '@/lib/supabase';
 
 const LOADING_MESSAGES = [
     "Analyzing global investor database...",
@@ -38,6 +39,7 @@ function LoadingMessage() {
 }
 
 export default function ChatPage() {
+    const router = useRouter();
     const [query, setQuery] = useState('');
     const [mode, setMode] = useState<'angels' | 'funds'>('angels');
     const [isLoading, setIsLoading] = useState(false);
@@ -47,6 +49,19 @@ export default function ChatPage() {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInvestor, setSelectedInvestor] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
+    const [user, setUser] = useState<any>(null);
+
+    useEffect(() => {
+        const checkAuth = async () => {
+            const { data: { session } } = await supabase.auth.getSession();
+            if (!session) {
+                router.push('/login');
+            } else {
+                setUser(session.user);
+            }
+        };
+        checkAuth();
+    }, [router]);
 
     const openModal = (investor?: any) => {
         setSelectedInvestor(investor);
@@ -57,17 +72,22 @@ export default function ChatPage() {
         e?.preventDefault();
         if (!query.trim()) return;
 
+        // Ensure user is authenticated
+        if (!user) {
+            router.push('/login');
+            return;
+        }
+
         setIsLoading(true);
         setHasSearched(true);
         setResults([]);
         setError(null);
 
         try {
-            const userId = '00000000-0000-0000-0000-000000000000';
             const res = await fetch('/api/search', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query, mode, userId }),
+                body: JSON.stringify({ query, mode, userId: user.id }),
             });
 
             const data = await res.json();

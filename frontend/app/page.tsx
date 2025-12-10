@@ -3,14 +3,14 @@
 import React from 'react';
 import Navbar from '@/components/wow/Navbar';
 import Hero from '@/components/wow/Hero';
-import SocialProof from '@/components/wow/SocialProof';
+// import SocialProof from '@/components/wow/SocialProof';
 import IntelligenceSection from '@/components/wow/IntelligenceSection';
-import HowItWorks from '@/components/wow/HowItWorks';
+// import HowItWorks from '@/components/wow/HowItWorks';
 import UseCases from '@/components/wow/UseCases';
-import Testimonials from '@/components/wow/Testimonials';
-import FAQ from '@/components/wow/FAQ';
-import Pricing from '@/components/wow/Pricing';
-import CTA from '@/components/wow/CTA';
+// import Testimonials from '@/components/wow/Testimonials';
+// import FAQ from '@/components/wow/FAQ';
+// import Pricing from '@/components/wow/Pricing';
+// import CTA from '@/components/wow/CTA';
 import Footer from '@/components/wow/Footer';
 
 export default function Home() {
@@ -21,16 +21,16 @@ export default function Home() {
 
       <main className="relative">
         <Hero />
-        <SocialProof />
+        {/* <SocialProof /> */}
         <IntelligenceSection />
-        <HowItWorks />
+        {/* <HowItWorks /> */}
         <UseCases />
-        <Testimonials />
-        <FAQ />
-        <Pricing />
+        {/* <Testimonials /> */}
+        {/* <FAQ /> */}
+        {/* <Pricing /> */}
       </main>
 
-      <CTA />
+      {/* <CTA /> */}
       <Footer />
     </div>
   );

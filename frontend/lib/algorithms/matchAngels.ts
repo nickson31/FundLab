@@ -79,53 +79,10 @@ export async function matchAngels(
         .sort((a, b) => b.score - a.score)
         .slice(0, 15); // Return top 15
 
-    // 4. Persist Results (Batch Insert)
-    if (topMatches.length > 0) {
-        console.log('[MatchAngels] Top match object:', JSON.stringify(topMatches[0], null, 2));
-        console.log('[MatchAngels] Top match angel ID:', topMatches[0].angel?.id);
-    }
-    // Only persist if we have a service role client (injectedClient is defined)
-    // Or if we are sure we have permissions. For now, strictly require injectedClient.
+    // 4. Persistence Removed as per user request
+    // Results are only returned to the chat interface
     if (injectedClient) {
-        const searchResultsToInsert = topMatches.map(match => ({
-            user_id: userId,
-            query: params.queryText || params.categoryKeywords.join(', '),
-            matched_angel_id: match.angel.id,
-            relevance_score: match.score,
-            summary: match.breakdown.reason_summary,
-            status: 'saved'
-        }));
-
-        if (searchResultsToInsert.length > 0) {
-            console.log('[MatchAngels] Attempting insert with payload sample:', JSON.stringify(searchResultsToInsert[0], null, 2));
-
-            const { data: insertedRows, error: insertError } = await client
-                .from('search_results')
-                .insert(searchResultsToInsert)
-                .select();
-
-            if (insertError) {
-                console.warn('[MatchAngels] ⚠️ Could not persist results (likely RLS):', insertError.code);
-            } else {
-                console.log('[MatchAngels] ✅ Persisted', insertedRows?.length, 'matches to search_results');
-            }
-
-            // ALSO Save to saved_investors for user visibility
-            const savedInvestorsToInsert = searchResultsToInsert.map(r => ({
-                user_id: userId,
-                investor_id: r.matched_angel_id,
-                type: 'angel',
-                notes: r.summary,
-                created_at: new Date().toISOString()
-            }));
-
-            // We use upsert to avoid duplicates if user searches again
-            const { error: savedError } = await client.from('saved_investors').upsert(savedInvestorsToInsert, { onConflict: 'user_id, investor_id', ignoreDuplicates: true });
-            if (savedError) console.warn('[MatchAngels] ⚠️ Could not populate saved_investors:', savedError.code, savedError.message);
-            else console.log('[MatchAngels] ✅ Populated saved_investors');
-        }
-    } else {
-        console.log('[MatchAngels] ℹ️ Skipping persistence (No Service Role Key)');
+        console.log('[MatchAngels] ℹ️ Persistence skipped (User requested no saving)');
     }
 
     // 5. Return formatted SearchResults
