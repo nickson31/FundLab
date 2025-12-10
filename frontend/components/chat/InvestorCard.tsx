@@ -26,6 +26,8 @@ export default function InvestorCard({
     onSave,
     isSaved = false
 }: InvestorCardProps) {
+    if (!investor) return null;
+
     const [isHovered, setIsHovered] = useState(false);
 
     // Type Guards & Extraction

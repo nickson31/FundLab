@@ -20,6 +20,7 @@ export async function matchAngels(
     client = supabase
 ): Promise<SearchResult[]> {
     console.log('[MatchAngels] 🔍 Starting match for user:', userId);
+    const queryForLog = params.queryText || (params.categoryKeywords ? params.categoryKeywords.join(', ') : 'Unknown Query');
 
     // 1. Fetch Angels
     const { data: angels, error } = await client
