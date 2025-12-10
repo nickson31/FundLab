@@ -252,7 +252,8 @@ export default function ChatInterface() {
                                                                 saved_at: new Date().toISOString()
                                                             });
                                                             // Optional: Show toast
-                                                            console.log('Saved!', inv.name || inv.fullName);
+                                                            const savedName = 'fullName' in inv ? inv.fullName : ('name' in inv ? inv.name : 'Investor');
+                                                            console.log('Saved!', savedName);
                                                         } catch (err) {
                                                             console.error('Error saving:', err);
                                                         }
