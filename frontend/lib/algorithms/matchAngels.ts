@@ -1,151 +1,149 @@
 import { supabase } from '@/lib/supabase';
+import { AngelInvestor, SearchResult, MatchBreakdown } from '@/types/investor';
 
 interface MatchParams {
     categoryKeywords: string[];
     stageKeywords: string[];
     locationKeywords: string[];
+    queryText?: string; // Original query for logging
 }
 
-export interface AngelMatch {
-    angel: any;
+interface AngelMatchRaw {
+    angel: AngelInvestor;
     score: number;
-    breakdown: {
-        categoryScore: number;
-        angelScore: number;
-        stageScore: number;
-        locationScore: number;
-    };
+    breakdown: MatchBreakdown;
 }
 
 export async function matchAngels(
     params: MatchParams,
     userId: string
-): Promise<AngelMatch[]> {
-    console.log('[MatchAngels] 🔍 Starting');
-    console.log('[MatchAngels] Keywords:', {
-        categories: params.categoryKeywords.length,
-        stages: params.stageKeywords.length,
-        locations: params.locationKeywords.length
-    });
+): Promise<SearchResult[]> {
+    console.log('[MatchAngels] 🔍 Starting match for user:', userId);
 
+    // 1. Fetch Angels
     const { data: angels, error } = await supabase
-        .from('angels')
-        .select('*')
-        .limit(1);
-
-    console.log('[MatchAngels] 📊 DB Response:', {
-        hasError: !!error,
-        errorMsg: error?.message,
-        hasData: !!angels,
-        count: angels?.length || 0
-    });
+        .from('angel_investors') // Ensure table name matches schema
+        .select('*');
 
     if (error) {
-        console.error('[MatchAngels] ❌ DB Error:', JSON.stringify(error));
+        console.error('[MatchAngels] ❌ DB Error fetching angels:', error);
         return [];
     }
 
     if (!angels || angels.length === 0) {
-        console.error('[MatchAngels] ❌ No data returned');
+        console.warn('[MatchAngels] ⚠️ No angels found in DB');
         return [];
     }
 
-    // Log the structure of the first angel
-    const firstAngel = angels[0];
-    console.log('[MatchAngels] 📋 First angel keys:', Object.keys(firstAngel).slice(0, 10));
-    console.log('[MatchAngels] 📋 Sample fields:', {
-        hasFullName: 'fullName' in firstAngel,
-        hasCategoriesStrong: 'categories_strong_es' in firstAngel,
-        hasAngelScore: 'angel_score' in firstAngel,
-        hasData: 'data' in firstAngel
+    // 2. Score Angels
+    const scoredAngels: AngelMatchRaw[] = angels.map((angel: any) => {
+        // Cast to strictly typed AngelInvestor for safer access, assuming DB schema aligns
+        const typedAngel = angel as AngelInvestor;
+
+        const categoryScore = calculateCategoryScore(typedAngel, params.categoryKeywords);
+        const angelScoreNormalized = parseFloat(String(typedAngel.angel_score || 0)) / 100.0;
+        const stageScore = calculateStageScore(typedAngel, params.stageKeywords);
+        const locationScore = calculateLocationScore(typedAngel, params.locationKeywords);
+
+        const totalScore = (
+            categoryScore * 0.45 +
+            (isNaN(angelScoreNormalized) ? 0 : angelScoreNormalized) * 0.25 +
+            stageScore * 0.20 +
+            locationScore * 0.10
+        );
+
+        return {
+            angel: typedAngel,
+            score: totalScore,
+            breakdown: {
+                category_match: categoryScore,
+                stage_match: stageScore,
+                location_match: locationScore,
+                overall_score: totalScore,
+                reason_summary: generateReason(typedAngel, params)
+            }
+        };
     });
 
-    // Fetch all angels for matching
-    const { data: allAngels } = await supabase
-        .from('angels')
-        .select('*');
-
-    if (!allAngels || allAngels.length === 0) {
-        console.error('[MatchAngels] ❌ No angels for matching');
-        return [];
-    }
-
-    console.log('[MatchAngels] ✅ Processing', allAngels.length, 'angels');
-
-    const matches: AngelMatch[] = allAngels
-        .map(angel => {
-            const categoryScore = calculateCategoryScore(angel, params.categoryKeywords);
-            const angelScoreNormalized = parseFloat(angel.angel_score || '0') / 100.0;
-            const stageScore = calculateStageScore(angel, params.stageKeywords);
-            const locationScore = calculateLocationScore(angel, params.locationKeywords);
-
-            const totalScore = (
-                categoryScore * 0.4 +
-                angelScoreNormalized * 0.3 +
-                stageScore * 0.2 +
-                locationScore * 0.1
-            );
-
-            return {
-                angel: { ...angel },
-                score: totalScore,
-                breakdown: {
-                    categoryScore,
-                    angelScore: angelScoreNormalized,
-                    stageScore,
-                    locationScore,
-                },
-            };
-        })
+    // 3. Sort and Filter
+    const topMatches = scoredAngels
         .sort((a, b) => b.score - a.score)
-        .slice(0, 20);
+        .slice(0, 15); // Return top 15
 
-    console.log('[MatchAngels] ✅ Results:', {
-        processed: allAngels.length,
-        returned: matches.length,
-        topScore: matches[0]?.score.toFixed(3) || 0
-    });
+    // 4. Persist Results (Batch Insert)
+    const searchResultsToInsert = topMatches.map(match => ({
+        user_id: userId,
+        query: params.queryText || params.categoryKeywords.join(', '),
+        matched_investor_id: match.angel.id,
+        relevance_score: match.score,
+        summary: match.breakdown.reason_summary,
+        status: 'saved'
+    }));
 
-    return matches;
+    if (searchResultsToInsert.length > 0) {
+        const { data: insertedRows, error: insertError } = await supabase
+            .from('search_results')
+            .insert(searchResultsToInsert)
+            .select();
+
+        if (insertError) {
+            console.error('[MatchAngels] ❌ Error persisting results:', insertError);
+        } else {
+            console.log('[MatchAngels] ✅ Persisted', insertedRows?.length, 'matches');
+        }
+    }
+
+    // 5. Return formatted SearchResults
+    return topMatches.map(match => ({
+        investor: match.angel,
+        type: 'angel',
+        score: match.score,
+        breakdown: match.breakdown
+    }));
 }
 
-function calculateCategoryScore(angel: any, queryKeywords: string[]): number {
-    if (!queryKeywords.length) return 0;
+// Helpers
 
+function calculateCategoryScore(angel: AngelInvestor, keywords: string[]): number {
+    if (!keywords.length) return 0;
     const sources = [
-        angel.categories_strong_es || '',
-        angel.categories_strong_en || '',
-        angel.categories_general_es || '',
-        angel.categories_general_en || '',
-        angel.headline || '',
-        angel.about || '',
-    ].join(' ').toLowerCase();
+        angel.categories_strong_es,
+        angel.categories_strong_en,
+        angel.categories_general_es,
+        angel.categories_general_en,
+        angel.headline,
+        angel.about
+    ].map(s => (s || '').toLowerCase()).join(' ');
 
-    const matches = queryKeywords.filter(keyword =>
-        sources.includes(keyword.toLowerCase())
-    ).length;
-
-    return Math.min(matches / queryKeywords.length, 1);
+    const hits = keywords.filter(k => sources.includes(k.toLowerCase())).length;
+    return Math.min(hits / (keywords.length || 1), 1.0);
 }
 
-function calculateStageScore(angel: any, queryKeywords: string[]): number {
-    if (!queryKeywords.length) return 0;
-
+function calculateStageScore(angel: AngelInvestor, keywords: string[]): number {
+    if (!keywords.length) return 0;
     const sources = [
-        angel.stages_strong_es || '',
-        angel.stages_strong_en || '',
-        angel.stages_general_es || '',
-        angel.stages_general_en || '',
-    ].join(' ').toLowerCase();
+        angel.stages_strong_es,
+        angel.stages_strong_en,
+        angel.stages_general_es,
+        angel.stages_general_en
+    ].map(s => (s || '').toLowerCase()).join(' ');
 
-    const matches = queryKeywords.filter(k => sources.includes(k.toLowerCase())).length;
-    return Math.min(matches / queryKeywords.length, 1);
+    const hits = keywords.filter(k => sources.includes(k.toLowerCase())).length;
+    return Math.min(hits / (keywords.length || 1), 1.0);
 }
 
-function calculateLocationScore(angel: any, queryKeywords: string[]): number {
-    if (!queryKeywords.length) return 0;
-
-    const location = (angel.addressWithCountry || '').toLowerCase();
-    const matches = queryKeywords.filter(k => location.includes(k.toLowerCase())).length;
-    return Math.min(matches / queryKeywords.length, 1);
+function calculateLocationScore(angel: AngelInvestor, keywords: string[]): number {
+    if (!keywords.length) return 0;
+    const loc = (angel.addressWithCountry || '').toLowerCase();
+    const hits = keywords.filter(k => loc.includes(k.toLowerCase())).length;
+    return hits > 0 ? 1 : 0;
 }
+
+function generateReason(angel: AngelInvestor, params: MatchParams): string {
+    const cats = params.categoryKeywords.filter(k =>
+        (angel.categories_strong_en || '').toLowerCase().includes(k.toLowerCase())
+    );
+    if (cats.length > 0) return `Strong match for ${cats.join(', ')}.`;
+    return 'Matched based on general investment profile.';
+}
+
