@@ -136,7 +136,7 @@ export default function AngelsPage() {
                                         investor={angel}
                                         type="angel"
                                         score={0} // Score not stored in flat list, or needs to be fetched
-                                        breakdown={{}}
+                                        breakdown={{ category_match: 0, stage_match: 0, location_match: 0, overall_score: 0 }}
                                         isSaved={true}
                                         onSave={handleUnsave}
                                     />
