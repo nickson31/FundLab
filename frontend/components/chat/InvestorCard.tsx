@@ -98,8 +98,12 @@ export default function InvestorCard({
 
     const getInitials = (n: string) => n.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
 
-    const scoreColor = score >= 0.7 ? 'text-green-400' : score >= 0.5 ? 'text-yellow-400' : 'text-gray-400';
-    const scoreBg = score >= 0.7 ? 'bg-green-500/10' : score >= 0.5 ? 'bg-yellow-500/10' : 'bg-gray-500/10';
+    const scoreBg = score >= 0.8 ? 'bg-green-100 dark:bg-green-500/20' : score >= 0.6 ? 'bg-yellow-100 dark:bg-yellow-500/20' : 'bg-gray-100 dark:bg-gray-500/20';
+    const scoreColor = score >= 0.8 ? 'text-green-700 dark:text-green-400' : score >= 0.6 ? 'text-yellow-700 dark:text-yellow-400' : 'text-gray-700 dark:text-gray-400';
+
+    const description = 'description' in investor ? investor.description : '';
+    const displaySummary = headline || description;
+    const fullDescription = ('about' in investor ? (investor as any).about : null) || description;
 
     return (
         <motion.div
