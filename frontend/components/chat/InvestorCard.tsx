@@ -37,8 +37,12 @@ export default function InvestorCard({
     const [isHovered, setIsHovered] = useState(false);
 
     // Type Guards & Extraction
-    const isAngel = (inv: Investor): inv is AngelInvestor => 'angel_score' in inv;
-    const isFund = (inv: Investor): inv is InvestmentFund => 'category_keywords' in inv && !('angel_score' in inv);
+    // Check if it has an angel score (string or number)
+    const isAngel = (inv: Investor): inv is AngelInvestor =>
+        'angel_score' in inv && (typeof inv.angel_score === 'number' || typeof inv.angel_score === 'string');
+
+    const isFund = (inv: Investor): inv is InvestmentFund =>
+        !isAngel(inv) && ('category_keywords' in inv || 'description' in inv);
 
     // Name Extraction
     let name = 'Unknown';

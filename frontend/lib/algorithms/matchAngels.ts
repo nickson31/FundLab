@@ -107,8 +107,22 @@ export async function matchAngels(
             if (insertError) {
                 console.warn('[MatchAngels] ⚠️ Could not persist results (likely RLS):', insertError.code);
             } else {
-                console.log('[MatchAngels] ✅ Persisted', insertedRows?.length, 'matches');
+                console.log('[MatchAngels] ✅ Persisted', insertedRows?.length, 'matches to search_results');
             }
+
+            // ALSO Save to saved_investors for user visibility
+            const savedInvestorsToInsert = searchResultsToInsert.map(r => ({
+                user_id: userId,
+                investor_id: r.matched_angel_id,
+                type: 'angel',
+                notes: r.summary,
+                created_at: new Date().toISOString()
+            }));
+
+            // We use upsert to avoid duplicates if user searches again
+            const { error: savedError } = await client.from('saved_investors').upsert(savedInvestorsToInsert, { onConflict: 'user_id, investor_id', ignoreDuplicates: true });
+            if (savedError) console.warn('[MatchAngels] ⚠️ Could not populate saved_investors:', savedError.code, savedError.message);
+            else console.log('[MatchAngels] ✅ Populated saved_investors');
         }
     } else {
         console.log('[MatchAngels] ℹ️ Skipping persistence (No Service Role Key)');
