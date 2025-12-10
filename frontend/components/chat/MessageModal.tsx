@@ -77,6 +77,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
     const handleSave = async () => {
         setIsSaving(true);
         try {
+            if (!selectedRecipient) return;
             const name = selectedRecipient.fullName || selectedRecipient.name || 'Investor';
             await fetch('/api/message/save', {
                 method: 'POST',
