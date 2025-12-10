@@ -35,9 +35,9 @@ export default function InvestorCard({
 
 
     const [isHovered, setIsHovered] = useState(false);
+    const [isExpanded, setIsExpanded] = useState(false);
 
     // Type Guards & Extraction
-    // Check if it has an angel score (string or number)
     const isAngel = (inv: Investor): inv is AngelInvestor =>
         'angel_score' in inv && (typeof inv.angel_score === 'number' || typeof inv.angel_score === 'string');
 
@@ -60,6 +60,10 @@ export default function InvestorCard({
         'linkedin_url' in investor ? investor.linkedin_url : undefined;
 
     const profilePic = 'profilePic' in investor ? investor.profilePic : undefined;
+
+    // Expanded Details
+    const recentInvestments = 'recent_investments' in investor ? (investor as any).recent_investments || '' : '';
+    const ticketSize = 'ticket_size' in investor ? (investor as any).ticket_size || 'Not specified' : 'Not specified';
 
     // Score (Specific to Angels)
     const angelScore = isAngel(investor) ? parseFloat(String(investor.angel_score || 0)) : 0;
@@ -84,17 +88,13 @@ export default function InvestorCard({
             reasons = investor.validation_reasons_english.split(';').map(s => s.trim()).filter(Boolean).slice(0, 2);
         }
     } else if (isFund(investor)) {
-        // Funds usually have keywords in JSON string format or raw string
-        // Assuming string based on updated types.
         if (investor.category_keywords) {
-            // Primitive cleanup if it's a raw array string "['a', 'b']"
             const clean = investor.category_keywords.replace(/[\[\]'"]/g, '');
             categories = clean.split(',').slice(0, 5);
         }
     }
 
     const categoryTags = [...new Set(categories)].slice(0, 3);
-    const stageTags = [...new Set(stages)].slice(0, 2);
 
     const getInitials = (n: string) => n.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
 
@@ -103,67 +103,77 @@ export default function InvestorCard({
 
     return (
         <motion.div
+            layout
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}
-            className="group relative h-full"
+            className="group relative h-auto"
         >
-            <div className="absolute inset-0 bg-gradient-to-b from-white/[0.07] to-white/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <div className="absolute inset-0 bg-gradient-to-b from-black/[0.02] to-black/[0.01] dark:from-white/[0.07] dark:to-white/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-            <div className="relative flex flex-col h-full bg-black/40 backdrop-blur-sm border border-white/[0.08] rounded-2xl p-5 hover:border-white/[0.15] transition-all duration-500">
+            <div className="relative flex flex-col h-full bg-white/80 dark:bg-black/40 backdrop-blur-md border border-gray-200/50 dark:border-white/[0.08] rounded-2xl p-5 hover:border-gray-300 dark:hover:border-white/[0.15] transition-all duration-500 overflow-hidden shadow-sm dark:shadow-none">
 
                 {/* Header */}
-                <div className="flex items-start gap-3 mb-4">
-                    <Avatar className="h-12 w-12 border border-white/10 shrink-0">
+                <div className="flex items-start gap-4 mb-4 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
+                    <Avatar className="h-12 w-12 border border-gray-200 dark:border-white/10 shrink-0">
                         <AvatarImage src={profilePic || undefined} alt={name} />
-                        <AvatarFallback className="bg-indigo-500/20 text-indigo-200 font-medium text-sm">
+                        <AvatarFallback className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-200 font-medium text-sm">
                             {getInitials(name)}
                         </AvatarFallback>
                     </Avatar>
 
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-sm font-bold text-white truncate pr-2">{name}</h3>
-                        <p className="text-xs text-gray-400 line-clamp-1 mt-0.5">{headline}</p>
-                    </div>
-
-                    <div className={cn("shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium", scoreBg, scoreColor)}>
-                        <TrendingUp className="w-3 h-3" />
-                        {Math.round(score * 100)}%
+                        <div className="flex justify-between items-start">
+                            <h3 className="text-sm font-bold text-gray-900 dark:text-white truncate pr-2">{name}</h3>
+                            <div className={cn("shrink-0 flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium", scoreBg, scoreColor)}>
+                                <TrendingUp className="w-3 h-3" />
+                                {Math.round(score * 100)}%
+                            </div>
+                        </div>
+                        <p className={cn("text-xs text-gray-500 dark:text-gray-400 mt-0.5 transition-all", isExpanded ? "" : "line-clamp-1")}>{headline}</p>
                     </div>
                 </div>
 
-                {/* Stats / Score */}
-                {angelScore > 0 && (
-                    <div className="flex items-center gap-2 mb-3 px-3 py-1.5 rounded-lg bg-indigo-500/5 border border-indigo-500/20 w-fit">
-                        <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
-                        <span className="text-xs text-indigo-300 font-medium">Angel Score: {angelScore}</span>
-                    </div>
-                )}
-
-                {/* Validation Reasons (The "Wow" factor) */}
+                {/* Validation Reasons */}
                 {reasons.length > 0 && (
                     <div className="mb-4 space-y-1.5">
-                        {reasons.map((reason, i) => (
-                            <div key={i} className="flex gap-2 text-xs text-gray-300 items-start">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-400/80 shrink-0 mt-0.5" />
+                        {reasons.slice(0, isExpanded ? 4 : 2).map((reason, i) => (
+                            <div key={i} className="flex gap-2 text-xs text-gray-600 dark:text-gray-300 items-start">
+                                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400/80 shrink-0 mt-0.5" />
                                 <span className="opacity-90 leading-tight">{reason}</span>
                             </div>
                         ))}
                     </div>
                 )}
 
-                <div className="flex-1" /> {/* Spacer */}
+                {/* Expanded Content */}
+                <div className={cn("grid transition-all duration-300 ease-in-out", isExpanded ? "grid-rows-[1fr] opacity-100 mb-4" : "grid-rows-[0fr] opacity-0")}>
+                    <div className="overflow-hidden space-y-3">
+                        <div className="bg-gray-50 dark:bg-white/5 rounded-lg p-3 border border-gray-100 dark:border-white/5">
+                            <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Recent Investments</p>
+                            <p className="text-xs text-gray-700 dark:text-white leading-relaxed">{recentInvestments || 'No public investments listed.'}</p>
+                        </div>
+                        <div className="flex gap-4">
+                            <div className="flex-1 bg-gray-50 dark:bg-white/5 rounded-lg p-3 border border-gray-100 dark:border-white/5">
+                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Ticket</p>
+                                <p className="text-xs text-gray-900 dark:text-white font-medium">{ticketSize}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="flex-1" />
 
                 {/* Tags */}
                 <div className="flex flex-wrap gap-1.5 mb-4">
                     {categoryTags.map((tag, i) => (
-                        <Badge key={i} variant="secondary" className="bg-white/5 text-gray-400 border-white/5 text-[10px] px-1.5 h-5 font-normal">
+                        <Badge key={i} variant="secondary" className="bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/5 text-[10px] px-1.5 h-5 font-normal">
                             {tag}
                         </Badge>
                     ))}
                     {location && (
-                        <div className="flex items-center gap-1 text-[10px] text-gray-500 ml-auto pt-1">
+                        <div className="flex items-center gap-1 text-[10px] text-gray-400 ml-auto pt-1">
                             <MapPin className="w-3 h-3" />
                             <span className="truncate max-w-[80px]">{location.split(',')[0]}</span>
                         </div>
@@ -171,19 +181,27 @@ export default function InvestorCard({
                 </div>
 
                 {/* Actions */}
-                <div className="flex gap-2 mt-auto pt-3 border-t border-white/5">
+                <div className="flex gap-2 mt-auto pt-3 border-t border-gray-100 dark:border-white/5">
                     <Button
                         onClick={() => onDraftMessage?.(investor)}
-                        className="flex-1 h-8 text-xs bg-indigo-600 hover:bg-indigo-500 text-white"
+                        className="flex-1 h-8 text-xs bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20"
                     >
                         Draft Message
+                    </Button>
+
+                    <Button
+                        variant="ghost"
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300 h-8 px-3 text-xs"
+                    >
+                        {isExpanded ? 'Less' : 'More'}
                     </Button>
 
                     {linkedinUrl && (
                         <Button
                             size="icon"
                             variant="ghost"
-                            className="h-8 w-8 rounded-full hover:bg-white/10"
+                            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 shrink-0"
                             onClick={() => window.open(linkedinUrl, '_blank')}
                         >
                             <Linkedin className="w-3.5 h-3.5 text-gray-400" />

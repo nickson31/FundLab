@@ -3,6 +3,7 @@ import { model } from '../gemini';
 interface MessageInput {
     investorData: any;
     companyContext: string;
+    messageType?: 'linkedin' | 'email';
 }
 
 interface SummaryInput {
@@ -16,6 +17,7 @@ interface SummaryInput {
  */
 export async function generateMessage(input: MessageInput): Promise<string> {
     const investor = input.investorData;
+    const type = input.messageType || 'linkedin';
 
     const prompt = `
 CRITICAL INSTRUCTION: READ ALL COLUMNS from the investor data below. Do not skip any field.
@@ -27,38 +29,29 @@ ${JSON.stringify(investor, null, 2)}
 === USER'S COMPANY CONTEXT ===
 ${input.companyContext}
 
-=== MESSAGE GENERATION RULES ===
-1. **Deep Analysis Required**: Find "gold nuggets" in their profile:
-   - Past investments/portfolio companies
-   - Specific industries they focus on
-   - Their investment thesis or philosophy
-   - Educational background (alma mater)
-   - Personal details (hobbies, interests mentioned in bio)
-   - Geographic focus
-   - Stage preferences (pre-seed, seed, series A)
+=== MESSAGE TYPE: ${type.toUpperCase()} ===
 
-2. **Personalization Keys**:
-   - Reference a SPECIFIC portfolio company or investment they made
-   - Mention their investment focus that aligns with the user's startup
-   - If they have published content/quotes, reference it
-   - Find common ground (location, industry experience, mutual connections)
+=== GENERATION RULES ===
+1. **Format**:
+   ${type === 'email' ? '- Format as a cold email.\n   - Include a catchy "Subject:" line at the very top.\n   - Use professional email spacing.' : '- Format as a LinkedIn message (Connection or InMail).\n   - NO Subject line.\n   - Keep it concise (under 200 words).\n   - Casual but professional tone.'}
+   - **IMPORTANT**: Use Markdown. Ensure there are double newlines (blank lines) between paragraphs for readability.
 
-3. **Message Structure**:
-   - Hook: Hyper-specific observation about THEM (not generic)
-   - Value Prop: One sentence on why you're reaching out (aligned to their thesis)
-   - Credibility: Brief traction or relevant experience
-   - Ask: 15-minute call or quick feedback
+2. **Deep Analysis & Personalization**:
+   - Reference a SPECIFIC portfolio company, investment thesis, or background detail "gold nugget".
+   - Explain WHY this specific investor is a good fit for the user's company context.
+   - Do NOT be generic.
 
-4. **Constraints**:
-   - 4-6 sentences MAX
-   - Professional but warm tone
-   - No salesy language
-   - No "Dear [Name]" or "Subject:" - just the message body
-   - Avoid generic phrases like "I came across your profile"
+3. **Structure**:
+   - Hook: Hyper-specific observation about THEM.
+   - Value Prop: Alignment with their thesis.
+   - Credibility: Brief traction.
+   - Ask: Low friction (15 min call or feedback).
 
-5. **Quality Check**: The message MUST reference at least 2 specific details from their profile.
+4. **Tone**:
+   - Professional, warm, confident.
+   - No salesy language.
 
-Return ONLY the message body. No formatting, no labels.
+Return ONLY the message body (and Subject for email).
 `;
 
     try {

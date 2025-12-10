@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { X, RefreshCw, Save, ChevronRight, Sparkles, Search } from 'lucide-react';
+import { X, RefreshCw, Save, ChevronRight, Sparkles, Search, Linkedin, Mail } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
@@ -13,9 +13,10 @@ interface MessageModalProps {
     isOpen: boolean;
     onClose: () => void;
     preSelectedInvestor?: Investor;
+    currentUserId?: string;
 }
 
-export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: MessageModalProps) {
+export default function MessageModal({ isOpen, onClose, preSelectedInvestor, currentUserId }: MessageModalProps) {
     const [step, setStep] = useState(1);
     const [recipients, setRecipients] = useState<Investor[]>([]);
     const [selectedRecipient, setSelectedRecipient] = useState<Investor | null>(null);
@@ -23,6 +24,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
     const [generatedMessage, setGeneratedMessage] = useState('');
     const [isGenerating, setIsGenerating] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
+    const [messageType, setMessageType] = useState<'linkedin' | 'email'>('linkedin');
 
     useEffect(() => {
         if (isOpen) {
@@ -30,19 +32,21 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
             setSelectedRecipient(preSelectedInvestor || null);
             setCompanyContext('');
             setGeneratedMessage('');
-            if (!preSelectedInvestor) {
+            if (!preSelectedInvestor && currentUserId) {
                 fetchRecipients();
             }
         }
-    }, [isOpen, preSelectedInvestor]);
+    }, [isOpen, preSelectedInvestor, currentUserId]);
 
     const fetchRecipients = async () => {
+        if (!currentUserId) return;
+
         // Fetch saved results from search_results table
         const { data: savedResults, error } = await supabase
             .from('search_results')
             .select('matched_angel_id, matched_fund_id')
             .eq('status', 'saved')
-            // .eq('user_id', ...) // In real app, filter by auth user
+            .eq('user_id', currentUserId)
             .order('created_at', { ascending: false })
             .limit(50);
 
@@ -74,16 +78,24 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
         setIsGenerating(true);
         setStep(3);
 
+        const minDelay = 10000; // 10 seconds delay
+        const startTime = Date.now();
+
         try {
-            const res = await fetch('/api/message/generate', {
+            const generatePromise = fetch('/api/message/generate', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     investorData: selectedRecipient,
                     companyContext,
                 })
-            });
-            const data = await res.json();
+            }).then(res => res.json());
+
+            const delayPromise = new Promise(resolve => setTimeout(resolve, minDelay));
+
+            // Wait for both
+            const [data] = await Promise.all([generatePromise, delayPromise]);
+
             setGeneratedMessage(data.message);
         } catch (error) {
             console.error('Generation error:', error);
@@ -129,13 +141,13 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
     return (
         <AnimatePresence>
             {isOpen && (
-                <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+                <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4">
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={onClose}
-                        className="absolute inset-0 bg-black/60 backdrop-blur-md"
+                        className="absolute inset-0 bg-black/80 backdrop-blur-md"
                     />
 
                     <motion.div
@@ -154,8 +166,8 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
                                     {step === 1 ? 'Who are you reaching out to?' : step === 2 ? 'Help the AI understand your pitch.' : 'Polish and send.'}
                                 </p>
                             </div>
-                            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-white/10 text-muted-foreground hover:text-white">
-                                <X className="w-5 h-5" />
+                            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-white/10 text-muted-foreground hover:text-white transition-colors">
+                                <X className="w-6 h-6" />
                             </Button>
                         </div>
 
@@ -209,6 +221,36 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
                                     </div>
 
                                     <div>
+                                        <label className="block text-sm font-medium text-white mb-3 ml-1">
+                                            Platform & Format
+                                        </label>
+                                        <div className="grid grid-cols-2 gap-3 mb-6">
+                                            <button
+                                                onClick={() => setMessageType('linkedin')}
+                                                className={cn(
+                                                    "p-3 rounded-xl border text-sm font-medium transition-all flex items-center justify-center gap-2",
+                                                    messageType === 'linkedin'
+                                                        ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20"
+                                                        : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10"
+                                                )}
+                                            >
+                                                <Linkedin className="w-4 h-4" />
+                                                LinkedIn
+                                            </button>
+                                            <button
+                                                onClick={() => setMessageType('email')}
+                                                className={cn(
+                                                    "p-3 rounded-xl border text-sm font-medium transition-all flex items-center justify-center gap-2",
+                                                    messageType === 'email'
+                                                        ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20"
+                                                        : "bg-white/5 border-white/10 text-gray-400 hover:bg-white/10"
+                                                )}
+                                            >
+                                                <Mail className="w-4 h-4" />
+                                                Email
+                                            </button>
+                                        </div>
+
                                         <label className="block text-sm font-medium text-white mb-2 ml-1">
                                             What's the core of your pitch?
                                         </label>
