@@ -30,12 +30,22 @@ export default function InvestorCard({
     const [saved, setSaved] = useState(isSaved);
 
     // Map database columns to display values
-    const name = investor.fullName || investor.name || 'Unknown Investor';
-    const headline = (investor.headline as string) || '';
-    const location = (investor.addressWithCountry as string) || 'Global';
-    const linkedinUrl = (investor.linkedinUrl as string) || '';
-    const profilePic = typeof investor.profilePic === 'string' ? investor.profilePic : '';
-    const angelScore = investor.angel_score ? parseFloat(String(investor.angel_score)) : 0;
+    // Safe property extraction helpers
+    const getString = (val: unknown, fallback = '') => (typeof val === 'string' ? val : fallback);
+    const getNumber = (val: unknown, fallback = 0) => {
+        const num = parseFloat(String(val));
+        return isNaN(num) ? fallback : num;
+    };
+
+    // Safely extract properties from strict union types
+    const rawFullName = 'fullName' in investor ? investor.fullName : undefined;
+    const name = getString(rawFullName) || getString(investor.name, 'Unknown Investor');
+
+    const headline = getString(investor.headline);
+    const location = getString(investor.addressWithCountry, 'Global');
+    const linkedinUrl = getString(investor.linkedinUrl);
+    const profilePic = getString(investor.profilePic);
+    const angelScore = getNumber(investor.angel_score);
 
     // Parse categories and stages
     const categories = (investor.categories_strong_es as string) || (investor.categories_strong_en as string) || '';
