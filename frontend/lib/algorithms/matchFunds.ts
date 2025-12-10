@@ -45,7 +45,7 @@ export async function matchFunds(
             );
 
             return {
-                fund: { ...data, id: fund.id },
+                fund: { ...data, id: data.linkedinUrl || data.linkedin_url || data.website_url || `fund_${Math.random()}` },
                 score: totalScore,
                 breakdown: {
                     category_match: categoryScore,

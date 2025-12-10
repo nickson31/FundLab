@@ -26,19 +26,9 @@ export async function matchAngels(
     const queryForLog = params.queryText || (params.categoryKeywords ? params.categoryKeywords.join(', ') : 'Unknown Query');
 
     // 1. Fetch Angels
-    // DIAGNOSTIC 1: Check angel_investors table (The schema-compliant one)
-    const { count: properCount, error: properError } = await client.from('angel_investors').select('*', { count: 'exact', head: true });
-    console.log('[MatchAngels] Count in "angel_investors":', properCount, 'Error:', properError?.message);
-
-    // 1. Fetch Angels from 'angels' (The currently used one)
-    // Force select '*, id' to see if ID is hidden
     const { data: angels, error } = await client
-        .from('angels')
-        .select('*, id');
-
-    if (angels && angels.length > 0) {
-        console.log('[MatchAngels] First angel fetched (with *, id):', JSON.stringify(angels[0], null, 2));
-    }
+        .from('angels') // Using 'angels' as per user setup
+        .select('*');
 
     if (error) {
         console.error('[MatchAngels] ❌ DB Error fetching angels:', error);
@@ -52,8 +42,12 @@ export async function matchAngels(
 
     // 2. Score Angels
     const scoredAngels: AngelMatchRaw[] = angels.map((angel: any) => {
+        // Use linkedinUrl as the stable ID since 'id' (UUID) is missing
+        const stableId = angel.linkedinUrl || angel.linkedin_url || `temp_${Math.random()}`;
+
         // Cast to strictly typed AngelInvestor for safer access, assuming DB schema aligns
-        const typedAngel = angel as AngelInvestor;
+        // And ensure the 'id' property is set from the stableId
+        const typedAngel = { ...angel, id: stableId } as AngelInvestor;
 
         const categoryScore = calculateCategoryScore(typedAngel, params.categoryKeywords);
         const angelScoreNormalized = parseFloat(String(typedAngel.angel_score || 0)) / 100.0;
