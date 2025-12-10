@@ -62,8 +62,19 @@ export async function POST(req: NextRequest) {
         // 3. Auto-save is now handled within matchAngels / matchFunds
         // to ensure correct ID mapping and Atomic persistence.
 
+        // 4. Generate AI Summary
+        let summary = '';
+        try {
+            const { generateSearchSummary } = await import('@/lib/gemini/generateSearchSummary');
+            console.log('[Search API] Step 3: Generating AI summary...');
+            summary = await generateSearchSummary({ query, results, mode });
+            console.log('[Search API] ✅ Summary generated');
+        } catch (err) {
+            console.error('[Search API] ⚠️ Failed to generate summary:', err);
+        }
+
         console.log('[Search API] ✅ Returning response with', results.length, 'results');
-        return NextResponse.json({ results, keywords });
+        return NextResponse.json({ results, keywords, summary });
     } catch (error) {
         console.error('[Search API] ❌ Fatal error:', error);
         return NextResponse.json({ error: 'Search failed' }, { status: 500 });

@@ -50,6 +50,7 @@ export default function ChatPage() {
     const [selectedInvestor, setSelectedInvestor] = useState<any>(null);
     const [error, setError] = useState<string | null>(null);
     const [user, setUser] = useState<any>(null);
+    const [aiSummary, setAiSummary] = useState<string | null>(null);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -81,6 +82,7 @@ export default function ChatPage() {
         setIsLoading(true);
         setHasSearched(true);
         setResults([]);
+        setAiSummary(null);
         setError(null);
 
         try {
@@ -94,6 +96,7 @@ export default function ChatPage() {
             if (data.results) {
                 setResults(data.results);
                 setKeywords(data.keywords);
+                setAiSummary(data.summary || null);
             }
         } catch (error) {
             console.error('Search error:', error);
@@ -127,9 +130,10 @@ export default function ChatPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 transition={{ delay: index * 0.05 }}
                             >
+                                {/* FIX: Use result.investor instead of result.angel/fund */}
                                 {mode === 'angels' ? (
                                     <InvestorCard
-                                        investor={result.angel}
+                                        investor={result.investor}
                                         type="angel"
                                         score={result.score}
                                         breakdown={result.breakdown}
@@ -137,7 +141,7 @@ export default function ChatPage() {
                                     />
                                 ) : (
                                     <FundCard
-                                        fund={result.fund}
+                                        fund={result.investor}
                                         score={result.score}
                                         breakdown={result.breakdown}
                                         onDraftMessage={openModal}
@@ -229,14 +233,19 @@ export default function ChatPage() {
                                 ) : (
                                     <div className="prose prose-invert max-w-none">
                                         <div className="bg-white/5 border border-white/5 rounded-2xl rounded-tl-sm p-5 text-gray-300 text-base leading-relaxed shadow-sm">
-                                            <p className="m-0">
-                                                I found <strong className="text-white">{results.length} {mode}</strong> matching your criteria.
-                                                {keywords?.categoryKeywords && (
-                                                    <> I also looked for terms like: <span className="text-indigo-300 italic">{keywords.categoryKeywords.slice(0, 4).join(', ')}</span>.</>
-                                                )}
-                                                <br /><br />
-                                                View the matches in the panel to the right.
-                                            </p>
+                                            {/* AI Summary Display */}
+                                            {aiSummary ? (
+                                                <div className="whitespace-pre-wrap font-sans">{aiSummary}</div>
+                                            ) : (
+                                                <p className="m-0">
+                                                    I found <strong className="text-white">{results.length} {mode}</strong> matching your criteria.
+                                                    {keywords?.categoryKeywords && (
+                                                        <> I also looked for terms like: <span className="text-indigo-300 italic">{keywords.categoryKeywords.slice(0, 4).join(', ')}</span>.</>
+                                                    )}
+                                                    <br /><br />
+                                                    View the matches in the panel to the right.
+                                                </p>
+                                            )}
                                         </div>
                                     </div>
                                 )}
