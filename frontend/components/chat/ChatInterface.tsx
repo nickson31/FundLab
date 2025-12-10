@@ -236,7 +236,7 @@ export default function ChatInterface() {
                                             {results.map((result: any, index: number) => (
                                                 <InvestorCard
                                                     key={index}
-                                                    investor={result.angel || result.fund}
+                                                    investor={result.investor}
                                                     type={mode === 'angels' ? 'angel' : 'fund'}
                                                     score={result.score}
                                                     breakdown={result.breakdown}

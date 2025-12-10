@@ -57,7 +57,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor }: M
 
         if (angelIds.length > 0) {
             const { data: angels } = await supabase
-                .from('angel_investors')
+                .from('angels')
                 .select('*')
                 .in('id', angelIds);
 

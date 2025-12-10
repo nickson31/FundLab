@@ -48,8 +48,8 @@ export async function POST(req: NextRequest) {
             console.log('[Search API] Step 3: Saving results to database...');
             const saves = results.map((r: any) => ({
                 user_id: userId,
-                matched_angel_id: r.angel?.id, // Assuming angel object has id
-                matched_fund_id: r.fund?.id,     // Assuming fund object has id
+                matched_investor_id: r.investor?.id,
+                // matched_fund_id: ... // Simplified to single column for now or handle type check
                 relevance_score: r.score,
                 query: query,
                 summary: JSON.stringify(r.breakdown) // Storing breakdown as summary for now
