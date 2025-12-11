@@ -237,20 +237,20 @@ export default function FundCard({
 
                                 {/* Stats Grid */}
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
-                                        <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Ticket Size</p>
-                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{ticketSize}</p>
+                                    <div className="p-3 bg-gradient-to-br from-purple-50 to-pink-50 dark:bg-white/5 rounded-lg border-2 border-purple-200 dark:border-white/5">
+                                        <p className="text-[10px] text-purple-600 uppercase font-bold tracking-wider mb-1">Ticket Size</p>
+                                        <p className="text-sm font-semibold text-purple-900 dark:text-white">{ticketSize}</p>
                                     </div>
-                                    <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
-                                        <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">AUM</p>
-                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{aum}</p>
+                                    <div className="p-3 bg-gradient-to-br from-purple-50 to-pink-50 dark:bg-white/5 rounded-lg border-2 border-purple-200 dark:border-white/5">
+                                        <p className="text-[10px] text-purple-600 uppercase font-bold tracking-wider mb-1">AUM</p>
+                                        <p className="text-sm font-semibold text-purple-900 dark:text-white">{aum}</p>
                                     </div>
                                 </div>
 
                                 {/* Sweet Spot */}
                                 <div>
-                                    <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-2">Investment Sweet Spot</p>
-                                    <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-black/20 p-3 rounded-lg border-l-2 border-purple-500">
+                                    <p className="text-[10px] text-purple-600 uppercase font-bold tracking-wider mb-2">Investment Sweet Spot</p>
+                                    <p className="text-sm text-purple-800 dark:text-gray-300 leading-relaxed bg-purple-50 dark:bg-black/20 p-3 rounded-lg border-l-2 border-purple-500">
                                         {sweetSpot}
                                     </p>
                                 </div>
@@ -260,7 +260,7 @@ export default function FundCard({
                                     <div className="pt-2">
                                         <button
                                             onClick={(e) => { e.stopPropagation(); setShowEmployees(!showEmployees); }}
-                                            className="flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-indigo-500 transition-colors mb-3"
+                                            className="flex items-center gap-2 text-xs font-semibold text-purple-600 hover:text-indigo-500 transition-colors mb-3"
                                         >
                                             <Users className="w-3.5 h-3.5" />
                                             {showEmployees ? 'Hide Team' : 'View Key Decision Makers'}
@@ -274,7 +274,7 @@ export default function FundCard({
                                                     className="grid gap-2"
                                                 >
                                                     {loadingEmployees ? (
-                                                        <div className="text-xs text-gray-400 flex items-center gap-2">
+                                                        <div className="text-xs text-purple-500 flex items-center gap-2">
                                                             <div className="w-3 h-3 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
                                                             Fetching team...
                                                         </div>

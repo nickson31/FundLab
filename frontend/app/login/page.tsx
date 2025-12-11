@@ -79,7 +79,7 @@ export default function LoginPage() {
                                 <h1 className="text-2xl font-semibold text-white tracking-tight">
                                     {isSignUp ? 'Create an account' : 'Welcome back'}
                                 </h1>
-                                <p className="text-gray-400 text-sm">
+                                <p className="text-blue-400 text-sm">
                                     {isSignUp ? 'Get started with FundLab AI' : 'Sign in to your FundLab AI account'}
                                 </p>
                             </motion.div>
@@ -101,29 +101,29 @@ export default function LoginPage() {
                         )}
 
                         <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-gray-500 ml-1">Email</label>
+                            <label className="text-xs font-medium text-blue-400 ml-1">Email</label>
                             <div className="relative group">
-                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
+                                <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-blue-400 group-focus-within:text-indigo-400 transition-colors" />
                                 <input
                                     type="email"
                                     required
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
-                                    className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all placeholder-gray-600"
+                                    className="w-full bg-black/20 border border-white/10 rounded-xl py-3 pl-10 pr-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all placeholder-blue-500"
                                     placeholder="founder@startup.com"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-1.5">
-                            <label className="text-xs font-medium text-gray-500 ml-1">Password</label>
+                            <label className="text-xs font-medium text-blue-400 ml-1">Password</label>
                             <input
                                 type="password"
                                 required
                                 minLength={6}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
-                                className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all placeholder-gray-600"
+                                className="w-full bg-black/20 border border-white/10 rounded-xl py-3 px-4 text-sm text-white focus:outline-none focus:ring-1 focus:ring-indigo-500/50 focus:border-indigo-500/50 transition-all placeholder-blue-500"
                                 placeholder="••••••••"
                             />
                         </div>
@@ -145,24 +145,24 @@ export default function LoginPage() {
 
                     <div className="my-8 flex items-center gap-4">
                         <div className="flex-1 h-px bg-white/5" />
-                        <span className="text-xs text-gray-500 font-medium">OR CONTINUE WITH</span>
+                        <span className="text-xs text-blue-400 font-medium">OR CONTINUE WITH</span>
                         <div className="flex-1 h-px bg-white/5" />
                     </div>
 
                     <div className="grid grid-cols-2 gap-3">
                         <button type="button" className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl py-2.5 transition-colors group">
-                            <Github className="w-4 h-4 text-gray-400 group-hover:text-white" />
-                            <span className="text-sm font-medium text-gray-400 group-hover:text-white">Github</span>
+                            <Github className="w-4 h-4 text-blue-400 group-hover:text-white" />
+                            <span className="text-sm font-medium text-blue-400 group-hover:text-white">Github</span>
                         </button>
                         <button type="button" className="flex items-center justify-center gap-2 bg-white/5 hover:bg-white/10 border border-white/5 rounded-xl py-2.5 transition-colors group">
                             <div className="w-4 h-4 rounded-full bg-white flex items-center justify-center">
                                 <span className="text-black font-bold text-[10px]">G</span>
                             </div>
-                            <span className="text-sm font-medium text-gray-400 group-hover:text-white">Google</span>
+                            <span className="text-sm font-medium text-blue-400 group-hover:text-white">Google</span>
                         </button>
                     </div>
 
-                    <p className="mt-8 text-center text-xs text-gray-500 transition-colors">
+                    <p className="mt-8 text-center text-xs text-blue-400 transition-colors">
                         {isSignUp ? "Already have an account? " : "Don't have an account? "}
                         <button
                             onClick={() => setIsSignUp(!isSignUp)}
