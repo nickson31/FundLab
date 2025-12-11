@@ -127,7 +127,7 @@ export default function InvestorCard({
                     {/* Left Column: Avatar & Score */}
                     <div className="flex flex-col items-center gap-3 shrink-0">
                         <Avatar className="h-16 w-16 border-2 border-white dark:border-white/10 shadow-lg ring-4 ring-gray-50 dark:ring-white/5">
-                            <AvatarImage src={profilePic} alt={name} className="object-cover" />
+                            <AvatarImage src={profilePic || undefined} alt={name} className="object-cover" />
                             <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 text-indigo-700 dark:text-indigo-200 font-bold text-lg">
                                 {getInitials(name)}
                             </AvatarFallback>
