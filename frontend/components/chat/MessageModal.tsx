@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, RefreshCw, Save, ChevronRight, Sparkles, Search, Linkedin, Mail, Check, Copy, PenSquare } from 'lucide-react';
 import { supabase } from '@/lib/supabase';
@@ -145,17 +146,11 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
         return '';
     };
 
-    import { createPortal } from 'react-dom';
-
-    // ... existing code ...
-
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
         setMounted(true);
     }, []);
-
-    // ... existing useEffects ...
 
     if (!isOpen || !mounted) return null;
 
