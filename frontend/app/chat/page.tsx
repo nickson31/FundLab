@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { AnimatePresence, motion } from 'framer-motion';
 import { Send, Sparkles, MessageSquare, MoreHorizontal, Search, Zap } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
@@ -58,7 +58,7 @@ function LoadingState({ userQuery }: LoadingStateProps) {
                     animate={{ opacity: 1, y: 0 }}
                     exit={{ opacity: 0, y: -10 }}
                     transition={{ duration: 0.3 }}
-                    className="flex items-center gap-3 text-sm text-blue-700 dark:text-blue-400"
+                    className="flex items-center gap-3 text-sm text-indigo-600 dark:text-indigo-400"
                 >
                     <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
                     <span className="min-w-[200px] font-medium">
@@ -66,7 +66,7 @@ function LoadingState({ userQuery }: LoadingStateProps) {
                     </span>
                 </motion.div>
             </AnimatePresence>
-            <div className="h-1 w-full bg-blue-100 dark:bg-white/5 rounded-full overflow-hidden">
+            <div className="h-1 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                 <motion.div
                     className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
                     style={{ width: `${progress}%` }}
@@ -90,6 +90,8 @@ export default function ChatPage() {
     const [keywords, setKeywords] = useState<any>(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [selectedInvestor, setSelectedInvestor] = useState<any>(null);
+    const [loadingMessage, setLoadingMessage] = useState("Scanning matches...");
+    const [loadingMessageSequence, setLoadingMessageSequence] = useState<string[]>([]);
     const [error, setError] = useState<string | null>(null);
     const [user, setUser] = useState<any>(null);
     const [aiSummary, setAiSummary] = useState<string | null>(null);
@@ -104,7 +106,23 @@ export default function ChatPage() {
             }
         };
         checkAuth();
+
     }, [router]);
+
+    // Cycle Loading Messages
+    useEffect(() => {
+        if (!isLoading || loadingMessageSequence.length === 0) return;
+
+        let index = 0;
+        setLoadingMessage(loadingMessageSequence[0]);
+
+        const interval = setInterval(() => {
+            index = (index + 1) % loadingMessageSequence.length;
+            setLoadingMessage(loadingMessageSequence[index]);
+        }, 2000);
+
+        return () => clearInterval(interval);
+    }, [isLoading, loadingMessageSequence]);
 
     // Clear results when switching modes
     useEffect(() => {
@@ -137,6 +155,11 @@ export default function ChatPage() {
         setResults([]);
         setAiSummary(null);
         setError(null);
+
+        // Generate intelligent loading messages
+        const messageSet = generateLoadingMessages(currentQuery);
+        setLoadingMessageSequence(messageSet.messages);
+
 
         // 2. Artificial Delay + Background Fetch
         const minDelay = 10000; // 10 seconds exactly
@@ -171,14 +194,14 @@ export default function ChatPage() {
     // Right Panel Content (Investor Cards)
     const RightPanel = (
         <>
-            <div className="flex items-center justify-between px-5 py-4 border-b border-blue-100 dark:border-white/5 bg-gradient-to-r from-blue-50 to-purple-50 dark:bg-black/10 select-none">
-                <span className="text-sm font-medium text-blue-900 dark:text-white tracking-tight">Matches</span>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/20 dark:border-white/5 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md select-none sticky top-0 z-10">
+                <span className="text-sm font-medium text-slate-700 dark:text-slate-200 tracking-tight">Matches</span>
                 {!isLoading && (
-                    <span className="text-xs bg-blue-100 dark:bg-white/10 text-blue-800 dark:text-gray-400 px-2 py-0.5 rounded-full border border-blue-300 animate-in fade-in zoom-in">{results.length}</span>
+                    <span className="text-[10px] bg-white/50 dark:bg-white/10 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-white/20 dark:border-white/10 animate-in fade-in zoom-in">{results.length}</span>
                 )}
             </div>
 
-            <div className="flex-1 overflow-y-auto p-4 space-y-4 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="flex-1 overflow-y-auto p-4 space-y-4">
                 {results.length === 0 && !isLoading ? (
                     <div className="h-full flex flex-col items-center justify-center text-center text-blue-600 space-y-3 opacity-50">
                         <Search className="w-8 h-8" />
@@ -213,7 +236,7 @@ export default function ChatPage() {
                         ))}
                         {isLoading && (
                             [1, 2, 3].map(i => (
-                                <div key={i} className="h-40 rounded-xl bg-gradient-to-r from-blue-50 to-purple-50 dark:bg-white/5 animate-pulse border border-transparent dark:border-white/5" />
+                                <div key={i} className="h-40 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse border border-transparent dark:border-white/5" />
                             ))
                         )}
                     </AnimatePresence>
@@ -229,7 +252,7 @@ export default function ChatPage() {
     return (
         <MacShell sidePanel={RightPanel}>
             {/* Channel Header */}
-            <div className="flex items-center justify-between border-b border-border/40 px-6 py-4 bg-background/50 backdrop-blur-md sticky top-0 z-20 select-none">
+            <div className="flex items-center justify-between border-b border-border/40 px-6 py-4 bg-white/30 dark:bg-slate-900/30 backdrop-blur-md sticky top-0 z-20 select-none">
                 <div className="flex items-center gap-3">
                     <MessageSquare className="w-5 h-5 text-muted-foreground" />
                     <h1 className="text-lg font-medium tracking-tight text-foreground">Fundraising Assistant</h1>
@@ -242,11 +265,11 @@ export default function ChatPage() {
             </div>
 
             {/* Messages Area */}
-            <div className="flex h-screen overflow-hidden bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/50 dark:bg-background scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="flex h-screen overflow-hidden bg-transparent scrollbar-thin">
                 {!hasSearched ? (
                     <div className="h-full flex flex-col items-center justify-center text-center p-8 space-y-6 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
-                        <div className="w-24 h-24 rounded-3xl bg-indigo-50/50 dark:bg-indigo-500/10 flex items-center justify-center border border-indigo-100 dark:border-white/5 shadow-xl backdrop-blur-xl">
-                            <Sparkles className="w-10 h-10 text-indigo-500 dark:text-indigo-400 animate-pulse" />
+                        <div className="w-24 h-24 rounded-3xl bg-white/50 dark:bg-white/5 flex items-center justify-center border border-white/20 dark:border-white/10 shadow-xl backdrop-blur-xl">
+                            <Sparkles className="w-10 h-10 text-indigo-500/80 dark:text-indigo-400 animate-pulse" />
                         </div>
                         <div className="space-y-2">
                             <h2 className="text-3xl font-medium text-foreground tracking-tight">How can I help you fundraise?</h2>
@@ -266,7 +289,7 @@ export default function ChatPage() {
                                         onClick={() => {
                                             setQuery(suggestion);
                                         }}
-                                        className="p-4 rounded-xl bg-white dark:bg-white/10 border-2 border-blue-200 dark:border-white/10 text-sm font-medium text-foreground hover:bg-white dark:hover:bg-white/20 hover:border-indigo-500/50 transition-all text-left group shadow-sm hover:shadow-md"
+                                        className="p-4 rounded-xl bg-white/40 dark:bg-white/5 border border-white/20 dark:border-white/10 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-white/60 dark:hover:bg-white/10 hover:border-indigo-500/30 transition-all text-left group shadow-sm hover:shadow-md backdrop-blur-sm"
                                     >
                                         <span className="group-hover:translate-x-1 transition-transform inline-block">{suggestion}</span>
                                     </button>
@@ -300,15 +323,15 @@ export default function ChatPage() {
                                     <Sparkles className="w-4 h-4 text-white animate-pulse" />
                                 </div>
                                 <div className="space-y-4 flex-1">
-                                    <div className="bg-white dark:bg-white/5 border-2 border-blue-200 dark:border-white/5 rounded-2xl rounded-tl-sm p-6 w-full max-w-md shadow-lg">
+                                    <div className="bg-white/80 dark:bg-slate-900/50 border border-white/20 dark:border-white/10 rounded-2xl rounded-tl-sm p-6 w-full max-w-md shadow-lg backdrop-blur-md">
                                         <div className="w-full max-w-sm space-y-3">
-                                            <div className="flex items-center gap-3 text-sm text-blue-700 dark:text-gray-400">
+                                            <div className="flex items-center gap-3 text-sm text-indigo-600 dark:text-indigo-400">
                                                 <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                                                <span className="animate-[fadeIn_0.5s_ease-out] min-w-[200px]">
-                                                    Scanning matches...
+                                                <span key={loadingMessage} className="animate-[fadeIn_0.5s_ease-out] min-w-[200px]">
+                                                    {loadingMessage}
                                                 </span>
                                             </div>
-                                            <div className="h-1 w-full bg-blue-100 dark:bg-white/5 rounded-full overflow-hidden">
+                                            <div className="h-1 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                                                 <motion.div
                                                     className="h-full bg-indigo-500"
                                                     initial={{ width: "0%" }}
@@ -325,7 +348,7 @@ export default function ChatPage() {
                                 <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 shadow-lg bg-red-500 shadow-red-500/20">
                                     <Sparkles className="w-4 h-4 text-white" />
                                 </div>
-                                <div className="bg-red-50 dark:bg-red-500/10 border border-red-200 dark:border-red-500/20 rounded-2xl rounded-tl-sm p-5 text-red-600 dark:text-red-200 text-base leading-relaxed">
+                                <div className="bg-red-50/50 dark:bg-red-500/10 border border-red-200/50 dark:border-red-500/20 rounded-2xl rounded-tl-sm p-5 text-red-600 dark:text-red-300 text-base leading-relaxed backdrop-blur-sm">
                                     {error}
                                 </div>
                             </div>
@@ -346,7 +369,7 @@ export default function ChatPage() {
             </div>
 
             {/* Footer Composer */}
-            <div className="p-6 bg-gradient-to-t from-white/80 via-white/50 to-transparent dark:from-black/40 dark:via-black/20 dark:to-transparent">
+            <div className="p-6 bg-gradient-to-t from-background via-background/80 to-transparent">
                 <form onSubmit={handleSearch} className="relative">
                     {/* Prompt Suggestions */}
                     {!query && (
@@ -360,7 +383,7 @@ export default function ChatPage() {
                                     key={i}
                                     type="button"
                                     onClick={() => setQuery(suggestion)}
-                                    className="whitespace-nowrap px-3 py-1.5 rounded-full bg-white dark:bg-white/5 border-2 border-blue-200 dark:border-white/10 text-xs text-blue-800 dark:text-gray-300 hover:bg-white dark:hover:bg-white/10 transition-colors backdrop-blur-sm shadow-sm"
+                                    className="whitespace-nowrap px-3 py-1.5 rounded-full bg-white/60 dark:bg-white/5 border border-white/20 dark:border-white/10 text-xs text-slate-600 dark:text-slate-300 hover:bg-white/80 dark:hover:bg-white/10 transition-colors backdrop-blur-md shadow-sm"
                                 >
                                     {suggestion}
                                 </button>
@@ -368,12 +391,12 @@ export default function ChatPage() {
                         </div>
                     )}
 
-                    <div className="relative flex items-center bg-white dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-blue-200 dark:border-white/10 px-3 md:px-4 py-2 md:py-3 gap-2 md:gap-3 shadow-lg dark:shadow-none">
-                        <Button size="icon" variant="ghost" className="text-blue-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-white/10 rounded-xl min-h-[44px] min-w-[44px]" type="button">
+                    <div className="relative flex items-center glass-premium rounded-2xl px-3 md:px-4 py-2 md:py-3 gap-2 md:gap-3">
+                        <Button size="icon" variant="ghost" className="text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-white/5 rounded-xl min-h-[44px] min-w-[44px]" type="button">
                             <MoreHorizontal className="w-5 h-5" />
                         </Button>
                         <input
-                            className="flex-1 bg-transparent border-none focus:ring-0 text-blue-900 dark:text-white placeholder-blue-400 dark:placeholder-gray-500 text-base py-2 md:py-2"
+                            className="flex-1 bg-transparent border-none focus:ring-0 text-foreground placeholder:text-muted-foreground text-base py-2 md:py-2"
                             placeholder="Ask FundLab to find investors..."
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
@@ -388,7 +411,7 @@ export default function ChatPage() {
                         </Button>
                     </div>
                 </form>
-                <p className="text-center text-[10px] md:text-[10px] text-blue-600 dark:text-gray-600 mt-2 md:mt-3">FundLab AI can make mistakes. Verify important info.</p>
+                <p className="text-center text-[10px] md:text-[10px] text-slate-400 dark:text-slate-500 mt-2 md:mt-3">FundLab AI can make mistakes. Verify important info.</p>
             </div>
 
             <MessageModal

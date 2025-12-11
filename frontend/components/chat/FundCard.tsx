@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { ExternalLink, Linkedin, MapPin, TrendingUp, Sparkles, ChevronDown, ChevronUp, Users, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
+import { selectDynamicLayout, CardLayout, DynamicField } from '@/lib/dynamicCardLayouts';
 
 interface FundCardProps {
     fund: any;
@@ -121,8 +122,12 @@ export default function FundCard({
             .slice(0, 2);
     };
 
-    const scoreColor = score >= 0.7 ? 'text-green-400' : score >= 0.5 ? 'text-yellow-400' : 'text-gray-400';
-    const scoreBg = score >= 0.7 ? 'bg-green-500/10' : score >= 0.5 ? 'bg-yellow-500/10' : 'bg-gray-500/10';
+    const scoreColor = score >= 0.7 ? 'text-green-400' : score >= 0.5 ? 'text-yellow-400' : 'text-slate-400';
+    const scoreBg = score >= 0.7 ? 'bg-green-500/10' : score >= 0.5 ? 'bg-yellow-500/10' : 'bg-slate-500/10';
+
+    // Use Dynamic Layout System
+    const layout = selectDynamicLayout(fund, 'fund');
+    const dynamicFields = layout.fields; // Access the fields array
 
     return (
         <motion.div
@@ -137,34 +142,34 @@ export default function FundCard({
             <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 rounded-2xl opacity-0 group-hover:opacity-100 blur transition-opacity duration-300" />
 
             {/* Main Card */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-6 border-2 border-purple-200 dark:border-gray-800 shadow-xl shadow-purple-500/10 hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-300">
+            <div className="relative glass-card p-4 md:p-6 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300">
 
                 {/* Top Row */}
                 <div className="flex items-start gap-3 md:gap-4">
                     {/* Avatar */}
                     <div className="relative">
-                        <Avatar className="h-12 w-12 md:h-14 md:w-14 border-2 border-purple-100 dark:border-gray-800 shadow-sm">
+                        <Avatar className="h-12 w-12 md:h-14 md:w-14 border-2 border-white dark:border-white/10 shadow-sm">
                             <AvatarImage src={profilePic} alt={name} className="object-cover" />
                             <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg">
                                 {getInitials(name)}
                             </AvatarFallback>
                         </Avatar>
                         {/* Fund Type Badge */}
-                        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-500 rounded-full border-2 border-white dark:border-gray-900 flex items-center justify-center shadow-sm">
+                        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-500 rounded-full border-2 border-white dark:border-slate-950 flex items-center justify-center shadow-sm">
                             <TrendingUp className="w-3 h-3 text-white" />
                         </div>
                     </div>
 
                     {/* Name & Info */}
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-base md:text-lg font-bold text-purple-900 dark:text-white truncate">
+                        <h3 className="text-base md:text-lg font-bold text-foreground truncate">
                             {name}
                         </h3>
-                        <p className="text-sm md:text-sm text-purple-800 dark:text-gray-400 line-clamp-1 mt-0.5">
+                        <p className="text-sm md:text-sm text-muted-foreground line-clamp-1 mt-0.5">
                             {fund.short_description || description || "Investment Fund"}
                         </p>
                         {location && (
-                            <div className="flex items-center gap-1 mt-1.5 text-xs text-purple-700 dark:text-gray-500">
+                            <div className="flex items-center gap-1 mt-1.5 text-xs text-purple-700 dark:text-slate-500">
                                 <MapPin className="w-3 h-3" />
                                 <span>{location}</span>
                             </div>
@@ -174,17 +179,17 @@ export default function FundCard({
                     {/* Score Badge */}
                     <div className={cn(
                         "flex flex-col items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-xl",
-                        score >= 0.7 ? "bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800" :
-                            score >= 0.5 ? "bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800" :
-                                "bg-purple-50 dark:bg-gray-800 border border-purple-200 dark:border-gray-700"
+                        score >= 0.7 ? "bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20" :
+                            score >= 0.5 ? "bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20" :
+                                "bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10"
                     )}>
                         <span className={cn(
                             "text-xl md:text-2xl font-bold",
                             score >= 0.7 ? "text-emerald-600 dark:text-emerald-400" :
                                 score >= 0.5 ? "text-amber-600 dark:text-amber-400" :
-                                    "text-purple-800 dark:text-gray-400"
+                                    "text-slate-600 dark:text-slate-400"
                         )}>{Math.round(score * 100)}</span>
-                        <span className="text-[9px] font-medium text-purple-700 dark:text-gray-500 uppercase">Match</span>
+                        <span className="text-[9px] font-medium text-slate-500 dark:text-slate-500 uppercase">Match</span>
                     </div>
                 </div>
 
@@ -193,7 +198,7 @@ export default function FundCard({
                     {categoryTags.map((tag, i) => (
                         <span
                             key={i}
-                            className="px-2.5 py-1 md:px-3 md:py-1 rounded-full text-xs font-medium bg-gradient-to-r from-pink-100 to-purple-100 dark:bg-gray-800 text-pink-900 dark:text-gray-300 border border-pink-300 dark:border-gray-700 shadow-sm"
+                            className="px-2.5 py-1 md:px-3 md:py-1 rounded-full text-xs font-medium bg-white/50 dark:bg-white/5 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-white/10 shadow-sm"
                         >
                             {tag}
                         </span>
@@ -211,7 +216,7 @@ export default function FundCard({
                         >
                             <div className="pt-4 space-y-4">
                                 {/* AI Reasoning Block */}
-                                <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-xl p-5 border-2 border-indigo-200 dark:border-indigo-500/30 shadow-lg">
+                                <div className="bg-indigo-50/50 dark:bg-indigo-500/10 rounded-xl p-5 border border-indigo-100 dark:border-indigo-500/20 shadow-sm">
                                     <div className="flex items-center gap-2 mb-3">
                                         <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
                                             <Sparkles className="w-4 h-4 text-white" />
@@ -235,32 +240,38 @@ export default function FundCard({
                                     </p>
                                 </div>
 
-                                {/* Stats Grid */}
+                                {/* Dynamic Stats Grid based on available data */}
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div className="p-3 bg-gradient-to-br from-purple-50 to-pink-50 dark:bg-white/5 rounded-lg border-2 border-purple-200 dark:border-white/5">
-                                        <p className="text-[10px] text-purple-600 uppercase font-bold tracking-wider mb-1">Ticket Size</p>
-                                        <p className="text-sm font-semibold text-purple-900 dark:text-white">{ticketSize}</p>
-                                    </div>
-                                    <div className="p-3 bg-gradient-to-br from-purple-50 to-pink-50 dark:bg-white/5 rounded-lg border-2 border-purple-200 dark:border-white/5">
-                                        <p className="text-[10px] text-purple-600 uppercase font-bold tracking-wider mb-1">AUM</p>
-                                        <p className="text-sm font-semibold text-purple-900 dark:text-white">{aum}</p>
-                                    </div>
+                                    {dynamicFields
+                                        .filter(f => ['ticket_size', 'recent_investments', 'investment_thesis'].includes(f.component)) // Customize which fields go in grid
+                                        .map((field, idx) => (
+                                            <div key={idx} className="p-3 bg-slate-50 dark:bg-white/5 rounded-lg border border-slate-200 dark:border-white/5">
+                                                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">{field.label}</p>
+                                                <p className="text-xs font-medium text-foreground leading-relaxed line-clamp-2">
+                                                    {field.value}
+                                                </p>
+                                            </div>
+                                        ))}
                                 </div>
 
-                                {/* Sweet Spot */}
-                                <div>
-                                    <p className="text-[10px] text-purple-600 uppercase font-bold tracking-wider mb-2">Investment Sweet Spot</p>
-                                    <p className="text-sm text-purple-800 dark:text-gray-300 leading-relaxed bg-purple-50 dark:bg-black/20 p-3 rounded-lg border-l-2 border-purple-500">
-                                        {sweetSpot}
-                                    </p>
-                                </div>
+                                {/* Dynamic Text Sections (Sweet Spot, Description, etc) */}
+                                {dynamicFields
+                                    .filter(f => ['investment_thesis', 'ticket_size', 'recent_investments'].indexOf(f.component) === -1 && f.display_type === 'text' && f.component !== 'headline') // Exclude what's in grid and headline
+                                    .map((field, idx) => (
+                                        <div key={idx}>
+                                            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-2">{field.label}</p>
+                                            <p className="text-sm text-foreground leading-relaxed bg-slate-50 dark:bg-white/5 p-3 rounded-lg border-l-2 border-indigo-500">
+                                                {field.value}
+                                            </p>
+                                        </div>
+                                    ))}
 
                                 {/* Team Section */}
                                 {hasEmployees && (
                                     <div className="pt-2">
                                         <button
                                             onClick={(e) => { e.stopPropagation(); setShowEmployees(!showEmployees); }}
-                                            className="flex items-center gap-2 text-xs font-semibold text-purple-600 hover:text-indigo-500 transition-colors mb-3"
+                                            className="flex items-center gap-2 text-xs font-semibold text-indigo-600 hover:text-indigo-500 transition-colors mb-3"
                                         >
                                             <Users className="w-3.5 h-3.5" />
                                             {showEmployees ? 'Hide Team' : 'View Key Decision Makers'}
@@ -280,16 +291,16 @@ export default function FundCard({
                                                         </div>
                                                     ) : employees.length > 0 ? (
                                                         employees.map((emp, i) => (
-                                                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-50 dark:hover:bg-white/5 transition-colors group/emp">
+                                                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group/emp">
                                                                 <Avatar className="h-8 w-8">
                                                                     <AvatarImage src={emp.profilePic || emp.photo_url} />
-                                                                    <AvatarFallback className="text-[10px] bg-indigo-50 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
+                                                                    <AvatarFallback className="text-[10px] bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300">
                                                                         {getInitials(emp.fullName || emp.name)}
                                                                     </AvatarFallback>
                                                                 </Avatar>
                                                                 <div className="flex-1 min-w-0">
-                                                                    <p className="text-sm font-medium text-purple-900 dark:text-white truncate">{emp.fullName || emp.name}</p>
-                                                                    <p className="text-xs text-purple-600 dark:text-gray-400 truncate">{emp.title || emp.position}</p>
+                                                                    <p className="text-sm font-medium text-foreground truncate">{emp.fullName || emp.name}</p>
+                                                                    <p className="text-xs text-muted-foreground truncate">{emp.title || emp.position}</p>
                                                                 </div>
                                                                 <Button size="icon" variant="ghost" className="h-6 w-6 opacity-0 group-hover/emp:opacity-100 transition-opacity">
                                                                     <Linkedin className="w-3 h-3 text-blue-500" />
@@ -310,12 +321,12 @@ export default function FundCard({
                 </AnimatePresence>
 
                 {/* Footer Actions */}
-                <div className="mt-4 md:mt-5 pt-3 md:pt-4 border-t border-purple-100 dark:border-gray-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+                <div className="mt-4 md:mt-5 pt-3 md:pt-4 border-t border-slate-100 dark:border-white/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                     <Button
                         variant="ghost"
                         size="sm"
                         onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
-                        className="text-purple-700 hover:text-purple-900 dark:text-gray-400 dark:hover:text-white hover:bg-purple-50 dark:hover:bg-white/10 font-medium transition-colors min-h-[44px] px-4"
+                        className="text-slate-500 hover:text-foreground dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 font-medium transition-colors min-h-[44px] px-4"
                     >
                         {isExpanded ? (
                             <><ChevronUp className="w-4 h-4 mr-1.5" /> Less Info</>
@@ -329,10 +340,10 @@ export default function FundCard({
                             <Button
                                 size="sm"
                                 variant="outline"
-                                className="h-11 w-11 md:h-9 md:w-9 p-0 rounded-full border-2 border-purple-200 dark:border-gray-700"
+                                className="h-11 w-11 md:h-9 md:w-9 p-0 rounded-full border border-slate-200 dark:border-white/10 bg-transparent"
                                 onClick={(e) => { e.stopPropagation(); window.open(linkedinUrl || websiteUrl, '_blank'); }}
                             >
-                                {linkedinUrl ? <Linkedin className="w-4 h-4 text-[#0077b5]" /> : <ExternalLink className="w-4 h-4 text-gray-400" />}
+                                {linkedinUrl ? <Linkedin className="w-4 h-4 text-[#0077b5]" /> : <ExternalLink className="w-4 h-4 text-slate-400" />}
                             </Button>
                         )}
                         <Button

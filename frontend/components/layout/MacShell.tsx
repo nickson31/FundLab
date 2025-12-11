@@ -70,8 +70,8 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                         {/* Search Mock */}
                         <div className="p-4 border-b border-white/5">
                             <div className="flex items-center gap-2 rounded-lg px-3 py-2 bg-white/5 border border-white/5 text-blue-400 group focus-within:ring-1 focus-within:ring-white/10 transition-all">
-                                <Search className="w-4 h-4 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
-                                <input placeholder="Search..." className="w-full bg-transparent text-sm placeholder-gray-600 focus:outline-none" />
+                                <Search className="w-4 h-4 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
+                                <input placeholder="Search..." className="w-full bg-transparent text-sm placeholder-slate-600 focus:outline-none" />
                             </div>
                         </div>
 
@@ -87,13 +87,13 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                                             "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 group relative overflow-hidden",
                                             isActive
                                                 ? "text-indigo-100 font-medium"
-                                                : "text-gray-400 hover:text-gray-200 hover:bg-white/5"
+                                                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
                                         )}
                                     >
                                         {isActive && (
                                             <div className="absolute inset-0 bg-indigo-500/10 border-l-2 border-indigo-500/50" />
                                         )}
-                                        <item.icon className={cn("w-4 h-4 z-10 transition-colors", isActive ? "text-indigo-400" : "text-gray-500 group-hover:text-gray-300")} />
+                                        <item.icon className={cn("w-4 h-4 z-10 transition-colors", isActive ? "text-indigo-400" : "text-slate-500 group-hover:text-slate-300")} />
                                         <span className="z-10">{item.label}</span>
                                     </Link>
                                 );
@@ -107,10 +107,10 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                                     {user?.email?.[0].toUpperCase() || 'F'}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="text-sm font-medium text-gray-200 truncate">{user?.confirmed_at ? user.email.split('@')[0] : 'Founder'}</div>
-                                    <div className="text-xs text-gray-500">{user?.email || 'Free Plan'}</div>
+                                    <div className="text-sm font-medium text-slate-200 truncate">{user?.confirmed_at ? user.email.split('@')[0] : 'Founder'}</div>
+                                    <div className="text-xs text-slate-500">{user?.email || 'Free Plan'}</div>
                                 </div>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-gray-500 hover:text-white hover:bg-white/5">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-white hover:bg-white/5">
                                     <Settings className="w-4 h-4" />
                                 </Button>
                             </div>

@@ -175,19 +175,18 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                         exit={{ opacity: 0, scale: 0.95, y: 0 }}
                         className="glass-panel w-full max-w-3xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col max-h-[85vh] z-10 relative bg-white dark:bg-[#0A0A0A] isolate"
                     >
-                        {/* Header */}
-                        <div className="p-6 border-b border-blue-100 dark:border-white/5 flex justify-between items-center bg-blue-50/50 dark:bg-white/5">
+                        <div className="p-6 border-b border-white/20 dark:border-white/5 flex justify-between items-center bg-white/40 dark:bg-white/5 backdrop-blur-md">
                             <div>
-                                <h2 className="text-xl font-bold text-blue-900 dark:text-white flex items-center gap-2">
+                                <h2 className="text-xl font-bold text-foreground flex items-center gap-2">
                                     {step === 1 && <><Search className="w-5 h-5 text-indigo-500" /> Select Recipient</>}
                                     {step === 2 && <><PenSquare className="w-5 h-5 text-indigo-500" /> Draft Message</>}
                                     {step === 3 && <><Sparkles className="w-5 h-5 text-indigo-500" /> AI Draft</>}
                                 </h2>
-                                <p className="text-sm text-blue-700 dark:text-muted-foreground mt-1">
+                                <p className="text-sm text-muted-foreground mt-1">
                                     {step === 1 ? 'Choose who to contact from your matches.' : step === 2 ? 'Give the AI some context for a warm intro.' : 'Review and copy your personalized draft.'}
                                 </p>
                             </div>
-                            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-blue-100 dark:hover:bg-white/10 text-blue-700 dark:text-muted-foreground transition-colors">
+                            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-slate-100 dark:hover:bg-white/10 text-muted-foreground transition-colors">
                                 <X className="w-6 h-6" />
                             </Button>
                         </div>
@@ -204,18 +203,18 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                             <div
                                                 key={r.id || idx}
                                                 onClick={() => { setSelectedRecipient(r); setStep(2); }}
-                                                className="flex items-center p-3 hover:bg-blue-50 dark:hover:bg-white/5 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-blue-200 dark:hover:border-white/10 group"
+                                                className="flex items-center p-3 hover:bg-slate-50 dark:hover:bg-white/5 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-slate-200 dark:hover:border-white/10 group"
                                             >
-                                                <Avatar className="h-10 w-10 mr-4 border-2 border-blue-200 dark:border-white/10">
+                                                <Avatar className="h-10 w-10 mr-4 border-2 border-white dark:border-white/10 shadow-sm">
                                                     <AvatarFallback className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 font-medium">
                                                         {getRecipientName(r).charAt(0)}
                                                     </AvatarFallback>
                                                 </Avatar>
                                                 <div>
-                                                    <div className="font-semibold text-blue-900 dark:text-white">{getRecipientName(r)}</div>
-                                                    <div className="text-sm text-blue-700 dark:text-muted-foreground line-clamp-1">{getRecipientHeadline(r)}</div>
+                                                    <div className="font-semibold text-foreground">{getRecipientName(r)}</div>
+                                                    <div className="text-sm text-muted-foreground line-clamp-1">{getRecipientHeadline(r)}</div>
                                                 </div>
-                                                <ChevronRight className="ml-auto text-blue-400 dark:text-muted-foreground group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors w-5 h-5" />
+                                                <ChevronRight className="ml-auto text-slate-300 dark:text-slate-600 group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors w-5 h-5" />
                                             </div>
                                         ))}
                                         {recipients.length === 0 && (
@@ -232,20 +231,20 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
 
                             {step === 2 && (
                                 <div className="space-y-6">
-                                    <div className="bg-indigo-50 dark:bg-indigo-500/10 p-4 rounded-xl flex items-center border border-indigo-100 dark:border-indigo-500/20">
+                                    <div className="bg-indigo-50/50 dark:bg-indigo-500/10 p-4 rounded-xl flex items-center border border-indigo-100 dark:border-indigo-500/20">
                                         <Avatar className="h-10 w-10 mr-3 border border-indigo-200 dark:border-indigo-500/20">
-                                            <AvatarFallback className="bg-indigo-100 dark:bg-indigo-500/50 text-indigo-600 dark:text-white">
+                                            <AvatarFallback className="bg-white dark:bg-indigo-500/50 text-indigo-600 dark:text-white">
                                                 {recipientInitial}
                                             </AvatarFallback>
                                         </Avatar>
                                         <div>
                                             <div className="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase tracking-wider mb-0.5">Drafting Message To</div>
-                                            <div className="font-bold text-blue-900 dark:text-white leading-tight">{recipientName}</div>
+                                            <div className="font-bold text-foreground leading-tight">{recipientName}</div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-blue-800 dark:text-white mb-3 ml-1">
+                                        <label className="block text-sm font-medium text-foreground mb-3 ml-1">
                                             Platform & Format
                                         </label>
                                         <div className="grid grid-cols-2 gap-3 mb-6">
@@ -255,7 +254,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                     "p-3 rounded-xl border text-sm font-medium transition-all flex items-center justify-center gap-2",
                                                     messageType === 'linkedin'
                                                         ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20"
-                                                        : "bg-blue-50 dark:bg-white/5 border-2 border-blue-200 dark:border-white/10 text-blue-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-white/10"
+                                                        : "bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
                                                 )}
                                             >
                                                 <Linkedin className="w-4 h-4" />
@@ -267,7 +266,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                     "p-3 rounded-xl border text-sm font-medium transition-all flex items-center justify-center gap-2",
                                                     messageType === 'email'
                                                         ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20"
-                                                        : "bg-blue-50 dark:bg-white/5 border-2 border-blue-200 dark:border-white/10 text-blue-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-white/10"
+                                                        : "bg-white dark:bg-white/5 border border-slate-200 dark:border-white/10 text-slate-700 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-white/10"
                                                 )}
                                             >
                                                 <Mail className="w-4 h-4" />
@@ -275,18 +274,18 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                             </button>
                                         </div>
 
-                                        <label className="block text-sm font-medium text-blue-800 dark:text-white mb-2 ml-1">
+                                        <label className="block text-sm font-medium text-foreground mb-2 ml-1">
                                             What's the core of your pitch?
                                         </label>
                                         <textarea
                                             value={companyContext}
                                             onChange={(e) => setCompanyContext(e.target.value)}
                                             placeholder="Describe your company, traction, and why this investor is a good fit..."
-                                            className="w-full h-48 p-4 rounded-xl bg-white dark:bg-black/20 border-2 border-blue-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent resize-none outline-none text-blue-900 dark:text-white placeholder:text-blue-400 dark:placeholder:text-muted-foreground/50 leading-relaxed"
+                                            className="w-full h-48 p-4 rounded-xl bg-white/50 dark:bg-black/20 border border-slate-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent resize-none outline-none text-foreground placeholder:text-muted-foreground leading-relaxed"
                                         />
                                         <div className="flex justify-between mt-2 px-1">
-                                            <span className="text-xs text-blue-600 dark:text-muted-foreground">Be specific about metrics.</span>
-                                            <span className="text-xs text-blue-600 dark:text-muted-foreground">{companyContext.length} chars</span>
+                                            <span className="text-xs text-muted-foreground">Be specific about metrics.</span>
+                                            <span className="text-xs text-muted-foreground">{companyContext.length} chars</span>
                                         </div>
                                     </div>
                                 </div>
@@ -313,11 +312,11 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                     initial={{ opacity: 0, y: 10 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     key="loading-text"
-                                                    className="font-medium text-lg text-blue-900 dark:text-white"
+                                                    className="font-medium text-lg text-foreground"
                                                 >
                                                     Crafting your message...
                                                 </motion.div>
-                                                <div className="text-sm text-blue-600 dark:text-gray-400 flex flex-col gap-1 items-center">
+                                                <div className="text-sm text-muted-foreground flex flex-col gap-1 items-center">
                                                     <div className="flex items-center gap-2">
                                                         <Check className="w-3 h-3 text-green-500" />
                                                         <span>Analyzed <strong>{recipientName}</strong>'s profile</span>
@@ -334,7 +333,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:bg-black/20 p-6 rounded-xl border-2 border-blue-200 dark:border-white/5 whitespace-pre-wrap font-sans text-blue-900 dark:text-white leading-relaxed flex-1 overflow-y-auto shadow-inner text-sm md:text-base selection:bg-indigo-100 dark:selection:bg-indigo-900/30">
+                                        <div className="bg-white/50 dark:bg-black/20 p-6 rounded-xl border border-slate-200 dark:border-white/5 whitespace-pre-wrap font-sans text-foreground leading-relaxed flex-1 overflow-y-auto shadow-inner text-sm md:text-base selection:bg-indigo-100 dark:selection:bg-indigo-900/30">
                                             {generatedMessage}
                                         </div>
                                     )}
@@ -343,12 +342,12 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                         </div>
 
                         {/* Footer */}
-                        <div className="p-6 border-t border-blue-100 dark:border-white/5 flex justify-between bg-blue-50/30 dark:bg-white/5 items-center">
+                        <div className="p-6 border-t border-white/20 dark:border-white/5 flex justify-between bg-white/40 dark:bg-white/5 items-center backdrop-blur-md">
                             {step > 1 ? (
                                 <Button
                                     variant="ghost"
                                     onClick={() => setStep(step - 1)}
-                                    className="text-blue-600 dark:text-muted-foreground hover:text-blue-900 dark:hover:text-white pl-0 hover:bg-transparent"
+                                    className="text-muted-foreground hover:text-foreground pl-0 hover:bg-transparent"
                                 >
                                     Back
                                 </Button>
@@ -370,7 +369,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                         <Button
                                             variant="outline"
                                             onClick={handleCopy}
-                                            className="border-2 border-blue-200 dark:border-white/10 hover:bg-blue-50 dark:hover:bg-white/5 text-blue-700 dark:text-muted-foreground hover:text-blue-900 dark:hover:text-white bg-transparent"
+                                            className="border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-muted-foreground hover:text-foreground bg-transparent"
                                         >
                                             {hasCopied ? (
                                                 <>
@@ -382,7 +381,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                 </>
                                             )}
                                         </Button>
-                                        <Button variant="outline" onClick={handleGenerate} className="border-2 border-blue-200 dark:border-white/10 hover:bg-blue-50 dark:hover:bg-white/5 text-blue-700 dark:text-muted-foreground hover:text-blue-900 dark:hover:text-white bg-transparent">
+                                        <Button variant="outline" onClick={handleGenerate} className="border border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-muted-foreground hover:text-foreground bg-transparent">
                                             <RefreshCw className="w-4 h-4 mr-2" /> Retry
                                         </Button>
                                         <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20">
