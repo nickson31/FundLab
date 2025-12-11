@@ -23,7 +23,7 @@ const LOADING_MESSAGES = [
     "Formatting final matches..."
 ];
 
-function LoadingBar() {
+function LoadingState() {
     const [progress, setProgress] = useState(0);
     const [msgIndex, setMsgIndex] = useState(0);
 
