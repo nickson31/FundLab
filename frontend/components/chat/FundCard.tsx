@@ -308,46 +308,44 @@ export default function FundCard({
                         </motion.div>
                     )}
                 </AnimatePresence>
+
+                {/* Footer Actions */}
+                <div className="mt-5 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
+                        className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/10 font-medium transition-colors"
+                    >
+                        {isExpanded ? (
+                            <><ChevronUp className="w-4 h-4 mr-1.5" /> Less Info</>
+                        ) : (
+                            <><ChevronDown className="w-4 h-4 mr-1.5" /> Deep Dive</>
+                        )}
+                    </Button>
+
+                    <div className="flex gap-2">
+                        {(linkedinUrl || websiteUrl) && (
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-9 w-9 p-0 rounded-full border-gray-200 dark:border-gray-700"
+                                onClick={(e) => { e.stopPropagation(); window.open(linkedinUrl || websiteUrl, '_blank'); }}
+                            >
+                                {linkedinUrl ? <Linkedin className="w-4 h-4 text-[#0077b5]" /> : <ExternalLink className="w-4 h-4 text-gray-400" />}
+                            </Button>
+                        )}
+                        <Button
+                            size="sm"
+                            onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(fund); }}
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-full px-5 font-semibold shadow-lg shadow-indigo-500/20 transition-all"
+                        >
+                            <Sparkles className="w-3.5 h-3.5 mr-2" />
+                            Draft Intro
+                        </Button>
+                    </div>
+                </div>
             </div>
-        </div>
-
-                {/* Footer Actions */ }
-    <div className="mt-5 pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between gap-3">
-        <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
-            className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 font-medium transition-colors"
-        >
-            {isExpanded ? (
-                <><ChevronUp className="w-4 h-4 mr-1.5" /> Less Info</>
-            ) : (
-                <><ChevronDown className="w-4 h-4 mr-1.5" /> Deep Dive</>
-            )}
-        </Button>
-
-        <div className="flex gap-2">
-            {(linkedinUrl || websiteUrl) && (
-                <Button
-                    size="sm"
-                    variant="outline"
-                    className="h-9 w-9 p-0 rounded-full border-gray-200 dark:border-white/10"
-                    onClick={(e) => { e.stopPropagation(); window.open(linkedinUrl || websiteUrl, '_blank'); }}
-                >
-                    {linkedinUrl ? <Linkedin className="w-4 h-4 text-[#0077b5]" /> : <ExternalLink className="w-4 h-4 text-gray-400" />}
-                </Button>
-            )}
-            <Button
-                size="sm"
-                onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(fund); }}
-                className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-5 font-semibold shadow-lg shadow-indigo-500/0 hover:shadow-indigo-500/20 transition-all"
-            >
-                <Sparkles className="w-3.5 h-3.5 mr-2" />
-                Draft Intro
-            </Button>
-        </div>
-    </div>
-            </div >
-        </motion.div >
+        </motion.div>
     );
 }
