@@ -67,16 +67,19 @@ export function selectDynamicLayout(
         }
 
         // Location
-        if (angel.addressWithCountry || angel.location_city) {
-            const location = angel.addressWithCountry || `${angel.location_city}, ${angel.location_country}`;
-            fields.push({
-                component: 'location',
-                label: 'Location',
-                value: location,
-                priority: 4,
-                display_type: 'badge'
-            });
-            components.push('location');
+        const angelData = investor as any; // Cast to any for dynamic fields
+        if (angelData.addressWithCountry || angelData.location_city) {
+            const location = angelData.addressWithCountry || `${angelData.location_city || ''}, ${angelData.location_country || ''}`.trim();
+            if (location && location !== ',') {
+                fields.push({
+                    component: 'location',
+                    label: 'Location',
+                    value: location,
+                    priority: 4,
+                    display_type: 'badge'
+                });
+                components.push('location');
+            }
         }
 
         // Categories (English only)
@@ -114,11 +117,12 @@ export function selectDynamicLayout(
         }
 
         // Recent Investments
-        if (angel.recent_investments) {
+        const angelData2 = investor as any;
+        if (angelData2.recent_investments) {
             fields.push({
                 component: 'recent_investments',
                 label: 'Recent Activity',
-                value: angel.recent_investments,
+                value: angelData2.recent_investments,
                 priority: 3,
                 display_type: 'text'
             });
@@ -126,11 +130,12 @@ export function selectDynamicLayout(
         }
 
         // Ticket Size
-        if (angel.ticket_size) {
+        const angelData3 = investor as any;
+        if (angelData3.ticket_size) {
             fields.push({
                 component: 'ticket_size',
                 label: 'Ticket Size',
-                value: angel.ticket_size,
+                value: angelData3.ticket_size,
                 priority: 3,
                 display_type: 'text'
             });
@@ -176,15 +181,19 @@ export function selectDynamicLayout(
             components.push('headline');
         }
 
-        if (fund.location_city || fund.location_country) {
-            fields.push({
-                component: 'location',
-                label: 'Location',
-                value: `${fund.location_city || ''}, ${fund.location_country || ''}`.trim(),
-                priority: 4,
-                display_type: 'badge'
-            });
-            components.push('location');
+        const fundData = investor as any;
+        if (fundData.location_city || fundData.location_country) {
+            const location = `${fundData.location_city || ''}, ${fundData.location_country || ''}`.trim();
+            if (location && location !== ',') {
+                fields.push({
+                    component: 'location',
+                    label: 'Location',
+                    value: location,
+                    priority: 4,
+                    display_type: 'badge'
+                });
+                components.push('location');
+            }
         }
 
         // Categories
@@ -208,22 +217,24 @@ export function selectDynamicLayout(
             }
         }
 
-        if (fund.sweet_spot) {
+        const fundData2 = investor as any;
+        if (fundData2.sweet_spot) {
             fields.push({
                 component: 'ticket_size',
                 label: 'Sweet Spot',
-                value: fund.sweet_spot,
+                value: fundData2.sweet_spot,
                 priority: 4,
                 display_type: 'text'
             });
             components.push('ticket_size');
         }
 
-        if (fund.investment_thesis) {
+        const fundData3 = investor as any;
+        if (fundData3.investment_thesis) {
             fields.push({
                 component: 'investment_thesis',
                 label: 'Investment Thesis',
-                value: fund.investment_thesis,
+                value: fundData3.investment_thesis,
                 priority: 3,
                 display_type: 'text'
             });
