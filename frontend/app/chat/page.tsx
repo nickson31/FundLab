@@ -309,10 +309,16 @@ export default function ChatPage() {
                                 </div>
                             </div>
                         ) : (
-                            <SystemMessage
-                                content={aiSummary || `I found ${results.length} matches for "${lastQuery}".`}
-                                isLoading={isLoading}
-                            />
+                            <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.4 }}
+                            >
+                                <SystemMessage
+                                    content={aiSummary || `I found ${results.length} matches for "${lastQuery}".`}
+                                    isLoading={isLoading}
+                                />
+                            </motion.div>
                         )}
                     </div>
                 )}

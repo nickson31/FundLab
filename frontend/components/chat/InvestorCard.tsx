@@ -118,7 +118,7 @@ export default function InvestorCard({
             <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-purple-500/5 to-pink-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl" />
 
             {/* Main Card */}
-            <div className="relative bg-white dark:bg-black/40 backdrop-blur-3xl border border-gray-100 dark:border-white/10 rounded-3xl p-6 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 overflow-hidden">
+            <div className="relative bg-white/90 dark:bg-black/40 backdrop-blur-3xl border border-gray-200 dark:border-white/10 rounded-3xl p-6 shadow-md hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 overflow-hidden">
 
                 {/* Decorative Top Line */}
                 <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
