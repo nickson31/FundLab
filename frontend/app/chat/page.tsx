@@ -9,7 +9,7 @@ import InvestorCard from '@/components/chat/InvestorCard';
 import FundCard from '@/components/chat/FundCard';
 import MessageModal from '@/components/chat/MessageModal';
 import SearchToggle from '@/components/chat/SearchToggle';
-import MacShell from '@/components/layout/MacShell';
+import { ModeToggle } from '@/components/mode-toggle';
 import { SystemMessage } from '@/components/chat/SystemMessage';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
@@ -209,7 +209,7 @@ export default function ChatPage() {
         </>
     );
 
-    import { ModeToggle } from '@/components/mode-toggle';
+
 
     // ... existing code ...
 
