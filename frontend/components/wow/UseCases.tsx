@@ -18,7 +18,7 @@ export default function UseCases() {
                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading text-white tracking-tight mb-6">
                         Built for Every Stage.
                     </h2>
-                    <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                    <p className="text-xl text-blue-400 max-w-2xl mx-auto">
                         Whether you're raising your first check or closing a Series A, FundLab adapts to your needs.
                     </p>
                 </motion.div>
@@ -69,16 +69,16 @@ export default function UseCases() {
 
                                 <div className="flex items-center justify-between mb-6">
                                     <span className={`text-xs font-bold uppercase tracking-wider ${useCase.accent}`}>{useCase.stage}</span>
-                                    <span className="text-xs text-gray-500">{useCase.amount}</span>
+                                    <span className="text-xs text-blue-500">{useCase.amount}</span>
                                 </div>
 
                                 <h3 className="text-2xl font-bold font-heading text-white mb-3">{useCase.title}</h3>
-                                <p className="text-gray-400 text-sm mb-6 leading-relaxed">{useCase.description}</p>
+                                <p className="text-blue-400 text-sm mb-6 leading-relaxed">{useCase.description}</p>
 
                                 <ul className="space-y-2">
                                     {useCase.features.map((feature, j) => (
-                                        <li key={j} className="flex items-center gap-2 text-sm text-gray-500">
-                                            <Check className="w-4 h-4 text-gray-600" />
+                                        <li key={j} className="flex items-center gap-2 text-sm text-blue-500">
+                                            <Check className="w-4 h-4 text-blue-600" />
                                             {feature}
                                         </li>
                                     ))}

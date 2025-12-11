@@ -15,7 +15,7 @@ export default function SocialProof() {
                     viewport={{ once: true }}
                     className="text-center mb-16"
                 >
-                    <p className="text-sm font-medium text-gray-500 uppercase tracking-[0.25em] mb-2">
+                    <p className="text-sm font-medium text-blue-500 uppercase tracking-[0.25em] mb-2">
                         Trusted by 500+ Founders Worldwide
                     </p>
                 </motion.div>
@@ -39,8 +39,8 @@ export default function SocialProof() {
                             <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2 group-hover:text-indigo-400 transition-colors duration-500">
                                 {stat.value}
                             </div>
-                            <div className="text-sm font-medium text-gray-400">{stat.label}</div>
-                            <div className="text-xs text-gray-600">{stat.sublabel}</div>
+                            <div className="text-sm font-medium text-blue-400">{stat.label}</div>
+                            <div className="text-xs text-blue-600">{stat.sublabel}</div>
                         </motion.div>
                     ))}
                 </div>
@@ -53,11 +53,11 @@ export default function SocialProof() {
                     transition={{ delay: 0.4 }}
                     className="flex flex-wrap justify-center items-center gap-x-12 gap-y-6"
                 >
-                    <p className="text-xs text-gray-600 uppercase tracking-widest mr-4">Alumni from</p>
+                    <p className="text-xs text-blue-600 uppercase tracking-widest mr-4">Alumni from</p>
                     {["Y Combinator", "Techstars", "500 Startups", "Seedcamp", "Antler"].map((company, i) => (
                         <span
                             key={i}
-                            className="text-lg font-bold font-heading text-gray-500 hover:text-white transition-colors duration-300 cursor-default"
+                            className="text-lg font-bold font-heading text-blue-500 hover:text-white transition-colors duration-300 cursor-default"
                         >
                             {company}
                         </span>

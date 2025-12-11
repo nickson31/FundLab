@@ -16,7 +16,7 @@ export default function Testimonials() {
                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading text-white tracking-tight mb-6">
                         Founders Love Us.
                     </h2>
-                    <p className="text-xl text-gray-400">
+                    <p className="text-xl text-blue-400">
                         Join hundreds of founders who've closed their rounds with FundLab.
                     </p>
                 </motion.div>
@@ -67,7 +67,7 @@ export default function Testimonials() {
                                     </div>
                                     <div>
                                         <div className="font-bold text-white">{testimonial.name}</div>
-                                        <div className="text-sm text-gray-500">{testimonial.role}</div>
+                                        <div className="text-sm text-blue-500">{testimonial.role}</div>
                                         <div className="text-xs text-indigo-400 font-medium">{testimonial.raised}</div>
                                     </div>
                                 </div>

@@ -20,7 +20,7 @@ export default function Pricing() {
                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading text-white tracking-tight mb-6">
                         Simple Pricing.
                     </h2>
-                    <p className="text-xl text-gray-400 max-w-2xl mx-auto">
+                    <p className="text-xl text-blue-400 max-w-2xl mx-auto">
                         Start free. Upgrade when you're ready to scale your fundraise.
                     </p>
                 </motion.div>
@@ -73,14 +73,14 @@ export default function Pricing() {
                                     <h3 className="text-xl font-bold text-white mb-2">{plan.name}</h3>
                                     <div className="flex items-baseline gap-1">
                                         <span className="text-4xl font-bold font-heading text-white">{plan.price}</span>
-                                        <span className="text-gray-500">{plan.period}</span>
+                                        <span className="text-blue-500">{plan.period}</span>
                                     </div>
-                                    <p className="text-sm text-gray-500 mt-2">{plan.description}</p>
+                                    <p className="text-sm text-blue-500 mt-2">{plan.description}</p>
                                 </div>
 
                                 <ul className="space-y-3 mb-8">
                                     {plan.features.map((feature, j) => (
-                                        <li key={j} className="flex items-center gap-3 text-sm text-gray-400">
+                                        <li key={j} className="flex items-center gap-3 text-sm text-blue-400">
                                             <Check className="w-4 h-4 text-indigo-400 shrink-0" />
                                             {feature}
                                         </li>
