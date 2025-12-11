@@ -87,6 +87,7 @@ export interface MatchBreakdown {
     overall_score: number;
     reason_summary?: string;
     reasoning?: string;
+    matched_keywords?: string[];
 }
 
 export interface SearchResult {

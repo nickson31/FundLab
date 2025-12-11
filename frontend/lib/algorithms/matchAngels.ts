@@ -61,6 +61,23 @@ export async function matchAngels(
             locationScore * 0.10
         );
 
+        // Find specific matching keywords for UI display
+        const matchedKeywords: string[] = [];
+        if (params.categoryKeywords && params.categoryKeywords.length > 0) {
+            const angelCategories = [
+                typedAngel.categories_general_en,
+                typedAngel.categories_strong_en,
+                typedAngel.categories_general_es,
+                typedAngel.categories_strong_es
+            ].join(' ').toLowerCase();
+
+            params.categoryKeywords.forEach(kw => {
+                if (angelCategories.includes(kw.toLowerCase())) {
+                    matchedKeywords.push(kw);
+                }
+            });
+        }
+
         return {
             angel: typedAngel,
             score: totalScore,
@@ -69,7 +86,8 @@ export async function matchAngels(
                 stage_match: stageScore,
                 location_match: locationScore,
                 overall_score: totalScore,
-                reason_summary: generateReason(typedAngel, params)
+                reason_summary: generateReason(typedAngel, params),
+                matched_keywords: Array.from(new Set(matchedKeywords)).slice(0, 3) // dedup and limit
             }
         };
     });
