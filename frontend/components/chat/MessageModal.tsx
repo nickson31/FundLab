@@ -27,6 +27,12 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
     const [isSaving, setIsSaving] = useState(false);
     const [messageType, setMessageType] = useState<'linkedin' | 'email'>('linkedin');
     const [hasCopied, setHasCopied] = useState(false);
+    const [mounted, setMounted] = useState(false);
+
+    // Portal mount effect - MUST be before any other effects
+    useEffect(() => {
+        setMounted(true);
+    }, []);
 
     useEffect(() => {
         if (isOpen) {
@@ -146,11 +152,6 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
         return '';
     };
 
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
 
     if (!isOpen || !mounted) return null;
 
