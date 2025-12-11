@@ -193,7 +193,7 @@ export default function InvestorCard({
                                             {/* Matched Keywords Badge */}
                                             {breakdown?.matched_keywords && breakdown.matched_keywords.length > 0 && (
                                                 <div className="flex flex-wrap gap-2 mb-3 border-b border-indigo-200/30 dark:border-white/10 pb-3">
-                                                    {breakdown.matched_keywords.map((kw, i) => (
+                                                    {breakdown.matched_keywords.map((kw: string, i: number) => (
                                                         <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-[10px] font-bold text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
                                                             <Zap className="w-3 h-3 text-indigo-500" />
                                                             {kw}
