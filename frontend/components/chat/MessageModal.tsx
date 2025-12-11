@@ -393,10 +393,8 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                         </div>
                     </motion.div>
                 </div>
-                </div>
-    )
-}
-        </AnimatePresence >,
-    document.body
+            )}
+        </AnimatePresence>,
+        document.body
     );
 }
