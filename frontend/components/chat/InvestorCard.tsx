@@ -110,86 +110,74 @@ export default function InvestorCard({
     return (
         <motion.div
             layout
-            initial={{ opacity: 0, y: 30, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            whileHover={{ y: -8, scale: 1.02 }}
-            transition={{ type: "spring", stiffness: 400, damping: 25 }}
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            whileHover={{ y: -3 }}
+            transition={{ type: "spring", stiffness: 260, damping: 20 }}
             className="group relative"
         >
-            {/* Neon Glow Effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-3xl opacity-0 group-hover:opacity-75 blur-xl transition-all duration-500 animate-pulse" />
+            {/* Subtle Glow on Hover */}
+            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 rounded-2xl opacity-0 group-hover:opacity-100 blur transition-opacity duration-300" />
 
-            {/* Main Card with Bold Design */}
-            <div className="relative bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-950 dark:to-purple-950 rounded-3xl p-6 border-2 border-blue-200 dark:border-blue-800 shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-500/30 transition-all duration-300">
+            {/* Main Card */}
+            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300">
 
-                {/* Animated Top Accent */}
-                <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-t-3xl animate-gradient-x" />
-
-                {/* Top Row: Avatar + Info + Score */}
-                <div className="flex items-start gap-5">
-                    {/* Avatar with Neon Ring */}
+                {/* Top Row */}
+                <div className="flex items-start gap-4">
+                    {/* Avatar */}
                     <div className="relative">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full blur opacity-75 group-hover:opacity-100 transition-opacity" />
-                        <Avatar className="relative h-16 w-16 border-4 border-white dark:border-gray-900 shadow-2xl ring-2 ring-blue-400">
+                        <Avatar className="h-14 w-14 border-2 border-gray-100 dark:border-gray-800 shadow-sm">
                             <AvatarImage src={profilePic || undefined} alt={name} className="object-cover" />
-                            <AvatarFallback className="bg-gradient-to-br from-cyan-500 via-blue-600 to-purple-600 text-white font-black text-xl">
+                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg">
                                 {getInitials(name)}
                             </AvatarFallback>
                         </Avatar>
-                        {/* Animated Status Pulse */}
-                        <div className="absolute -bottom-1 -right-1 w-5 h-5">
-                            <div className="absolute inset-0 bg-green-400 rounded-full animate-ping" />
-                            <div className="relative w-5 h-5 bg-green-500 rounded-full border-3 border-white dark:border-gray-900 shadow-lg" />
-                        </div>
+                        {/* Status Indicator */}
+                        <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 bg-emerald-500 rounded-full border-2 border-white dark:border-gray-900" />
                     </div>
 
-                    {/* Name & Title with Gradient */}
+                    {/* Name & Info */}
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-cyan-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent truncate tracking-tight">
+                        <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">
                             {name}
                         </h3>
-                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 truncate mt-1">
+                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate mt-0.5">
                             {headline?.slice(0, 60) || 'Investor'}
                         </p>
                         {location && (
-                            <div className="flex items-center gap-1.5 mt-2 px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 rounded-full w-fit">
-                                <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
-                                <span className="text-xs font-bold text-blue-700 dark:text-blue-300">{location.split(',')[0]}</span>
+                            <div className="flex items-center gap-1 mt-1.5 text-xs text-gray-500 dark:text-gray-500">
+                                <MapPin className="w-3 h-3" />
+                                <span>{location.split(',')[0]}</span>
                             </div>
                         )}
                     </div>
 
-                    {/* Score Badge - NEON DESIGN */}
-                    <motion.div
-                        whileHover={{ scale: 1.1, rotate: 5 }}
-                        className={cn(
-                            "relative flex flex-col items-center justify-center w-20 h-20 rounded-2xl shadow-2xl",
-                            score >= 0.8 ? "bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600" :
-                                score >= 0.6 ? "bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500" :
-                                    "bg-gradient-to-br from-gray-400 via-gray-500 to-gray-600"
-                        )}
-                    >
-                        <div className="absolute inset-0 bg-white/20 rounded-2xl animate-pulse" />
-                        <span className="relative text-3xl font-black text-white drop-shadow-lg">{Math.round(score * 100)}</span>
-                        <span className="relative text-[10px] font-black text-white/90 uppercase tracking-widest">MATCH</span>
-                    </motion.div>
+                    {/* Score Badge */}
+                    <div className={cn(
+                        "flex flex-col items-center justify-center w-16 h-16 rounded-xl",
+                        score >= 0.8 ? "bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800" :
+                            score >= 0.6 ? "bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800" :
+                                "bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                    )}>
+                        <span className={cn(
+                            "text-2xl font-bold",
+                            score >= 0.8 ? "text-emerald-600 dark:text-emerald-400" :
+                                score >= 0.6 ? "text-amber-600 dark:text-amber-400" :
+                                    "text-gray-600 dark:text-gray-400"
+                        )}>{Math.round(score * 100)}</span>
+                        <span className="text-[9px] font-medium text-gray-500 dark:text-gray-500 uppercase">Match</span>
+                    </div>
                 </div>
 
-                {/* Category Pills - VIBRANT NEON */}
-                <div className="flex flex-wrap gap-2 mt-5">
+                {/* Category Tags */}
+                <div className="flex flex-wrap gap-2 mt-4">
                     {categoryTags.map((tag, i) => (
-                        <motion.span
+                        <span
                             key={i}
-                            whileHover={{ scale: 1.05, y: -2 }}
-                            className={cn(
-                                "px-4 py-2 rounded-full text-xs font-black uppercase tracking-wide shadow-lg transition-all cursor-pointer",
-                                i === 0 ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-cyan-500/50" :
-                                    i === 1 ? "bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:shadow-purple-500/50" :
-                                        "bg-gradient-to-r from-orange-500 to-red-600 text-white hover:shadow-orange-500/50"
-                            )}
+                            className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
                         >
                             {tag}
-                        </motion.span>
+                        </span>
                     ))}
                 </div>
 
