@@ -33,7 +33,7 @@ export default function Hero() {
                         <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-white animate-gradient-x">Faster.</span>
                     </h1>
 
-                    <p className="text-base sm:text-lg md:text-xl text-gray-400 max-w-2xl mx-auto mb-8 md:mb-12 font-medium leading-relaxed text-balance px-4">
+                    <p className="text-base sm:text-lg md:text-xl text-blue-400 max-w-2xl mx-auto mb-8 md:mb-12 font-medium leading-relaxed text-balance px-4">
                         FundLab is the intelligence layer for your fundraise. We use LLMs to match you with the perfect investors, turning months of research into seconds.
                     </p>
                 </motion.div>
@@ -53,7 +53,7 @@ export default function Hero() {
                         <div className="relative bg-[#0A0A0A] rounded-xl border border-white/5 px-4 sm:px-6 py-4 sm:py-5 flex items-center gap-3 sm:gap-4 shadow-inner">
                             <Search className="text-indigo-400 w-4 h-4 sm:w-5 sm:h-5 flex-shrink-0" strokeWidth={2} />
                             <div className="flex-1 text-left min-w-0">
-                                <span className="text-sm sm:text-base md:text-lg text-gray-200 font-medium font-heading truncate block">Find Pre-Seed Fintech Angels in London...</span>
+                                <span className="text-sm sm:text-base md:text-lg text-blue-200 font-medium font-heading truncate block">Find Pre-Seed Fintech Angels in London...</span>
                             </div>
                             <div className="w-8 h-8 rounded-lg bg-indigo-600 flex items-center justify-center shadow-lg shadow-indigo-500/20">
                                 <ArrowRight className="text-white w-4 h-4" />
@@ -74,7 +74,7 @@ export default function Hero() {
                                             initial={{ opacity: 0, x: -10 }}
                                             animate={{ opacity: 1, x: 0 }}
                                             transition={{ delay: 1 + (i * 0.1) }}
-                                            className="text-xs font-medium text-gray-300 bg-white/5 border border-white/5 px-3 py-1.5 rounded-lg"
+                                            className="text-xs font-medium text-blue-300 bg-white/5 border border-white/5 px-3 py-1.5 rounded-lg"
                                         >
                                             {tag}
                                         </motion.span>

@@ -280,7 +280,7 @@ export default function FundCard({
                                                         </div>
                                                     ) : employees.length > 0 ? (
                                                         employees.map((emp, i) => (
-                                                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group/emp">
+                                                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-purple-50 dark:hover:bg-white/5 transition-colors group/emp">
                                                                 <Avatar className="h-8 w-8">
                                                                     <AvatarImage src={emp.profilePic || emp.photo_url} />
                                                                     <AvatarFallback className="text-[10px] bg-indigo-50 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
@@ -288,8 +288,8 @@ export default function FundCard({
                                                                     </AvatarFallback>
                                                                 </Avatar>
                                                                 <div className="flex-1 min-w-0">
-                                                                    <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{emp.fullName || emp.name}</p>
-                                                                    <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{emp.title || emp.position}</p>
+                                                                    <p className="text-sm font-medium text-purple-900 dark:text-white truncate">{emp.fullName || emp.name}</p>
+                                                                    <p className="text-xs text-purple-600 dark:text-gray-400 truncate">{emp.title || emp.position}</p>
                                                                 </div>
                                                                 <Button size="icon" variant="ghost" className="h-6 w-6 opacity-0 group-hover/emp:opacity-100 transition-opacity">
                                                                     <Linkedin className="w-3 h-3 text-blue-500" />
@@ -297,7 +297,7 @@ export default function FundCard({
                                                             </div>
                                                         ))
                                                     ) : (
-                                                        <div className="text-xs text-gray-400 italic">No public team data available.</div>
+                                                        <div className="text-xs text-purple-500 italic">No public team data available.</div>
                                                     )}
                                                 </motion.div>
                                             )}
@@ -310,7 +310,7 @@ export default function FundCard({
                 </AnimatePresence>
 
                 {/* Footer Actions */}
-                <div className="mt-5 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3">
+                <div className="mt-4 md:mt-5 pt-3 md:pt-4 border-t border-purple-100 dark:border-gray-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                     <Button
                         variant="ghost"
                         size="sm"
@@ -329,7 +329,7 @@ export default function FundCard({
                             <Button
                                 size="sm"
                                 variant="outline"
-                                className="h-9 w-9 p-0 rounded-full border-gray-200 dark:border-gray-700"
+                                className="h-11 w-11 md:h-9 md:w-9 p-0 rounded-full border-2 border-purple-200 dark:border-gray-700"
                                 onClick={(e) => { e.stopPropagation(); window.open(linkedinUrl || websiteUrl, '_blank'); }}
                             >
                                 {linkedinUrl ? <Linkedin className="w-4 h-4 text-[#0077b5]" /> : <ExternalLink className="w-4 h-4 text-gray-400" />}

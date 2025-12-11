@@ -17,11 +17,11 @@ export default function Navbar() {
                     <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-indigo-500 to-violet-500 flex items-center justify-center text-white shadow-[0_0_20px_rgba(99,102,241,0.5)] group-hover:shadow-[0_0_30px_rgba(99,102,241,0.8)] transition-all duration-500">
                         <Sparkles className="w-4 h-4" strokeWidth={2} />
                     </div>
-                    <span className="text-white font-bold tracking-tight text-lg font-heading group-hover:text-gray-200 transition-colors">FundLab</span>
+                    <span className="text-white font-bold tracking-tight text-lg font-heading group-hover:text-blue-200 transition-colors">FundLab</span>
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden md:flex items-center gap-8 text-sm font-medium text-gray-400">
+                <div className="hidden md:flex items-center gap-8 text-sm font-medium text-blue-400">
                     <a href="#features" className="hover:text-white transition-colors">Features</a>
                     <a href="#data" className="hover:text-white transition-colors">Data & Privacy</a>
                     <a href="#pricing" className="hover:text-white transition-colors">Pricing</a>
@@ -29,8 +29,8 @@ export default function Navbar() {
 
                 {/* Desktop CTA */}
                 <div className="hidden sm:flex items-center gap-4">
-                    <Link href="/login" className="text-sm font-medium text-gray-400 hover:text-white transition-colors">Log in</Link>
-                    <Button size="sm" className="bg-white text-black hover:bg-gray-200 font-bold rounded-full px-6 shadow-xl shadow-white/5" asChild>
+                    <Link href="/login" className="text-sm font-medium text-blue-400 hover:text-white transition-colors">Log in</Link>
+                    <Button size="sm" className="bg-white text-black hover:bg-blue-100 font-bold rounded-full px-6 shadow-xl shadow-white/5" asChild>
                         <Link href="/chat">
                             Get Access <ArrowRight className="ml-2 w-4 h-4" />
                         </Link>
@@ -40,7 +40,7 @@ export default function Navbar() {
                 {/* Mobile Menu Button */}
                 <button
                     onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                    className="md:hidden p-2 text-gray-400 hover:text-white transition-colors"
+                    className="md:hidden p-2 text-blue-400 hover:text-white transition-colors"
                     aria-label="Toggle menu"
                 >
                     {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -59,21 +59,21 @@ export default function Navbar() {
                         <div className="px-4 py-4 space-y-3">
                             <a
                                 href="#features"
-                                className="block py-2 text-gray-400 hover:text-white transition-colors"
+                                className="block py-2 text-blue-400 hover:text-white transition-colors"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
                                 Features
                             </a>
                             <a
                                 href="#data"
-                                className="block py-2 text-gray-400 hover:text-white transition-colors"
+                                className="block py-2 text-blue-400 hover:text-white transition-colors"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
                                 Data & Privacy
                             </a>
                             <a
                                 href="#pricing"
-                                className="block py-2 text-gray-400 hover:text-white transition-colors"
+                                className="block py-2 text-blue-400 hover:text-white transition-colors"
                                 onClick={() => setMobileMenuOpen(false)}
                             >
                                 Pricing
@@ -81,12 +81,12 @@ export default function Navbar() {
                             <div className="pt-3 border-t border-white/10 space-y-2">
                                 <Link
                                     href="/login"
-                                    className="block py-2 text-gray-400 hover:text-white transition-colors"
+                                    className="block py-2 text-blue-400 hover:text-white transition-colors"
                                     onClick={() => setMobileMenuOpen(false)}
                                 >
                                     Log in
                                 </Link>
-                                <Button className="w-full bg-white text-black hover:bg-gray-200 font-bold rounded-full" asChild>
+                                <Button className="w-full bg-white text-black hover:bg-blue-100 font-bold rounded-full" asChild>
                                     <Link href="/chat" onClick={() => setMobileMenuOpen(false)}>
                                         Get Access <ArrowRight className="ml-2 w-4 h-4" />
                                     </Link>

@@ -50,7 +50,7 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                         {/* Go Back Button */}
                         <button
                             onClick={() => router.back()}
-                            className="text-gray-400 hover:text-white transition-colors p-1.5 rounded-md hover:bg-white/10 active:scale-95 ml-2 flex items-center justify-center"
+                            className="text-blue-400 hover:text-white transition-colors p-1.5 rounded-md hover:bg-white/10 active:scale-95 ml-2 flex items-center justify-center"
                             title="Go Back"
                         >
                             <ChevronLeft className="w-4 h-4" />
@@ -69,7 +69,7 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                     <aside className="w-64 border-r border-white/5 flex flex-col bg-black/20 backdrop-blur-md">
                         {/* Search Mock */}
                         <div className="p-4 border-b border-white/5">
-                            <div className="flex items-center gap-2 rounded-lg px-3 py-2 bg-white/5 border border-white/5 text-gray-400 group focus-within:ring-1 focus-within:ring-white/10 transition-all">
+                            <div className="flex items-center gap-2 rounded-lg px-3 py-2 bg-white/5 border border-white/5 text-blue-400 group focus-within:ring-1 focus-within:ring-white/10 transition-all">
                                 <Search className="w-4 h-4 text-gray-500 group-focus-within:text-indigo-400 transition-colors" />
                                 <input placeholder="Search..." className="w-full bg-transparent text-sm placeholder-gray-600 focus:outline-none" />
                             </div>
