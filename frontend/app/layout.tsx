@@ -42,7 +42,7 @@ export default function RootLayout({
         outfit.variable,
         jakarta.variable,
         spaceGrotesk.variable,
-        "min-h-screen bg-background font-body antialiased text-gray-900 dark:text-gray-400 selection:bg-indigo-500/30 selection:text-indigo-200"
+        "min-h-screen bg-background font-body antialiased text-blue-900 dark:text-gray-400 selection:bg-indigo-500/30 selection:text-indigo-200"
       )}>
         <ThemeProvider
           attribute="class"

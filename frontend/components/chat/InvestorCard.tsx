@@ -230,13 +230,13 @@ export default function InvestorCard({
 
                                 {/* Stats Grid */}
                                 <div className="grid grid-cols-2 gap-3">
-                                    <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
-                                        <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Ticket Size</p>
-                                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{ticketSize}</p>
+                                    <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 dark:bg-white/5 rounded-lg border-2 border-blue-200 dark:border-white/5">
+                                        <p className="text-[10px] text-blue-600 uppercase font-bold tracking-wider mb-1">Ticket Size</p>
+                                        <p className="text-sm font-semibold text-blue-900 dark:text-white">{ticketSize}</p>
                                     </div>
-                                    <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
-                                        <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Recent Activity</p>
-                                        <p className="text-xs font-medium text-gray-900 dark:text-white leading-relaxed line-clamp-2">
+                                    <div className="p-3 bg-gradient-to-br from-blue-50 to-purple-50 dark:bg-white/5 rounded-lg border-2 border-blue-200 dark:border-white/5">
+                                        <p className="text-[10px] text-blue-600 uppercase font-bold tracking-wider mb-1">Recent Activity</p>
+                                        <p className="text-xs font-medium text-blue-900 dark:text-white leading-relaxed line-clamp-2">
                                             {recentInvestments || "No recent public deals listed."}
                                         </p>
                                     </div>
@@ -245,8 +245,8 @@ export default function InvestorCard({
                                 {/* Bio / About */}
                                 {('about' in investor) && (investor as any).about && (
                                     <div>
-                                        <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-2">About</p>
-                                        <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-black/20 p-3 rounded-lg border-l-2 border-purple-500">
+                                        <p className="text-[10px] text-blue-600 uppercase font-bold tracking-wider mb-2">About</p>
+                                        <p className="text-sm text-blue-800 dark:text-gray-300 leading-relaxed bg-blue-50 dark:bg-black/20 p-3 rounded-lg border-l-2 border-purple-500">
                                             {(investor as any).about}
                                         </p>
                                     </div>
@@ -257,7 +257,7 @@ export default function InvestorCard({
                 </AnimatePresence>
 
                 {/* Footer Actions */}
-                <div className="mt-5 pt-4 border-t border-gray-100 dark:border-gray-800 flex items-center justify-between gap-3">
+                <div className="mt-4 md:mt-5 pt-3 md:pt-4 border-t border-blue-100 dark:border-gray-800 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
                     <Button
                         variant="ghost"
                         size="sm"
@@ -276,7 +276,7 @@ export default function InvestorCard({
                             <Button
                                 size="sm"
                                 variant="outline"
-                                className="h-9 w-9 p-0 rounded-full border-gray-200 dark:border-gray-700"
+                                className="h-11 w-11 md:h-9 md:w-9 p-0 rounded-full border-2 border-blue-200 dark:border-gray-700"
                                 onClick={(e) => { e.stopPropagation(); window.open(linkedinUrl, '_blank'); }}
                             >
                                 <Linkedin className="w-4 h-4 text-[#0077b5]" />

@@ -34,10 +34,10 @@ export default function LoadingState() {
             {/* Status Text Carousel */}
             <div className="h-6 overflow-hidden relative w-full text-center">
                 <div className="animate-[slideUp_8s_infinite] space-y-6">
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Analyzing your request...</p>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Scanning investor database...</p>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Matching investment thesis...</p>
-                    <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Finding the perfect fit...</p>
+                    <p className="text-sm font-medium text-blue-700 dark:text-gray-400">Analyzing your request...</p>
+                    <p className="text-sm font-medium text-blue-700 dark:text-gray-400">Scanning investor database...</p>
+                    <p className="text-sm font-medium text-blue-700 dark:text-gray-400">Matching investment thesis...</p>
+                    <p className="text-sm font-medium text-blue-700 dark:text-gray-400">Finding the perfect fit...</p>
                 </div>
             </div>
 

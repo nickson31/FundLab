@@ -206,7 +206,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                 onClick={() => { setSelectedRecipient(r); setStep(2); }}
                                                 className="flex items-center p-3 hover:bg-blue-50 dark:hover:bg-white/5 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-blue-200 dark:hover:border-white/10 group"
                                             >
-                                                <Avatar className="h-10 w-10 mr-4 border border-gray-200 dark:border-white/10">
+                                                <Avatar className="h-10 w-10 mr-4 border-2 border-blue-200 dark:border-white/10">
                                                     <AvatarFallback className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 font-medium">
                                                         {getRecipientName(r).charAt(0)}
                                                     </AvatarFallback>
@@ -223,7 +223,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                 <div className="w-16 h-16 bg-blue-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
                                                     <Search className="w-8 h-8 text-blue-400 dark:text-muted-foreground" />
                                                 </div>
-                                                <p className="text-gray-500 dark:text-muted-foreground">No saved investors found yet.</p>
+                                                <p className="text-blue-600 dark:text-muted-foreground">No saved investors found yet.</p>
                                             </div>
                                         )}
                                     </div>
@@ -240,12 +240,12 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                         </Avatar>
                                         <div>
                                             <div className="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase tracking-wider mb-0.5">Drafting Message To</div>
-                                            <div className="font-bold text-gray-900 dark:text-white leading-tight">{recipientName}</div>
+                                            <div className="font-bold text-blue-900 dark:text-white leading-tight">{recipientName}</div>
                                         </div>
                                     </div>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-white mb-3 ml-1">
+                                        <label className="block text-sm font-medium text-blue-800 dark:text-white mb-3 ml-1">
                                             Platform & Format
                                         </label>
                                         <div className="grid grid-cols-2 gap-3 mb-6">
@@ -255,7 +255,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                     "p-3 rounded-xl border text-sm font-medium transition-all flex items-center justify-center gap-2",
                                                     messageType === 'linkedin'
                                                         ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20"
-                                                        : "bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10"
+                                                        : "bg-blue-50 dark:bg-white/5 border-2 border-blue-200 dark:border-white/10 text-blue-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-white/10"
                                                 )}
                                             >
                                                 <Linkedin className="w-4 h-4" />
@@ -267,7 +267,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                     "p-3 rounded-xl border text-sm font-medium transition-all flex items-center justify-center gap-2",
                                                     messageType === 'email'
                                                         ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20"
-                                                        : "bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10"
+                                                        : "bg-blue-50 dark:bg-white/5 border-2 border-blue-200 dark:border-white/10 text-blue-700 dark:text-gray-400 hover:bg-blue-100 dark:hover:bg-white/10"
                                                 )}
                                             >
                                                 <Mail className="w-4 h-4" />
@@ -275,18 +275,18 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                             </button>
                                         </div>
 
-                                        <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2 ml-1">
+                                        <label className="block text-sm font-medium text-blue-800 dark:text-white mb-2 ml-1">
                                             What's the core of your pitch?
                                         </label>
                                         <textarea
                                             value={companyContext}
                                             onChange={(e) => setCompanyContext(e.target.value)}
                                             placeholder="Describe your company, traction, and why this investor is a good fit..."
-                                            className="w-full h-48 p-4 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent resize-none outline-none text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-muted-foreground/50 leading-relaxed"
+                                            className="w-full h-48 p-4 rounded-xl bg-white dark:bg-black/20 border-2 border-blue-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent resize-none outline-none text-blue-900 dark:text-white placeholder:text-blue-400 dark:placeholder:text-muted-foreground/50 leading-relaxed"
                                         />
                                         <div className="flex justify-between mt-2 px-1">
-                                            <span className="text-xs text-gray-500 dark:text-muted-foreground">Be specific about metrics.</span>
-                                            <span className="text-xs text-gray-500 dark:text-muted-foreground">{companyContext.length} chars</span>
+                                            <span className="text-xs text-blue-600 dark:text-muted-foreground">Be specific about metrics.</span>
+                                            <span className="text-xs text-blue-600 dark:text-muted-foreground">{companyContext.length} chars</span>
                                         </div>
                                     </div>
                                 </div>
@@ -313,11 +313,11 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                     initial={{ opacity: 0, y: 10 }}
                                                     animate={{ opacity: 1, y: 0 }}
                                                     key="loading-text"
-                                                    className="font-medium text-lg text-gray-900 dark:text-white"
+                                                    className="font-medium text-lg text-blue-900 dark:text-white"
                                                 >
                                                     Crafting your message...
                                                 </motion.div>
-                                                <div className="text-sm text-gray-500 dark:text-gray-400 flex flex-col gap-1 items-center">
+                                                <div className="text-sm text-blue-600 dark:text-gray-400 flex flex-col gap-1 items-center">
                                                     <div className="flex items-center gap-2">
                                                         <Check className="w-3 h-3 text-green-500" />
                                                         <span>Analyzed <strong>{recipientName}</strong>'s profile</span>
@@ -334,7 +334,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                             </div>
                                         </div>
                                     ) : (
-                                        <div className="bg-gray-50 dark:bg-black/20 p-6 rounded-xl border border-gray-200 dark:border-white/5 whitespace-pre-wrap font-sans text-gray-900 dark:text-white leading-relaxed flex-1 overflow-y-auto shadow-inner text-sm md:text-base selection:bg-indigo-100 dark:selection:bg-indigo-900/30">
+                                        <div className="bg-gradient-to-br from-blue-50 to-purple-50 dark:bg-black/20 p-6 rounded-xl border-2 border-blue-200 dark:border-white/5 whitespace-pre-wrap font-sans text-blue-900 dark:text-white leading-relaxed flex-1 overflow-y-auto shadow-inner text-sm md:text-base selection:bg-indigo-100 dark:selection:bg-indigo-900/30">
                                             {generatedMessage}
                                         </div>
                                     )}
@@ -343,12 +343,12 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                         </div>
 
                         {/* Footer */}
-                        <div className="p-6 border-t border-gray-200 dark:border-white/5 flex justify-between bg-gray-50/50 dark:bg-white/5 items-center">
+                        <div className="p-6 border-t border-blue-100 dark:border-white/5 flex justify-between bg-blue-50/30 dark:bg-white/5 items-center">
                             {step > 1 ? (
                                 <Button
                                     variant="ghost"
                                     onClick={() => setStep(step - 1)}
-                                    className="text-gray-500 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-white pl-0 hover:bg-transparent"
+                                    className="text-blue-600 dark:text-muted-foreground hover:text-blue-900 dark:hover:text-white pl-0 hover:bg-transparent"
                                 >
                                     Back
                                 </Button>
@@ -370,7 +370,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                         <Button
                                             variant="outline"
                                             onClick={handleCopy}
-                                            className="border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-white bg-transparent"
+                                            className="border-2 border-blue-200 dark:border-white/10 hover:bg-blue-50 dark:hover:bg-white/5 text-blue-700 dark:text-muted-foreground hover:text-blue-900 dark:hover:text-white bg-transparent"
                                         >
                                             {hasCopied ? (
                                                 <>
@@ -382,7 +382,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                 </>
                                             )}
                                         </Button>
-                                        <Button variant="outline" onClick={handleGenerate} className="border-gray-200 dark:border-white/10 hover:bg-gray-100 dark:hover:bg-white/5 text-gray-600 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-white bg-transparent">
+                                        <Button variant="outline" onClick={handleGenerate} className="border-2 border-blue-200 dark:border-white/10 hover:bg-blue-50 dark:hover:bg-white/5 text-blue-700 dark:text-muted-foreground hover:text-blue-900 dark:hover:text-white bg-transparent">
                                             <RefreshCw className="w-4 h-4 mr-2" /> Retry
                                         </Button>
                                         <Button onClick={handleSave} disabled={isSaving} className="bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-500/20">
