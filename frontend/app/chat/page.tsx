@@ -14,20 +14,22 @@ import { ModeToggle } from '@/components/mode-toggle';
 import { SystemMessage } from '@/components/chat/SystemMessage';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
+import { generateLoadingMessages, FALLBACK_MESSAGES } from '@/lib/loadingMessages';
 
+interface LoadingStateProps {
+    userQuery: string;
+}
 
-const LOADING_MESSAGES = [
-    "Analyzing global investor database...",
-    "Matching investment thesis...",
-    "Checking recent portfolio conflicts...",
-    "Scoring alignment with your startup...",
-    "Verifying active investment status...",
-    "Formatting final matches..."
-];
-
-function LoadingState() {
+function LoadingState({ userQuery }: LoadingStateProps) {
     const [progress, setProgress] = useState(0);
     const [msgIndex, setMsgIndex] = useState(0);
+    const [messages, setMessages] = useState<string[]>(FALLBACK_MESSAGES);
+
+    useEffect(() => {
+        // Generate personalized messages based on user query
+        const { messages: personalizedMessages } = generateLoadingMessages(userQuery);
+        setMessages(personalizedMessages);
+    }, [userQuery]);
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -38,26 +40,35 @@ function LoadingState() {
         }, 100); // 10s total for 100 steps
 
         const msgInterval = setInterval(() => {
-            setMsgIndex(prev => (prev + 1) % LOADING_MESSAGES.length);
-        }, 1800);
+            setMsgIndex(prev => (prev + 1) % messages.length);
+        }, 2000); // 2s per message
 
         return () => {
             clearInterval(interval);
             clearInterval(msgInterval);
         };
-    }, []);
+    }, [messages]);
 
     return (
         <div className="w-full max-w-sm space-y-3">
-            <div className="flex items-center gap-3 text-sm text-gray-400">
-                <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                <span className="animate-[fadeIn_0.5s_ease-out] key={msgIndex} min-w-[200px]">
-                    {LOADING_MESSAGES[msgIndex]}
-                </span>
-            </div>
-            <div className="h-1 w-full bg-white/5 rounded-full overflow-hidden">
+            <AnimatePresence mode="wait">
                 <motion.div
-                    className="h-full bg-indigo-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
+                    key={msgIndex}
+                    initial={{ opacity: 0, y: 10 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -10 }}
+                    transition={{ duration: 0.3 }}
+                    className="flex items-center gap-3 text-sm text-blue-700 dark:text-blue-400"
+                >
+                    <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                    <span className="min-w-[200px] font-medium">
+                        {messages[msgIndex]}
+                    </span>
+                </motion.div>
+            </AnimatePresence>
+            <div className="h-1 w-full bg-blue-100 dark:bg-white/5 rounded-full overflow-hidden">
+                <motion.div
+                    className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
                     style={{ width: `${progress}%` }}
                     initial={{ width: "0%" }}
                     animate={{ width: `${progress}%` }}
