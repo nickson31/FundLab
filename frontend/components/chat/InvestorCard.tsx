@@ -18,6 +18,7 @@ interface InvestorCardProps {
     onDraftMessage?: (investor: Investor) => void;
     onSave?: (investor: Investor) => void;
     isSaved?: boolean;
+    query?: string;
 }
 
 export default function InvestorCard({
@@ -26,7 +27,8 @@ export default function InvestorCard({
     breakdown,
     onDraftMessage,
     onSave,
-    isSaved = false
+    isSaved = false,
+    query
 }: InvestorCardProps) {
     // DIAGNOSTIC LOGGING
     if (!investor) {
@@ -109,7 +111,7 @@ export default function InvestorCard({
     const fullDescription = ('about' in investor ? (investor as any).about : null) || description;
 
     // Use Dynamic Layout System
-    const layout = selectDynamicLayout(investor, 'angel');
+    const layout = selectDynamicLayout(investor, 'angel', query);
     const dynamicFields = layout.fields;
 
     // Helper to find a specific dynamic field

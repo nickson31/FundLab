@@ -194,10 +194,10 @@ export default function ChatPage() {
     // Right Panel Content (Investor Cards)
     const RightPanel = (
         <>
-            <div className="flex items-center justify-between px-5 py-4 border-b border-white/20 dark:border-white/5 bg-white/40 dark:bg-slate-900/40 backdrop-blur-md select-none sticky top-0 z-10">
-                <span className="text-sm font-medium text-slate-700 dark:text-slate-200 tracking-tight">Matches</span>
+            <div className="flex items-center justify-between px-5 py-4 border-b border-indigo-100 dark:border-white/5 bg-white/80 dark:bg-slate-900/40 backdrop-blur-md select-none sticky top-0 z-10">
+                <span className="text-sm font-bold text-indigo-950 dark:text-slate-200 tracking-tight">Top Matches</span>
                 {!isLoading && (
-                    <span className="text-[10px] bg-white/50 dark:bg-white/10 text-slate-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-white/20 dark:border-white/10 animate-in fade-in zoom-in">{results.length}</span>
+                    <span className="text-[10px] bg-indigo-50 dark:bg-white/10 text-indigo-600 dark:text-slate-300 px-2 py-0.5 rounded-full border border-indigo-100 dark:border-white/10 animate-in fade-in zoom-in font-bold">{results.length}</span>
                 )}
             </div>
 
@@ -236,7 +236,7 @@ export default function ChatPage() {
                         ))}
                         {isLoading && (
                             [1, 2, 3].map(i => (
-                                <div key={i} className="h-40 rounded-xl bg-slate-100 dark:bg-white/5 animate-pulse border border-transparent dark:border-white/5" />
+                                <div key={i} className="h-40 rounded-xl bg-indigo-50/50 dark:bg-white/5 animate-pulse border border-indigo-100/50 dark:border-white/5" />
                             ))
                         )}
                     </AnimatePresence>
@@ -252,7 +252,7 @@ export default function ChatPage() {
     return (
         <MacShell sidePanel={RightPanel}>
             {/* Channel Header */}
-            <div className="flex items-center justify-between border-b border-border/40 px-6 py-4 bg-white/30 dark:bg-slate-900/30 backdrop-blur-md sticky top-0 z-20 select-none">
+            <div className="flex items-center justify-between border-b border-indigo-100/50 dark:border-white/5 px-6 py-4 bg-white/60 dark:bg-slate-900/30 backdrop-blur-md sticky top-0 z-20 select-none">
                 <div className="flex items-center gap-3">
                     <MessageSquare className="w-5 h-5 text-muted-foreground" />
                     <h1 className="text-lg font-medium tracking-tight text-foreground">Fundraising Assistant</h1>
@@ -265,7 +265,7 @@ export default function ChatPage() {
             </div>
 
             {/* Messages Area */}
-            <div className="flex h-screen overflow-hidden bg-transparent scrollbar-thin">
+            <div className="flex h-screen overflow-hidden bg-white dark:bg-transparent scrollbar-thin">
                 {!hasSearched ? (
                     <div className="h-full flex flex-col items-center justify-center text-center p-8 space-y-6 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
                         <div className="w-24 h-24 rounded-3xl bg-white/50 dark:bg-white/5 flex items-center justify-center border border-white/20 dark:border-white/10 shadow-xl backdrop-blur-xl">
@@ -289,7 +289,7 @@ export default function ChatPage() {
                                         onClick={() => {
                                             setQuery(suggestion);
                                         }}
-                                        className="p-4 rounded-xl bg-white/40 dark:bg-white/5 border border-white/20 dark:border-white/10 text-sm font-medium text-slate-700 dark:text-slate-200 hover:bg-white/60 dark:hover:bg-white/10 hover:border-indigo-500/30 transition-all text-left group shadow-sm hover:shadow-md backdrop-blur-sm"
+                                        className="p-4 rounded-xl bg-white border border-indigo-50 dark:border-white/10 text-sm font-semibold text-indigo-900 dark:text-slate-200 hover:bg-indigo-50/50 dark:hover:bg-white/10 hover:border-indigo-200 dark:hover:border-indigo-500/30 transition-all text-left group shadow-sm hover:shadow-md"
                                     >
                                         <span className="group-hover:translate-x-1 transition-transform inline-block">{suggestion}</span>
                                     </button>
@@ -391,8 +391,8 @@ export default function ChatPage() {
                         </div>
                     )}
 
-                    <div className="relative flex items-center glass-premium rounded-2xl px-3 md:px-4 py-2 md:py-3 gap-2 md:gap-3">
-                        <Button size="icon" variant="ghost" className="text-slate-400 hover:text-slate-600 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-slate-100/50 dark:hover:bg-white/5 rounded-xl min-h-[44px] min-w-[44px]" type="button">
+                    <div className="relative flex items-center bg-white dark:bg-white/5 rounded-2xl border border-indigo-100 dark:border-white/10 px-3 md:px-4 py-2 md:py-3 gap-2 md:gap-3 shadow-2xl shadow-indigo-500/5">
+                        <Button size="icon" variant="ghost" className="text-indigo-400 hover:text-indigo-600 dark:text-slate-400 dark:hover:text-slate-200 hover:bg-indigo-50 dark:hover:bg-white/5 rounded-xl min-h-[44px] min-w-[44px]" type="button">
                             <MoreHorizontal className="w-5 h-5" />
                         </Button>
                         <input
@@ -411,7 +411,7 @@ export default function ChatPage() {
                         </Button>
                     </div>
                 </form>
-                <p className="text-center text-[10px] md:text-[10px] text-slate-400 dark:text-slate-500 mt-2 md:mt-3">FundLab AI can make mistakes. Verify important info.</p>
+                <p className="text-center text-[10px] md:text-[10px] text-indigo-300 dark:text-slate-500 mt-2 md:mt-3">FundLab AI can make mistakes. Verify important info.</p>
             </div>
 
             <MessageModal

@@ -36,11 +36,11 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
     ];
 
     return (
-        <div className="flex w-screen h-screen items-center justify-center p-4 lg:p-10 overflow-hidden bg-black/40">
-            <div className="flex flex-col overflow-hidden w-full h-full max-w-7xl max-h-[95vh] glass-panel rounded-2xl shadow-2xl backdrop-blur-2xl border border-white/10 ring-1 ring-white/5 relative bg-[#0a0a0a]/60">
+        <div className="flex w-screen h-screen items-center justify-center p-4 lg:p-10 overflow-hidden bg-white/90 dark:bg-black/40">
+            <div className="flex flex-col overflow-hidden w-full h-full max-w-7xl max-h-[95vh] glass-panel rounded-2xl shadow-2xl backdrop-blur-2xl border border-indigo-100 dark:border-white/10 ring-1 ring-white/5 relative bg-white/80 dark:bg-[#0a0a0a]/60">
 
                 {/* Mac Title Bar */}
-                <div className="flex border-b border-white/5 pt-4 pr-5 pb-4 pl-5 items-center justify-between bg-black/40 z-50 select-none">
+                <div className="flex border-b border-indigo-100 dark:border-white/5 pt-4 pr-5 pb-4 pl-5 items-center justify-between bg-white/50 dark:bg-black/40 z-50 select-none">
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 group">
                             <div className="w-3 h-3 rounded-full bg-[#FF5F57] shadow-sm border border-transparent group-hover:border-[#E0443E] transition-colors"></div>
@@ -56,7 +56,7 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                             <ChevronLeft className="w-4 h-4" />
                         </button>
                     </div>
-                    <div className="flex items-center gap-2 text-xs font-medium text-white/30 uppercase tracking-[0.2em] transform -translate-x-4">
+                    <div className="flex items-center gap-2 text-xs font-bold text-indigo-300 dark:text-white/30 uppercase tracking-[0.2em] transform -translate-x-4">
                         FundLab AI
                     </div>
                     <div className="w-16"></div> {/* Spacer for balance */}
@@ -66,12 +66,12 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                 <div className="flex-1 flex overflow-hidden relative">
 
                     {/* Left Sidebar - Navigation */}
-                    <aside className="w-64 border-r border-white/5 flex flex-col bg-black/20 backdrop-blur-md">
+                    <aside className="w-64 border-r border-indigo-100 dark:border-white/5 flex flex-col bg-white/40 dark:bg-black/20 backdrop-blur-md">
                         {/* Search Mock */}
-                        <div className="p-4 border-b border-white/5">
-                            <div className="flex items-center gap-2 rounded-lg px-3 py-2 bg-white/5 border border-white/5 text-blue-400 group focus-within:ring-1 focus-within:ring-white/10 transition-all">
-                                <Search className="w-4 h-4 text-slate-500 group-focus-within:text-indigo-400 transition-colors" />
-                                <input placeholder="Search..." className="w-full bg-transparent text-sm placeholder-slate-600 focus:outline-none" />
+                        <div className="p-4 border-b border-indigo-100 dark:border-white/5">
+                            <div className="flex items-center gap-2 rounded-lg px-3 py-2 bg-indigo-50/50 dark:bg-white/5 border border-indigo-100 dark:border-white/5 text-blue-400 group focus-within:ring-1 focus-within:ring-indigo-200 dark:focus-within:ring-white/10 transition-all">
+                                <Search className="w-4 h-4 text-indigo-300 dark:text-slate-500 group-focus-within:text-indigo-500 dark:group-focus-within:text-indigo-400 transition-colors" />
+                                <input placeholder="Search..." className="w-full bg-transparent text-sm placeholder-indigo-300 dark:placeholder-slate-600 focus:outline-none text-indigo-900" />
                             </div>
                         </div>
 
@@ -86,8 +86,8 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                                         className={cn(
                                             "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 group relative overflow-hidden",
                                             isActive
-                                                ? "text-indigo-100 font-medium"
-                                                : "text-slate-400 hover:text-slate-200 hover:bg-white/5"
+                                                ? "text-indigo-600 dark:text-indigo-100 font-bold bg-indigo-50 dark:bg-transparent"
+                                                : "text-indigo-900/60 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-slate-200 hover:bg-indigo-50/50 dark:hover:bg-white/5"
                                         )}
                                     >
                                         {isActive && (
@@ -101,16 +101,16 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                         </nav>
 
                         {/* User Profile */}
-                        <div className="border-t border-white/5 p-4 bg-black/10">
+                        <div className="border-t border-indigo-100 dark:border-white/5 p-4 bg-indigo-50/30 dark:bg-black/10">
                             <div className="flex items-center gap-3">
                                 <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-indigo-500 to-purple-600 flex items-center justify-center text-white font-bold text-xs shadow-lg ring-1 ring-white/10">
                                     {user?.email?.[0].toUpperCase() || 'F'}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                    <div className="text-sm font-medium text-slate-200 truncate">{user?.confirmed_at ? user.email.split('@')[0] : 'Founder'}</div>
-                                    <div className="text-xs text-slate-500">{user?.email || 'Free Plan'}</div>
+                                    <div className="text-sm font-bold text-indigo-950 dark:text-slate-200 truncate">{user?.confirmed_at ? user.email.split('@')[0] : 'Founder'}</div>
+                                    <div className="text-xs text-indigo-400 dark:text-slate-500">{user?.email || 'Free Plan'}</div>
                                 </div>
-                                <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-500 hover:text-white hover:bg-white/5">
+                                <Button variant="ghost" size="icon" className="h-8 w-8 text-indigo-300 dark:text-slate-500 hover:text-indigo-600 dark:hover:text-white hover:bg-indigo-50 dark:hover:bg-white/5">
                                     <Settings className="w-4 h-4" />
                                 </Button>
                             </div>
@@ -124,7 +124,7 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
 
                     {/* Optional Right Panel */}
                     {sidePanel && (
-                        <aside className="w-96 border-l border-white/5 flex flex-col bg-black/20 backdrop-blur-md">
+                        <aside className="w-96 border-l border-indigo-100 dark:border-white/5 flex flex-col bg-white/40 dark:bg-black/20 backdrop-blur-md">
                             {sidePanel}
                         </aside>
                     )}

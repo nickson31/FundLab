@@ -17,6 +17,7 @@ interface FundCardProps {
     onDraftMessage?: (fund: any) => void;
     onSave?: (fund: any) => void;
     isSaved?: boolean;
+    query?: string;
 }
 
 export default function FundCard({
@@ -25,7 +26,8 @@ export default function FundCard({
     breakdown,
     onDraftMessage,
     onSave,
-    isSaved = false
+    isSaved = false,
+    query
 }: FundCardProps) {
     const [isHovered, setIsHovered] = useState(false);
     const [saved, setSaved] = useState(isSaved);
@@ -125,8 +127,8 @@ export default function FundCard({
     const scoreColor = score >= 0.7 ? 'text-green-400' : score >= 0.5 ? 'text-yellow-400' : 'text-slate-400';
     const scoreBg = score >= 0.7 ? 'bg-green-500/10' : score >= 0.5 ? 'bg-yellow-500/10' : 'bg-slate-500/10';
 
-    // Use Dynamic Layout System
-    const layout = selectDynamicLayout(fund, 'fund');
+    // Use Dynamic Layout System (Scoring Engine)
+    const layout = selectDynamicLayout(fund, 'fund', query);
     const dynamicFields = layout.fields; // Access the fields array
 
     return (
