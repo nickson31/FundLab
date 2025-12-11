@@ -137,7 +137,7 @@ export default function FundCard({
             <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 rounded-2xl opacity-0 group-hover:opacity-100 blur transition-opacity duration-300" />
 
             {/* Main Card */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-5 border border-purple-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-6 border-2 border-purple-200 dark:border-gray-800 shadow-xl shadow-purple-500/10 hover:shadow-2xl hover:shadow-pink-500/20 transition-all duration-300">
 
                 {/* Top Row */}
                 <div className="flex items-start gap-3 md:gap-4">
@@ -193,7 +193,7 @@ export default function FundCard({
                     {categoryTags.map((tag, i) => (
                         <span
                             key={i}
-                            className="px-2.5 py-1 md:px-3 md:py-1 rounded-full text-xs font-medium bg-pink-100 dark:bg-gray-800 text-pink-800 dark:text-gray-300 border border-pink-200 dark:border-gray-700"
+                            className="px-2.5 py-1 md:px-3 md:py-1 rounded-full text-xs font-medium bg-gradient-to-r from-pink-100 to-purple-100 dark:bg-gray-800 text-pink-900 dark:text-gray-300 border border-pink-300 dark:border-gray-700 shadow-sm"
                         >
                             {tag}
                         </span>
