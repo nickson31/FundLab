@@ -206,24 +206,26 @@ export default function FundCard({
                                 >
                                     <div className="pt-4 space-y-4">
                                         {/* AI Reasoning Block */}
-                                        <div className="bg-indigo-50/50 dark:bg-indigo-500/10 rounded-xl p-4 border border-indigo-100 dark:border-indigo-500/20">
-                                            <div className="flex items-center gap-2 mb-2">
-                                                <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
-                                                <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200 uppercase tracking-widest">Why it's a match</span>
+                                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-500/20 dark:to-purple-500/20 rounded-xl p-5 border-2 border-indigo-200 dark:border-indigo-500/30 shadow-lg">
+                                            <div className="flex items-center gap-2 mb-3">
+                                                <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
+                                                    <Sparkles className="w-4 h-4 text-white" />
+                                                </div>
+                                                <span className="text-sm font-bold text-indigo-900 dark:text-indigo-100 uppercase tracking-widest">AI Analysis</span>
                                             </div>
 
                                             {/* Matched Keywords Badge */}
                                             {breakdown?.matched_keywords && breakdown.matched_keywords.length > 0 && (
-                                                <div className="flex flex-wrap gap-2 mb-3 border-b border-indigo-200/30 dark:border-white/10 pb-3">
+                                                <div className="flex flex-wrap gap-2 mb-4">
                                                     {breakdown.matched_keywords.map((kw: string, i: number) => (
-                                                        <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-[10px] font-bold text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
-                                                            <Zap className="w-3 h-3 text-indigo-500" />
+                                                        <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-black/30 text-xs font-bold text-indigo-700 dark:text-indigo-200 border-2 border-indigo-300 dark:border-indigo-500/50 shadow-md">
+                                                            <Zap className="w-4 h-4 text-indigo-500" />
                                                             {kw}
                                                         </span>
                                                     ))}
                                                 </div>
                                             )}
-                                            <p className="text-sm text-indigo-900/80 dark:text-indigo-200/80 leading-relaxed">
+                                            <p className="text-sm text-indigo-900 dark:text-indigo-100 leading-relaxed font-medium">
                                                 {breakdown?.reasoning || fund.reasoning || "High alignment with your vertical and stage. This fund has explicitly expressed interest in this sector recently."}
                                             </p>
                                         </div>
