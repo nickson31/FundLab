@@ -2,8 +2,9 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Sparkles, ArrowRight, Menu, X } from 'lucide-react';
+import { Sparkles, Menu, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { ModeToggle } from '@/components/mode-toggle';
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function Navbar() {
@@ -29,6 +30,7 @@ export default function Navbar() {
 
                 {/* Desktop CTA */}
                 <div className="hidden sm:flex items-center gap-4">
+                    <ModeToggle />
                     <Link href="/login" className="text-sm font-medium text-blue-400 hover:text-white transition-colors">Log in</Link>
                     <Button size="sm" className="bg-white text-black hover:bg-blue-100 font-bold rounded-full px-6 shadow-xl shadow-white/5" asChild>
                         <Link href="/chat">
