@@ -368,12 +368,12 @@ export default function ChatPage() {
                         </div>
                     )}
 
-                    <div className="relative flex items-center bg-white dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-gray-200 dark:border-white/10 px-4 py-3 gap-3 shadow-lg dark:shadow-none">
-                        <Button size="icon" variant="ghost" className="text-gray-400 hover:text-gray-600 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/10 rounded-xl" type="button">
+                    <div className="relative flex items-center bg-white dark:bg-white/5 backdrop-blur-xl rounded-2xl border border-blue-200 dark:border-white/10 px-3 md:px-4 py-2 md:py-3 gap-2 md:gap-3 shadow-lg dark:shadow-none">
+                        <Button size="icon" variant="ghost" className="text-blue-400 hover:text-blue-600 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-white/10 rounded-xl min-h-[44px] min-w-[44px]" type="button">
                             <MoreHorizontal className="w-5 h-5" />
                         </Button>
                         <input
-                            className="flex-1 bg-transparent border-none focus:ring-0 text-gray-900 dark:text-white placeholder-gray-400 dark:placeholder-gray-500 text-base py-2"
+                            className="flex-1 bg-transparent border-none focus:ring-0 text-blue-900 dark:text-white placeholder-blue-400 dark:placeholder-gray-500 text-base py-2 md:py-2"
                             placeholder="Ask FundLab to find investors..."
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
@@ -381,14 +381,14 @@ export default function ChatPage() {
                         <Button
                             type="submit"
                             disabled={!query.trim() || isLoading}
-                            className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl px-4 py-2 shadow-lg shadow-indigo-500/20 transition-all"
+                            className="bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl px-4 md:px-4 py-2 md:py-2 min-h-[44px] shadow-lg shadow-indigo-500/20 transition-all"
                         >
-                            <Send className="w-4 h-4 mr-2" />
-                            <span>Send</span>
+                            <Send className="w-4 h-4 mr-0 md:mr-2" />
+                            <span className="hidden md:inline">Send</span>
                         </Button>
                     </div>
                 </form>
-                <p className="text-center text-[10px] text-gray-500 dark:text-gray-600 mt-3">FundLab AI can make mistakes. Verify important info.</p>
+                <p className="text-center text-[10px] md:text-[10px] text-blue-600 dark:text-gray-600 mt-2 md:mt-3">FundLab AI can make mistakes. Verify important info.</p>
             </div>
 
             <MessageModal

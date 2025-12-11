@@ -120,13 +120,13 @@ export default function InvestorCard({
             <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 rounded-2xl opacity-0 group-hover:opacity-100 blur transition-opacity duration-300" />
 
             {/* Main Card */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-5 border border-blue-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-4 md:p-5 border border-blue-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300">
 
                 {/* Top Row */}
-                <div className="flex items-start gap-4">
+                <div className="flex items-start gap-3 md:gap-4">
                     {/* Avatar */}
                     <div className="relative">
-                        <Avatar className="h-14 w-14 border-2 border-blue-100 dark:border-gray-800 shadow-sm">
+                        <Avatar className="h-12 w-12 md:h-14 md:w-14 border-2 border-blue-100 dark:border-gray-800 shadow-sm">
                             <AvatarImage src={profilePic || undefined} alt={name} className="object-cover" />
                             <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg">
                                 {getInitials(name)}
@@ -138,10 +138,10 @@ export default function InvestorCard({
 
                     {/* Name & Info */}
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold text-blue-900 dark:text-white truncate">
+                        <h3 className="text-base md:text-lg font-bold text-blue-900 dark:text-white truncate">
                             {name}
                         </h3>
-                        <p className="text-sm text-blue-800 dark:text-gray-400 truncate mt-0.5">
+                        <p className="text-sm md:text-sm text-blue-800 dark:text-gray-400 truncate mt-0.5">
                             {headline?.slice(0, 60) || 'Investor'}
                         </p>
                         {location && (
@@ -154,13 +154,13 @@ export default function InvestorCard({
 
                     {/* Score Badge */}
                     <div className={cn(
-                        "flex flex-col items-center justify-center w-16 h-16 rounded-xl",
+                        "flex flex-col items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-xl",
                         score >= 0.8 ? "bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800" :
                             score >= 0.6 ? "bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800" :
                                 "bg-blue-50 dark:bg-gray-800 border border-blue-200 dark:border-gray-700"
                     )}>
                         <span className={cn(
-                            "text-2xl font-bold",
+                            "text-xl md:text-2xl font-bold",
                             score >= 0.8 ? "text-emerald-600 dark:text-emerald-400" :
                                 score >= 0.6 ? "text-amber-600 dark:text-amber-400" :
                                     "text-blue-800 dark:text-gray-400"
@@ -170,11 +170,11 @@ export default function InvestorCard({
                 </div>
 
                 {/* Category Tags */}
-                <div className="flex flex-wrap gap-2 mt-4">
+                <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4">
                     {categoryTags.map((tag, i) => (
                         <span
                             key={i}
-                            className="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 dark:bg-gray-800 text-purple-800 dark:text-gray-300 border border-purple-200 dark:border-gray-700"
+                            className="px-2.5 py-1 md:px-3 md:py-1 rounded-full text-xs font-medium bg-purple-100 dark:bg-gray-800 text-purple-800 dark:text-gray-300 border border-purple-200 dark:border-gray-700"
                         >
                             {tag}
                         </span>
@@ -262,7 +262,7 @@ export default function InvestorCard({
                         variant="ghost"
                         size="sm"
                         onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
-                        className="text-blue-700 hover:text-blue-900 dark:text-gray-400 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-white/10 font-medium transition-colors"
+                        className="text-blue-700 hover:text-blue-900 dark:text-gray-400 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-white/10 font-medium transition-colors min-h-[44px] px-4"
                     >
                         {isExpanded ? (
                             <><ChevronUp className="w-4 h-4 mr-1.5" /> Less Info</>
@@ -285,7 +285,7 @@ export default function InvestorCard({
                         <Button
                             size="sm"
                             onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(investor); }}
-                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-full px-5 font-semibold shadow-lg shadow-indigo-500/20 transition-all"
+                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-full px-4 md:px-5 min-h-[44px] font-semibold shadow-lg shadow-indigo-500/20 transition-all"
                         >
                             <Sparkles className="w-3.5 h-3.5 mr-2" />
                             Draft Intro
