@@ -127,76 +127,89 @@ export default function FundCard({
     return (
         <motion.div
             layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -4 }}
-            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            initial={{ opacity: 0, y: 30, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            whileHover={{ y: -8, scale: 1.02 }}
+            transition={{ type: "spring", stiffness: 400, damping: 25 }}
             className="group relative"
         >
-            {/* Gradient Border Effect */}
-            <div className="absolute -inset-[1px] bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 rounded-2xl opacity-0 group-hover:opacity-100 blur-sm transition-all duration-500" />
+            {/* Neon Glow Effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-600 rounded-3xl opacity-0 group-hover:opacity-75 blur-xl transition-all duration-500 animate-pulse" />
 
-            {/* Main Card */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-200 dark:border-gray-800 shadow-lg hover:shadow-2xl transition-all duration-300">
+            {/* Main Card with Bold Design */}
+            <div className="relative bg-gradient-to-br from-white via-blue-50 to-purple-50 dark:from-gray-900 dark:via-blue-950 dark:to-purple-950 rounded-3xl p-6 border-2 border-blue-200 dark:border-blue-800 shadow-2xl hover:shadow-blue-500/50 dark:hover:shadow-blue-500/30 transition-all duration-300">
+
+                {/* Animated Top Accent */}
+                <div className="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-cyan-400 via-blue-500 to-purple-600 rounded-t-3xl animate-gradient-x" />
 
                 {/* Top Row: Logo + Info + Score */}
-                <div className="flex items-start gap-4">
-                    {/* Avatar with Gradient */}
+                <div className="flex items-start gap-5">
+                    {/* Avatar with Neon Ring */}
                     <div className="relative">
-                        <Avatar className="h-14 w-14 border-2 border-white dark:border-gray-800 shadow-xl">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-full blur opacity-75 group-hover:opacity-100 transition-opacity" />
+                        <Avatar className="relative h-16 w-16 border-4 border-white dark:border-gray-900 shadow-2xl ring-2 ring-blue-400">
                             <AvatarImage src={profilePic} alt={name} className="object-cover" />
-                            <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white font-bold text-lg">
+                            <AvatarFallback className="bg-gradient-to-br from-cyan-500 via-blue-600 to-purple-600 text-white font-black text-xl">
                                 {getInitials(name)}
                             </AvatarFallback>
                         </Avatar>
-                        {/* Fund Type Badge */}
-                        <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-indigo-600 rounded-full border-2 border-white dark:border-gray-900 flex items-center justify-center">
-                            <TrendingUp className="w-3 h-3 text-white" />
-                        </div>
+                        {/* Fund Type Badge with Animation */}
+                        <motion.div
+                            animate={{ scale: [1, 1.1, 1] }}
+                            transition={{ repeat: Infinity, duration: 2 }}
+                            className="absolute -bottom-1 -right-1 w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full border-3 border-white dark:border-gray-900 flex items-center justify-center shadow-lg"
+                        >
+                            <TrendingUp className="w-3.5 h-3.5 text-white" />
+                        </motion.div>
                     </div>
 
-                    {/* Name & Description */}
+                    {/* Name & Description with Gradient */}
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate tracking-tight">
+                        <h3 className="text-xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 dark:from-cyan-400 dark:via-blue-400 dark:to-purple-400 bg-clip-text text-transparent truncate tracking-tight">
                             {name}
                         </h3>
-                        <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-1">
+                        <p className="text-sm font-semibold text-gray-700 dark:text-gray-300 line-clamp-1 mt-1">
                             {fund.short_description || description || "Investment Fund"}
                         </p>
                         {location && (
-                            <div className="flex items-center gap-1 mt-1 text-xs text-gray-400">
-                                <MapPin className="w-3 h-3" />
-                                <span>{location}</span>
+                            <div className="flex items-center gap-1.5 mt-2 px-3 py-1 bg-gradient-to-r from-blue-100 to-purple-100 dark:from-blue-900/50 dark:to-purple-900/50 rounded-full w-fit">
+                                <MapPin className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+                                <span className="text-xs font-bold text-blue-700 dark:text-blue-300">{location}</span>
                             </div>
                         )}
                     </div>
 
-                    {/* Score Badge - Premium Gradient Design */}
-                    <div className={cn(
-                        "flex flex-col items-center justify-center w-14 h-14 rounded-xl shadow-lg",
-                        score >= 0.7 ? "bg-gradient-to-br from-green-400 to-emerald-600 text-white" :
-                            score >= 0.5 ? "bg-gradient-to-br from-yellow-400 to-orange-500 text-white" :
-                                "bg-gradient-to-br from-gray-200 to-gray-400 text-gray-700"
-                    )}>
-                        <span className="text-xl font-black leading-none">{Math.round(score * 100)}</span>
-                        <span className="text-[9px] font-bold opacity-80 uppercase tracking-wider">Match</span>
-                    </div>
+                    {/* Score Badge - NEON DESIGN */}
+                    <motion.div
+                        whileHover={{ scale: 1.1, rotate: 5 }}
+                        className={cn(
+                            "relative flex flex-col items-center justify-center w-20 h-20 rounded-2xl shadow-2xl",
+                            score >= 0.7 ? "bg-gradient-to-br from-green-400 via-emerald-500 to-teal-600" :
+                                score >= 0.5 ? "bg-gradient-to-br from-yellow-400 via-orange-500 to-red-500" :
+                                    "bg-gradient-to-br from-gray-400 via-gray-500 to-gray-600"
+                        )}
+                    >
+                        <div className="absolute inset-0 bg-white/20 rounded-2xl animate-pulse" />
+                        <span className="relative text-3xl font-black text-white drop-shadow-lg">{Math.round(score * 100)}</span>
+                        <span className="relative text-[10px] font-black text-white/90 uppercase tracking-widest">MATCH</span>
+                    </motion.div>
                 </div>
 
-                {/* Category Pills - COLORFUL */}
-                <div className="flex flex-wrap gap-2 mt-4">
+                {/* Category Pills - VIBRANT NEON */}
+                <div className="flex flex-wrap gap-2 mt-5">
                     {categoryTags.map((tag, i) => (
-                        <span
+                        <motion.span
                             key={i}
+                            whileHover={{ scale: 1.05, y: -2 }}
                             className={cn(
-                                "px-3 py-1 rounded-full text-xs font-semibold transition-all",
-                                i === 0 ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-500/20 dark:text-indigo-300" :
-                                    i === 1 ? "bg-purple-100 text-purple-700 dark:bg-purple-500/20 dark:text-purple-300" :
-                                        "bg-pink-100 text-pink-700 dark:bg-pink-500/20 dark:text-pink-300"
+                                "px-4 py-2 rounded-full text-xs font-black uppercase tracking-wide shadow-lg transition-all cursor-pointer",
+                                i === 0 ? "bg-gradient-to-r from-cyan-500 to-blue-600 text-white hover:shadow-cyan-500/50" :
+                                    i === 1 ? "bg-gradient-to-r from-purple-500 to-pink-600 text-white hover:shadow-purple-500/50" :
+                                        "bg-gradient-to-r from-orange-500 to-red-600 text-white hover:shadow-orange-500/50"
                             )}
                         >
                             {tag}
-                        </span>
+                        </motion.span>
                     ))}
                 </div>
 
