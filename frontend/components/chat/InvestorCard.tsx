@@ -120,13 +120,13 @@ export default function InvestorCard({
             <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 rounded-2xl opacity-0 group-hover:opacity-100 blur transition-opacity duration-300" />
 
             {/* Main Card */}
-            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-5 border border-gray-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300">
+            <div className="relative bg-white dark:bg-gray-900 rounded-2xl p-5 border border-blue-200 dark:border-gray-800 shadow-md hover:shadow-xl transition-all duration-300">
 
                 {/* Top Row */}
                 <div className="flex items-start gap-4">
                     {/* Avatar */}
                     <div className="relative">
-                        <Avatar className="h-14 w-14 border-2 border-gray-100 dark:border-gray-800 shadow-sm">
+                        <Avatar className="h-14 w-14 border-2 border-blue-100 dark:border-gray-800 shadow-sm">
                             <AvatarImage src={profilePic || undefined} alt={name} className="object-cover" />
                             <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg">
                                 {getInitials(name)}
@@ -138,14 +138,14 @@ export default function InvestorCard({
 
                     {/* Name & Info */}
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate">
+                        <h3 className="text-lg font-bold text-blue-900 dark:text-white truncate">
                             {name}
                         </h3>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 truncate mt-0.5">
+                        <p className="text-sm text-blue-800 dark:text-gray-400 truncate mt-0.5">
                             {headline?.slice(0, 60) || 'Investor'}
                         </p>
                         {location && (
-                            <div className="flex items-center gap-1 mt-1.5 text-xs text-gray-500 dark:text-gray-500">
+                            <div className="flex items-center gap-1 mt-1.5 text-xs text-blue-700 dark:text-gray-500">
                                 <MapPin className="w-3 h-3" />
                                 <span>{location.split(',')[0]}</span>
                             </div>
@@ -157,15 +157,15 @@ export default function InvestorCard({
                         "flex flex-col items-center justify-center w-16 h-16 rounded-xl",
                         score >= 0.8 ? "bg-emerald-50 dark:bg-emerald-950/50 border border-emerald-200 dark:border-emerald-800" :
                             score >= 0.6 ? "bg-amber-50 dark:bg-amber-950/50 border border-amber-200 dark:border-amber-800" :
-                                "bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700"
+                                "bg-blue-50 dark:bg-gray-800 border border-blue-200 dark:border-gray-700"
                     )}>
                         <span className={cn(
                             "text-2xl font-bold",
                             score >= 0.8 ? "text-emerald-600 dark:text-emerald-400" :
                                 score >= 0.6 ? "text-amber-600 dark:text-amber-400" :
-                                    "text-gray-600 dark:text-gray-400"
+                                    "text-blue-800 dark:text-gray-400"
                         )}>{Math.round(score * 100)}</span>
-                        <span className="text-[9px] font-medium text-gray-500 dark:text-gray-500 uppercase">Match</span>
+                        <span className="text-[9px] font-medium text-blue-700 dark:text-gray-500 uppercase">Match</span>
                     </div>
                 </div>
 
@@ -174,7 +174,7 @@ export default function InvestorCard({
                     {categoryTags.map((tag, i) => (
                         <span
                             key={i}
-                            className="px-3 py-1 rounded-full text-xs font-medium bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-700"
+                            className="px-3 py-1 rounded-full text-xs font-medium bg-purple-100 dark:bg-gray-800 text-purple-800 dark:text-gray-300 border border-purple-200 dark:border-gray-700"
                         >
                             {tag}
                         </span>
@@ -262,7 +262,7 @@ export default function InvestorCard({
                         variant="ghost"
                         size="sm"
                         onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
-                        className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/10 font-medium transition-colors"
+                        className="text-blue-700 hover:text-blue-900 dark:text-gray-400 dark:hover:text-white hover:bg-blue-50 dark:hover:bg-white/10 font-medium transition-colors"
                     >
                         {isExpanded ? (
                             <><ChevronUp className="w-4 h-4 mr-1.5" /> Less Info</>
