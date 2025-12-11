@@ -127,178 +127,207 @@ export default function FundCard({
     return (
         <motion.div
             layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
+            initial={{ opacity: 0, scale: 0.98, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            whileHover={{ scale: 1.002, translateY: -2 }}
             className="group relative"
         >
-            {/* Hover glow effect */}
-            <div className="absolute inset-0 bg-gradient-to-b from-black/[0.02] to-black/[0.01] dark:from-white/[0.07] dark:to-white/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Ambient Glow */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-purple-500/5 to-pink-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl" />
 
-            {/* Main card */}
-            <div className="relative bg-white/80 dark:bg-black/40 backdrop-blur-md border border-gray-200/50 dark:border-white/[0.08] rounded-2xl p-4 md:p-6 hover:border-gray-300 dark:hover:border-white/[0.15] transition-all duration-500 overflow-hidden shadow-sm dark:shadow-none">
+            {/* Main Card */}
+            <div className="relative bg-white dark:bg-black/40 backdrop-blur-3xl border border-gray-100 dark:border-white/10 rounded-3xl p-6 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 overflow-hidden">
 
-                {/* Header */}
-                <div className="flex items-start gap-4 mb-4 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
-                    {/* Logo */}
-                    <Avatar className="h-12 w-12 md:h-14 md:w-14 border-2 border-gray-200 dark:border-white/10 ring-2 ring-purple-500/10 dark:ring-purple-500/20 shrink-0">
-                        <AvatarImage src={profilePic} alt={name} />
-                        <AvatarFallback className="bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-500/20 dark:to-pink-500/20 text-purple-700 dark:text-white font-semibold">
-                            {getInitials(name)}
-                        </AvatarFallback>
-                    </Avatar>
+                {/* Decorative Top Line */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    {/* Name & Score */}
-                    <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start">
-                            <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white truncate mb-1 pr-2">
-                                {name}
-                            </h3>
-                            <div className={cn(
-                                "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold shrink-0",
-                                scoreBg, scoreColor
-                            )}>
-                                <TrendingUp className="w-3 h-3" />
-                                {Math.round(score * 100)}%
-                            </div>
+                <div className="flex gap-5">
+                    {/* Left Column: Logo & Score */}
+                    <div className="flex flex-col items-center gap-3 shrink-0">
+                        <Avatar className="h-16 w-16 border-2 border-white dark:border-white/10 shadow-lg ring-4 ring-gray-50 dark:ring-white/5">
+                            <AvatarImage src={profilePic} alt={name} className="object-cover" />
+                            <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 text-indigo-700 dark:text-indigo-200 font-bold text-lg">
+                                {getInitials(name)}
+                            </AvatarFallback>
+                        </Avatar>
+
+                        <div className={cn(
+                            "flex flex-col items-center justify-center w-12 h-12 rounded-2xl border backdrop-blur-md shadow-inner",
+                            score >= 0.7 ? "bg-green-500/10 border-green-500/20 text-green-600 dark:text-green-400" :
+                                score >= 0.5 ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-600 dark:text-yellow-400" :
+                                    "bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-500"
+                        )}>
+                            <span className="text-xs font-bold leading-none">{Math.round(score * 100)}</span>
+                            <span className="text-[9px] font-medium opacity-70 leading-none">FIT</span>
                         </div>
-
-                        {/* Summary / Short Description */}
-                        <p className={cn("text-xs md:text-sm text-gray-500 dark:text-gray-400 transition-all", isExpanded ? "" : "line-clamp-2")}>
-                            {(fund.short_description) || description}
-                        </p>
                     </div>
-                </div>
 
-                {/* Location & Tags (Always visible) */}
-                <div className="mb-4">
-                    {location && (
-                        <div className="flex items-center gap-2 text-xs text-gray-500 dark:text-gray-400 mb-2">
-                            <MapPin className="w-3 h-3" />
-                            <span className="truncate">{location}</span>
-                        </div>
-                    )}
-                    <div className="flex flex-wrap gap-1.5">
-                        {categoryTags.map((tag, i) => (
-                            <Badge key={i} variant="secondary" className="bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-300 border-gray-200 dark:border-white/10 text-xs px-2 py-0.5">{tag}</Badge>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Expanded Content */}
-                <div className={cn("grid transition-all duration-300 ease-in-out", isExpanded ? "grid-rows-[1fr] opacity-100 mb-4" : "grid-rows-[0fr] opacity-0")}>
-                    <div className="overflow-hidden space-y-3">
-                        <div className="grid grid-cols-2 gap-4 p-4 bg-gray-50 dark:bg-white/5 rounded-xl border border-gray-100 dark:border-white/5">
-                            <div>
-                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Ticket Size</p>
-                                <p className="text-sm text-gray-900 dark:text-white font-medium">{ticketSize}</p>
-                            </div>
-                            <div>
-                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">AUM</p>
-                                <p className="text-sm text-gray-900 dark:text-white font-medium">{aum}</p>
-                            </div>
-                            <div className="col-span-2">
-                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Sweet Spot</p>
-                                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed">{sweetSpot}</p>
-                            </div>
-
-                            {/* Contact Info */}
-                            {(fund.contact_email || fund.phone_number) && (
-                                <div className="col-span-2 pt-2 border-t border-gray-200 dark:border-white/10 mt-1">
-                                    <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Contact</p>
-                                    <div className="flex flex-col gap-1">
-                                        {fund.contact_email && (
-                                            <span className="text-xs text-indigo-600 dark:text-indigo-400 font-medium select-text">{fund.contact_email}</span>
-                                        )}
-                                        {fund.phone_number && (
-                                            <span className="text-xs text-gray-500 dark:text-gray-400 select-text">{fund.phone_number}</span>
-                                        )}
-                                    </div>
+                    {/* Right Column: Content */}
+                    <div className="flex-1 min-w-0 space-y-3">
+                        {/* Header */}
+                        <div>
+                            <div className="flex justify-between items-start">
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white truncate pr-2 tracking-tight">
+                                    {name}
+                                </h3>
+                                {/* Mobile Actions */}
+                                <div className="flex gap-1 md:hidden">
+                                    {/* Simplified generic actions for mobile if needed */}
                                 </div>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                {/* Employee Toggle (Conditional) */}
-                {hasEmployees && (
-                    <>
-                        <button
-                            onClick={() => setShowEmployees(!showEmployees)}
-                            className="w-full flex items-center justify-between px-3 py-2 mb-3 rounded-lg bg-gray-50 dark:bg-white/5 hover:bg-gray-100 dark:hover:bg-white/10 border border-gray-200 dark:border-white/10 transition-colors"
-                        >
-                            <div className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
-                                <Users className="w-4 h-4" />
-                                <span>Team Members</span>
                             </div>
-                            {showEmployees ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
-                        </button>
+                            <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mt-1 font-medium">
+                                {(fund.short_description) || description}
+                            </p>
+                        </div>
 
-                        {/* Employees List */}
-                        {showEmployees && (
-                            <div className="mb-4 space-y-2 animate-[fadeIn_0.3s_ease-out]">
-                                {loadingEmployees ? (
-                                    <div className="text-center text-sm text-gray-400 py-2">Loading...</div>
-                                ) : employees.length > 0 ? (
-                                    employees.map((emp, i) => (
-                                        <div key={i} className="flex items-center gap-2 p-2 rounded-lg bg-gray-50 dark:bg-white/5">
-                                            <Avatar className="h-8 w-8">
-                                                <AvatarImage src={emp.profilePic || emp.photo_url || (emp.data && emp.data.profilePic)} />
-                                                <AvatarFallback className="text-xs bg-indigo-100 dark:bg-indigo-500/20 text-indigo-700 dark:text-indigo-200">
-                                                    {getInitials(emp.fullName || emp.name || (emp.data && emp.data.name) || 'UN')}
-                                                </AvatarFallback>
-                                            </Avatar>
-                                            <div className="flex-1 min-w-0">
-                                                <p className="text-sm text-gray-900 dark:text-white truncate">{emp.fullName || emp.name || (emp.data && emp.data.name)}</p>
-                                                <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{emp.title || emp.position || (emp.data && emp.data.headline)}</p>
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2">
+                            {location && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-gray-50 dark:bg-white/5 text-xs font-semibold text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-white/5">
+                                    <MapPin className="w-3 h-3 text-indigo-500" />
+                                    {location}
+                                </span>
+                            )}
+                            {categoryTags.map((tag, i) => (
+                                <Badge key={i} variant="outline" className="bg-transparent border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-400 text-xs font-medium px-2.5 py-1">
+                                    {tag}
+                                </Badge>
+                            ))}
+                        </div>
+
+                        {/* Enhanced Expanded Content */}
+                        <AnimatePresence>
+                            {isExpanded && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="overflow-hidden"
+                                >
+                                    <div className="pt-4 space-y-4">
+                                        {/* AI Reasoning Block */}
+                                        <div className="bg-indigo-50/50 dark:bg-indigo-500/10 rounded-xl p-4 border border-indigo-100 dark:border-indigo-500/20">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                                                <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200 uppercase tracking-widest">Why it's a match</span>
+                                            </div>
+                                            <p className="text-sm text-indigo-900/80 dark:text-indigo-200/80 leading-relaxed">
+                                                {breakdown?.reasoning || fund.reasoning || "High alignment with your vertical and stage. This fund has explicitly expressed interest in this sector recently."}
+                                            </p>
+                                        </div>
+
+                                        {/* Stats Grid */}
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
+                                                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Ticket Size</p>
+                                                <p className="text-sm font-semibold text-gray-900 dark:text-white">{ticketSize}</p>
+                                            </div>
+                                            <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
+                                                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">AUM</p>
+                                                <p className="text-sm font-semibold text-gray-900 dark:text-white">{aum}</p>
                                             </div>
                                         </div>
-                                    ))
-                                ) : (
-                                    <div className="text-center text-sm text-gray-400 py-2">No team members found</div>
-                                )}
-                            </div>
-                        )}
-                    </>
-                )}
 
-                {/* Actions */}
-                <div className="flex gap-2 pt-2 border-t border-gray-100 dark:border-white/5 mt-auto">
-                    <Button
-                        onClick={() => onDraftMessage && onDraftMessage(fund)}
-                        className="flex-1 bg-purple-600 hover:bg-purple-500 text-white text-sm h-9 md:h-10 shadow-lg shadow-purple-900/20"
-                    >
-                        Draft Message
-                    </Button>
+                                        {/* Sweet Spot */}
+                                        <div>
+                                            <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-2">Investment Sweet Spot</p>
+                                            <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-black/20 p-3 rounded-lg border-l-2 border-purple-500">
+                                                {sweetSpot}
+                                            </p>
+                                        </div>
 
-                    <Button
-                        variant="ghost"
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300 h-9 md:h-10 px-4"
-                    >
-                        {isExpanded ? 'Less' : 'More'}
-                    </Button>
+                                        {/* Team Section */}
+                                        {hasEmployees && (
+                                            <div className="pt-2">
+                                                <button
+                                                    onClick={(e) => { e.stopPropagation(); setShowEmployees(!showEmployees); }}
+                                                    className="flex items-center gap-2 text-xs font-semibold text-gray-500 hover:text-indigo-500 transition-colors mb-3"
+                                                >
+                                                    <Users className="w-3.5 h-3.5" />
+                                                    {showEmployees ? 'Hide Team' : 'View Key Decision Makers'}
+                                                </button>
 
-                    {(linkedinUrl || websiteUrl) && (
-                        <Button
-                            variant="outline"
-                            size="icon"
-                            className="border-gray-200 dark:border-white/10 hover:border-gray-300 dark:hover:border-white/20 hover:bg-gray-100 dark:hover:bg-white/5 h-9 w-9 md:h-10 md:w-10 shrink-0"
-                            onClick={() => window.open(linkedinUrl || websiteUrl, '_blank')}
-                        >
-                            {linkedinUrl ? (
-                                <Linkedin className="w-4 h-4 text-blue-600 dark:text-blue-400" />
-                            ) : (
-                                <ExternalLink className="w-4 h-4 text-gray-400" />
+                                                <AnimatePresence>
+                                                    {showEmployees && (
+                                                        <motion.div
+                                                            initial={{ opacity: 0, y: -10 }}
+                                                            animate={{ opacity: 1, y: 0 }}
+                                                            className="grid gap-2"
+                                                        >
+                                                            {loadingEmployees ? (
+                                                                <div className="text-xs text-gray-400 flex items-center gap-2">
+                                                                    <div className="w-3 h-3 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
+                                                                    Fetching team...
+                                                                </div>
+                                                            ) : employees.length > 0 ? (
+                                                                employees.map((emp, i) => (
+                                                                    <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-gray-50 dark:hover:bg-white/5 transition-colors group/emp">
+                                                                        <Avatar className="h-8 w-8">
+                                                                            <AvatarImage src={emp.profilePic || emp.photo_url} />
+                                                                            <AvatarFallback className="text-[10px] bg-indigo-50 text-indigo-600 dark:bg-indigo-500/20 dark:text-indigo-300">
+                                                                                {getInitials(emp.fullName || emp.name)}
+                                                                            </AvatarFallback>
+                                                                        </Avatar>
+                                                                        <div className="flex-1 min-w-0">
+                                                                            <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{emp.fullName || emp.name}</p>
+                                                                            <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{emp.title || emp.position}</p>
+                                                                        </div>
+                                                                        <Button size="icon" variant="ghost" className="h-6 w-6 opacity-0 group-hover/emp:opacity-100 transition-opacity">
+                                                                            <Linkedin className="w-3 h-3 text-blue-500" />
+                                                                        </Button>
+                                                                    </div>
+                                                                ))
+                                                            ) : (
+                                                                <div className="text-xs text-gray-400 italic">No public team data available.</div>
+                                                            )}
+                                                        </motion.div>
+                                                    )}
+                                                </AnimatePresence>
+                                            </div>
+                                        )}
+                                    </div>
+                                </motion.div>
                             )}
-                        </Button>
-                    )}
+                        </AnimatePresence>
+                    </div>
                 </div>
 
-                {/* Subtle bottom indicator */}
-                <div className="absolute bottom-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-purple-500/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                {/* Footer Actions */}
+                <div className="mt-5 pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between gap-3">
+                    <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
+                        className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 font-medium transition-colors"
+                    >
+                        {isExpanded ? (
+                            <><ChevronUp className="w-4 h-4 mr-1.5" /> Less Info</>
+                        ) : (
+                            <><ChevronDown className="w-4 h-4 mr-1.5" /> Deep Dive</>
+                        )}
+                    </Button>
+
+                    <div className="flex gap-2">
+                        {(linkedinUrl || websiteUrl) && (
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-9 w-9 p-0 rounded-full border-gray-200 dark:border-white/10"
+                                onClick={(e) => { e.stopPropagation(); window.open(linkedinUrl || websiteUrl, '_blank'); }}
+                            >
+                                {linkedinUrl ? <Linkedin className="w-4 h-4 text-[#0077b5]" /> : <ExternalLink className="w-4 h-4 text-gray-400" />}
+                            </Button>
+                        )}
+                        <Button
+                            size="sm"
+                            onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(fund); }}
+                            className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-5 font-semibold shadow-lg shadow-indigo-500/0 hover:shadow-indigo-500/20 transition-all"
+                        >
+                            <Sparkles className="w-3.5 h-3.5 mr-2" />
+                            Draft Intro
+                        </Button>
+                    </div>
+                </div>
             </div>
         </motion.div>
     );

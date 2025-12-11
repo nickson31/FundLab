@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Linkedin, MapPin, TrendingUp, Sparkles, CheckCircle2 } from 'lucide-react';
+import { Linkedin, MapPin, TrendingUp, Sparkles, CheckCircle2, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Investor, MatchBreakdown, AngelInvestor, InvestmentFund, FundEmployee } from '@/types/investor';
 
@@ -108,132 +108,168 @@ export default function InvestorCard({
     return (
         <motion.div
             layout
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            onMouseEnter={() => setIsHovered(true)}
-            onMouseLeave={() => setIsHovered(false)}
-            className="group relative h-auto"
+            initial={{ opacity: 0, scale: 0.98, y: 10 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            whileHover={{ scale: 1.002, translateY: -2 }}
+            className="group relative"
         >
-            <div className="absolute inset-0 bg-gradient-to-b from-black/[0.02] to-black/[0.01] dark:from-white/[0.07] dark:to-white/[0.02] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            {/* Ambient Glow */}
+            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-purple-500/5 to-pink-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-all duration-700 blur-xl" />
 
-            <div className="relative flex flex-col h-full bg-white/80 dark:bg-black/40 backdrop-blur-md border border-gray-200/50 dark:border-white/[0.08] rounded-2xl p-5 hover:border-gray-300 dark:hover:border-white/[0.15] transition-all duration-500 overflow-hidden shadow-sm dark:shadow-none">
+            {/* Main Card */}
+            <div className="relative bg-white dark:bg-black/40 backdrop-blur-3xl border border-gray-100 dark:border-white/10 rounded-3xl p-6 shadow-sm hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-500 overflow-hidden">
 
-                {/* Header */}
-                <div className="flex items-start gap-4 mb-4 cursor-pointer" onClick={() => setIsExpanded(!isExpanded)}>
-                    <Avatar className="h-12 w-12 border border-gray-200 dark:border-white/10 shrink-0">
-                        <AvatarImage src={profilePic || undefined} alt={name} />
-                        <AvatarFallback className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-200 font-medium text-sm">
-                            {getInitials(name)}
-                        </AvatarFallback>
-                    </Avatar>
+                {/* Decorative Top Line */}
+                <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
-                    <div className="flex-1 min-w-0">
-                        <div className="flex justify-between items-start">
-                            <h3 className="text-base md:text-lg font-bold text-gray-900 dark:text-white truncate mb-1 pr-2">
-                                {name}
-                            </h3>
-                            <div className={cn(
-                                "flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold shrink-0",
-                                scoreBg, scoreColor
-                            )}>
-                                <TrendingUp className="w-3 h-3" />
-                                {Math.round(score * 100)}%
-                            </div>
+                <div className="flex gap-5">
+                    {/* Left Column: Avatar & Score */}
+                    <div className="flex flex-col items-center gap-3 shrink-0">
+                        <Avatar className="h-16 w-16 border-2 border-white dark:border-white/10 shadow-lg ring-4 ring-gray-50 dark:ring-white/5">
+                            <AvatarImage src={profilePic} alt={name} className="object-cover" />
+                            <AvatarFallback className="bg-gradient-to-br from-indigo-100 to-purple-100 dark:from-indigo-900/50 dark:to-purple-900/50 text-indigo-700 dark:text-indigo-200 font-bold text-lg">
+                                {getInitials(name)}
+                            </AvatarFallback>
+                        </Avatar>
+
+                        <div className={cn(
+                            "flex flex-col items-center justify-center w-12 h-12 rounded-2xl border backdrop-blur-md shadow-inner",
+                            score >= 0.8 ? "bg-green-500/10 border-green-500/20 text-green-600 dark:text-green-400" :
+                                score >= 0.6 ? "bg-yellow-500/10 border-yellow-500/20 text-yellow-600 dark:text-yellow-400" :
+                                    "bg-gray-100 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-500"
+                        )}>
+                            <span className="text-xs font-bold leading-none">{Math.round(score * 100)}</span>
+                            <span className="text-[9px] font-medium opacity-70 leading-none">FIT</span>
                         </div>
-                        <p className={cn("text-xs md:text-sm text-gray-500 dark:text-gray-400 transition-all", isExpanded ? "" : "line-clamp-2")}>
-                            {isExpanded ? fullDescription : displaySummary}
-                        </p>
                     </div>
-                </div>
 
-                {/* Validation Reasons */}
-                {reasons.length > 0 && (
-                    <div className="mb-4 space-y-1.5">
-                        {reasons.slice(0, isExpanded ? 4 : 2).map((reason, i) => (
-                            <div key={i} className="flex gap-2 text-xs text-gray-600 dark:text-gray-300 items-start">
-                                <CheckCircle2 className="w-3.5 h-3.5 text-indigo-500 dark:text-indigo-400/80 shrink-0 mt-0.5" />
-                                <span className="opacity-90 leading-tight">{reason}</span>
+                    {/* Right Column: Content */}
+                    <div className="flex-1 min-w-0 space-y-3">
+                        {/* Header */}
+                        <div>
+                            <div className="flex justify-between items-start">
+                                <h3 className="text-xl font-bold text-gray-900 dark:text-white truncate pr-2 tracking-tight">
+                                    {name}
+                                </h3>
                             </div>
-                        ))}
-                    </div>
-                )}
-
-                {/* Expanded Content */}
-                <div className={cn("grid transition-all duration-300 ease-in-out", isExpanded ? "grid-rows-[1fr] opacity-100 mb-4" : "grid-rows-[0fr] opacity-0")}>
-                    <div className="overflow-hidden space-y-3">
-                        {/* Bio / About */}
-                        {('about' in investor) && (investor as any).about && (
-                            <div className="bg-gray-50 dark:bg-white/5 rounded-lg p-3 border border-gray-100 dark:border-white/5">
-                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">About</p>
-                                <p className="text-xs text-gray-700 dark:text-gray-300 leading-relaxed line-clamp-4 hover:line-clamp-none transition-all">
-                                    {(investor as any).about}
-                                </p>
-                            </div>
-                        )}
-
-                        <div className="bg-gray-50 dark:bg-white/5 rounded-lg p-3 border border-gray-100 dark:border-white/5">
-                            <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Recent Investments & Portfolio</p>
-                            <p className="text-xs text-gray-700 dark:text-white leading-relaxed">
-                                {recentInvestments ||
-                                    (('portfolio_companies' in investor && Array.isArray((investor as any).portfolio_companies))
-                                        ? (investor as any).portfolio_companies.join(', ')
-                                        : 'No public investments listed.')}
+                            <p className="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 leading-relaxed mt-1 font-medium">
+                                {isExpanded ? fullDescription : displaySummary}
                             </p>
                         </div>
 
-                        <div className="flex gap-4">
-                            <div className="flex-1 bg-gray-50 dark:bg-white/5 rounded-lg p-3 border border-gray-100 dark:border-white/5">
-                                <p className="text-[10px] uppercase tracking-wider text-gray-500 font-medium mb-1">Ticket Size</p>
-                                <p className="text-xs text-gray-900 dark:text-white font-medium">{ticketSize}</p>
-                            </div>
+                        {/* Tags */}
+                        <div className="flex flex-wrap gap-2">
+                            {location && (
+                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md bg-gray-50 dark:bg-white/5 text-xs font-semibold text-gray-600 dark:text-gray-300 border border-gray-100 dark:border-white/5">
+                                    <MapPin className="w-3 h-3 text-indigo-500" />
+                                    {location.split(',')[0]}
+                                </span>
+                            )}
+                            {categoryTags.map((tag, i) => (
+                                <Badge key={i} variant="outline" className="bg-transparent border-gray-200 dark:border-white/10 text-gray-500 dark:text-gray-400 text-xs font-medium px-2.5 py-1">
+                                    {tag}
+                                </Badge>
+                            ))}
                         </div>
+
+                        {/* Enhanced Expanded Content */}
+                        <AnimatePresence>
+                            {isExpanded && (
+                                <motion.div
+                                    initial={{ height: 0, opacity: 0 }}
+                                    animate={{ height: "auto", opacity: 1 }}
+                                    exit={{ height: 0, opacity: 0 }}
+                                    className="overflow-hidden"
+                                >
+                                    <div className="pt-4 space-y-4">
+                                        {/* AI Reasoning Block */}
+                                        <div className="bg-indigo-50/50 dark:bg-indigo-500/10 rounded-xl p-4 border border-indigo-100 dark:border-indigo-500/20">
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
+                                                <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200 uppercase tracking-widest">Why it's a match</span>
+                                            </div>
+
+                                            {reasons.length > 0 ? (
+                                                <div className="space-y-2">
+                                                    {reasons.map((reason, i) => (
+                                                        <div key={i} className="flex gap-2 text-sm text-indigo-900/80 dark:text-indigo-200/80 leading-relaxed items-start">
+                                                            <CheckCircle2 className="w-4 h-4 text-indigo-500 shrink-0 mt-0.5" />
+                                                            <span>{reason}</span>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            ) : (
+                                                <p className="text-sm text-indigo-900/80 dark:text-indigo-200/80 leading-relaxed">
+                                                    {breakdown?.reasoning || "High alignment based on investment history and sector focus."}
+                                                </p>
+                                            )}
+                                        </div>
+
+                                        {/* Stats Grid */}
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
+                                                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Ticket Size</p>
+                                                <p className="text-sm font-semibold text-gray-900 dark:text-white">{ticketSize}</p>
+                                            </div>
+                                            <div className="p-3 bg-gray-50 dark:bg-white/5 rounded-lg border border-gray-100 dark:border-white/5">
+                                                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-1">Recent Activity</p>
+                                                <p className="text-xs font-medium text-gray-900 dark:text-white leading-relaxed line-clamp-2">
+                                                    {recentInvestments || "No recent public deals listed."}
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        {/* Bio / About */}
+                                        {('about' in investor) && (investor as any).about && (
+                                            <div>
+                                                <p className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mb-2">About</p>
+                                                <p className="text-sm text-gray-600 dark:text-gray-300 leading-relaxed bg-gray-50 dark:bg-black/20 p-3 rounded-lg border-l-2 border-purple-500">
+                                                    {(investor as any).about}
+                                                </p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </motion.div>
+                            )}
+                        </AnimatePresence>
                     </div>
                 </div>
 
-                <div className="flex-1" />
-
-                {/* Tags */}
-                <div className="flex flex-wrap gap-1.5 mb-4">
-                    {categoryTags.map((tag, i) => (
-                        <Badge key={i} variant="secondary" className="bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 border-gray-200 dark:border-white/5 text-[10px] px-1.5 h-5 font-normal">
-                            {tag}
-                        </Badge>
-                    ))}
-                    {location && (
-                        <div className="flex items-center gap-1 text-[10px] text-gray-400 ml-auto pt-1">
-                            <MapPin className="w-3 h-3" />
-                            <span className="truncate max-w-[80px]">{location.split(',')[0]}</span>
-                        </div>
-                    )}
-                </div>
-
-                {/* Actions */}
-                <div className="flex gap-2 mt-auto pt-3 border-t border-gray-100 dark:border-white/5">
-                    <Button
-                        onClick={() => onDraftMessage?.(investor)}
-                        className="flex-1 h-8 text-xs bg-indigo-600 hover:bg-indigo-500 text-white shadow-lg shadow-indigo-900/20"
-                    >
-                        Draft Message
-                    </Button>
-
+                {/* Footer Actions */}
+                <div className="mt-5 pt-4 border-t border-gray-100 dark:border-white/5 flex items-center justify-between gap-3">
                     <Button
                         variant="ghost"
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="bg-gray-100 dark:bg-white/5 hover:bg-gray-200 dark:hover:bg-white/10 text-gray-600 dark:text-gray-300 h-8 px-3 text-xs"
+                        size="sm"
+                        onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
+                        className="text-gray-500 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white hover:bg-gray-50 dark:hover:bg-white/5 font-medium transition-colors"
                     >
-                        {isExpanded ? 'Less' : 'More'}
+                        {isExpanded ? (
+                            <><ChevronUp className="w-4 h-4 mr-1.5" /> Less Info</>
+                        ) : (
+                            <><ChevronDown className="w-4 h-4 mr-1.5" /> Deep Dive</>
+                        )}
                     </Button>
 
-                    {linkedinUrl && (
+                    <div className="flex gap-2">
+                        {(linkedinUrl) && (
+                            <Button
+                                size="sm"
+                                variant="outline"
+                                className="h-9 w-9 p-0 rounded-full border-gray-200 dark:border-white/10"
+                                onClick={(e) => { e.stopPropagation(); window.open(linkedinUrl, '_blank'); }}
+                            >
+                                <Linkedin className="w-4 h-4 text-[#0077b5]" />
+                            </Button>
+                        )}
                         <Button
-                            size="icon"
-                            variant="ghost"
-                            className="h-8 w-8 rounded-full hover:bg-gray-100 dark:hover:bg-white/10 shrink-0"
-                            onClick={() => window.open(linkedinUrl, '_blank')}
+                            size="sm"
+                            onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(investor); }}
+                            className="bg-black dark:bg-white text-white dark:text-black hover:bg-gray-800 dark:hover:bg-gray-200 rounded-full px-5 font-semibold shadow-lg shadow-indigo-500/0 hover:shadow-indigo-500/20 transition-all"
                         >
-                            <Linkedin className="w-3.5 h-3.5 text-gray-400" />
+                            <Sparkles className="w-3.5 h-3.5 mr-2" />
+                            Draft Intro
                         </Button>
-                    )}
+                    </div>
                 </div>
             </div>
         </motion.div>
