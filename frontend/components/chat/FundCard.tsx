@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Linkedin, MapPin, TrendingUp, Sparkles, ChevronDown, ChevronUp, Users } from 'lucide-react';
+import { ExternalLink, Linkedin, MapPin, TrendingUp, Sparkles, ChevronDown, ChevronUp, Users, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 
@@ -211,6 +211,18 @@ export default function FundCard({
                                                 <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                                                 <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200 uppercase tracking-widest">Why it's a match</span>
                                             </div>
+
+                                            {/* Matched Keywords Badge */}
+                                            {breakdown?.matched_keywords && breakdown.matched_keywords.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 mb-3 border-b border-indigo-200/30 dark:border-white/10 pb-3">
+                                                    {breakdown.matched_keywords.map((kw, i) => (
+                                                        <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-[10px] font-bold text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
+                                                            <Zap className="w-3 h-3 text-indigo-500" />
+                                                            {kw}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
                                             <p className="text-sm text-indigo-900/80 dark:text-indigo-200/80 leading-relaxed">
                                                 {breakdown?.reasoning || fund.reasoning || "High alignment with your vertical and stage. This fund has explicitly expressed interest in this sector recently."}
                                             </p>

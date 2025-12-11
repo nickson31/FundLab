@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Linkedin, MapPin, TrendingUp, Sparkles, CheckCircle2, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { Linkedin, MapPin, TrendingUp, Sparkles, CheckCircle2, ChevronDown, ChevronUp, ExternalLink, Zap } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Investor, MatchBreakdown, AngelInvestor, InvestmentFund, FundEmployee } from '@/types/investor';
 
@@ -189,6 +189,18 @@ export default function InvestorCard({
                                                 <Sparkles className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                                                 <span className="text-xs font-bold text-indigo-900 dark:text-indigo-200 uppercase tracking-widest">Why it's a match</span>
                                             </div>
+
+                                            {/* Matched Keywords Badge */}
+                                            {breakdown?.matched_keywords && breakdown.matched_keywords.length > 0 && (
+                                                <div className="flex flex-wrap gap-2 mb-3 border-b border-indigo-200/30 dark:border-white/10 pb-3">
+                                                    {breakdown.matched_keywords.map((kw, i) => (
+                                                        <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-indigo-100 dark:bg-indigo-500/20 text-[10px] font-bold text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-500/30">
+                                                            <Zap className="w-3 h-3 text-indigo-500" />
+                                                            {kw}
+                                                        </span>
+                                                    ))}
+                                                </div>
+                                            )}
 
                                             {reasons.length > 0 ? (
                                                 <div className="space-y-2">
