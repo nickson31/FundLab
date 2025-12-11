@@ -266,15 +266,25 @@ export default function ChatPage() {
                 ) : (
                     <div className="p-6 space-y-8">
                         {/* User Query - Use lastQuery here */}
-                        <div className="flex justify-end animate-[slideInRight_0.3s_ease-out]">
+                        <motion.div
+                            initial={{ opacity: 0, x: 50, scale: 0.95 }}
+                            animate={{ opacity: 1, x: 0, scale: 1 }}
+                            transition={{ type: "spring", stiffness: 200, damping: 20 }}
+                            className="flex justify-end"
+                        >
                             <div className="bg-indigo-600 text-white px-5 py-3 rounded-2xl rounded-tr-sm shadow-lg max-w-[80%] text-base leading-relaxed">
                                 {lastQuery}
                             </div>
-                        </div>
+                        </motion.div>
 
                         {/* AI Response */}
                         {isLoading ? (
-                            <div className="flex items-start gap-4 animate-[fadeIn_0.5s_ease-out_forwards]">
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ type: "spring", stiffness: 150, damping: 15 }}
+                                className="flex items-start gap-4"
+                            >
                                 <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 shadow-lg bg-indigo-600 shadow-indigo-500/20">
                                     <Sparkles className="w-4 h-4 text-white animate-pulse" />
                                 </div>
@@ -298,7 +308,7 @@ export default function ChatPage() {
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </motion.div>
                         ) : error ? (
                             <div className="flex items-start gap-4 animate-[fadeIn_0.5s_ease-out_forwards]">
                                 <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 shadow-lg bg-red-500 shadow-red-500/20">
