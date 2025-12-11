@@ -242,7 +242,7 @@ export default function ChatPage() {
             </div>
 
             {/* Messages Area */}
-            <div className="flex-1 overflow-y-auto p-0 scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-white/10 scrollbar-track-transparent">
+            <div className="flex h-screen overflow-hidden bg-gradient-to-br from-blue-50/50 via-purple-50/30 to-pink-50/50 dark:bg-background scrollbar-thin scrollbar-thumb-gray-200 dark:scrollbar-thumb-white/10 scrollbar-track-transparent">
                 {!hasSearched ? (
                     <div className="h-full flex flex-col items-center justify-center text-center p-8 space-y-6 opacity-0 animate-[fadeIn_0.5s_ease-out_forwards]">
                         <div className="w-24 h-24 rounded-3xl bg-indigo-50/50 dark:bg-indigo-500/10 flex items-center justify-center border border-indigo-100 dark:border-white/5 shadow-xl backdrop-blur-xl">

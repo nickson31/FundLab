@@ -15,7 +15,7 @@ import Footer from '@/components/wow/Footer';
 
 export default function Home() {
   return (
-    <div className="min-h-screen relative overflow-hidden text-blue-600 font-body selection:bg-indigo-500/30 selection:text-indigo-200">
+    <div className="min-h-screen relative overflow-hidden bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 dark:bg-black text-blue-600 dark:text-gray-400 font-body selection:bg-indigo-500/30 selection:text-indigo-200">
 
       <Navbar />
 
