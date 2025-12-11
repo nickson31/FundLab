@@ -18,13 +18,13 @@ export function SystemMessage({ content, isLoading }: SystemMessageProps) {
             <div className="space-y-2 flex-1 max-w-3xl">
                 <div className="flex items-baseline gap-2">
                     <span className="text-sm font-semibold text-white">FundLab AI</span>
-                    <span className="text-xs text-gray-500">Just now</span>
+                    <span className="text-xs text-blue-600 dark:text-gray-500">Just now</span>
                 </div>
 
                 <div className="prose prose-invert max-w-none">
-                    <div className="bg-white/5 border border-white/5 rounded-2xl rounded-tl-sm p-4 text-gray-200 text-sm md:text-base leading-relaxed shadow-sm">
+                    <div className="bg-blue-50 dark:bg-white/5 border border-blue-200 dark:border-white/5 rounded-2xl rounded-tl-sm p-4 text-blue-900 dark:text-gray-200 text-sm md:text-base leading-relaxed shadow-sm">
                         {isLoading ? (
-                            <div className="flex items-center gap-2 text-gray-400 italic">
+                            <div className="flex items-center gap-2 text-blue-600 dark:text-gray-400 italic">
                                 <span>Thinking...</span>
                             </div>
                         ) : (

@@ -176,18 +176,18 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                         className="glass-panel w-full max-w-3xl rounded-2xl shadow-2xl border border-white/10 overflow-hidden flex flex-col max-h-[85vh] z-10 relative bg-white dark:bg-[#0A0A0A] isolate"
                     >
                         {/* Header */}
-                        <div className="p-6 border-b border-gray-100 dark:border-white/5 flex justify-between items-center bg-gray-50/50 dark:bg-white/5">
+                        <div className="p-6 border-b border-blue-100 dark:border-white/5 flex justify-between items-center bg-blue-50/50 dark:bg-white/5">
                             <div>
-                                <h2 className="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                <h2 className="text-xl font-bold text-blue-900 dark:text-white flex items-center gap-2">
                                     {step === 1 && <><Search className="w-5 h-5 text-indigo-500" /> Select Recipient</>}
                                     {step === 2 && <><PenSquare className="w-5 h-5 text-indigo-500" /> Draft Message</>}
                                     {step === 3 && <><Sparkles className="w-5 h-5 text-indigo-500" /> AI Draft</>}
                                 </h2>
-                                <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
+                                <p className="text-sm text-blue-700 dark:text-muted-foreground mt-1">
                                     {step === 1 ? 'Choose who to contact from your matches.' : step === 2 ? 'Give the AI some context for a warm intro.' : 'Review and copy your personalized draft.'}
                                 </p>
                             </div>
-                            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-muted-foreground transition-colors">
+                            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-blue-100 dark:hover:bg-white/10 text-blue-700 dark:text-muted-foreground transition-colors">
                                 <X className="w-6 h-6" />
                             </Button>
                         </div>
@@ -204,7 +204,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                             <div
                                                 key={r.id || idx}
                                                 onClick={() => { setSelectedRecipient(r); setStep(2); }}
-                                                className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-gray-200 dark:hover:border-white/10 group"
+                                                className="flex items-center p-3 hover:bg-blue-50 dark:hover:bg-white/5 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-blue-200 dark:hover:border-white/10 group"
                                             >
                                                 <Avatar className="h-10 w-10 mr-4 border border-gray-200 dark:border-white/10">
                                                     <AvatarFallback className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 font-medium">
@@ -212,16 +212,16 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                                                     </AvatarFallback>
                                                 </Avatar>
                                                 <div>
-                                                    <div className="font-semibold text-gray-900 dark:text-white">{getRecipientName(r)}</div>
-                                                    <div className="text-sm text-gray-500 dark:text-muted-foreground line-clamp-1">{getRecipientHeadline(r)}</div>
+                                                    <div className="font-semibold text-blue-900 dark:text-white">{getRecipientName(r)}</div>
+                                                    <div className="text-sm text-blue-700 dark:text-muted-foreground line-clamp-1">{getRecipientHeadline(r)}</div>
                                                 </div>
-                                                <ChevronRight className="ml-auto text-gray-400 dark:text-muted-foreground group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors w-5 h-5" />
+                                                <ChevronRight className="ml-auto text-blue-400 dark:text-muted-foreground group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors w-5 h-5" />
                                             </div>
                                         ))}
                                         {recipients.length === 0 && (
                                             <div className="text-center py-12">
-                                                <div className="w-16 h-16 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
-                                                    <Search className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />
+                                                <div className="w-16 h-16 bg-blue-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                    <Search className="w-8 h-8 text-blue-400 dark:text-muted-foreground" />
                                                 </div>
                                                 <p className="text-gray-500 dark:text-muted-foreground">No saved investors found yet.</p>
                                             </div>
