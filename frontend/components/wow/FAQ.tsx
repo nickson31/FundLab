@@ -16,7 +16,7 @@ export default function FAQ() {
                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading text-white tracking-tight mb-6">
                         Questions?
                     </h2>
-                    <p className="text-xl text-gray-400">
+                    <p className="text-xl text-blue-400">
                         Everything you need to know about FundLab.
                     </p>
                 </motion.div>
@@ -50,13 +50,13 @@ export default function FAQ() {
                             whileInView={{ opacity: 1, y: 0 }}
                             viewport={{ once: true }}
                             transition={{ delay: i * 0.05 }}
-                            className="group bg-white/[0.02] border border-white/[0.08] rounded-2xl overflow-hidden hover:border-white/[0.12] transition-colors"
+                            className="group bg-white/[0.02] border border-white/[0.08] rounded-2xl overflow-hidden hover:bg-blue-100der-white/[0.12] transition-colors"
                         >
                             <summary className="flex items-center justify-between p-6 cursor-pointer list-none">
                                 <span className="font-bold text-white pr-8">{faq.q}</span>
-                                <Plus className="w-5 h-5 text-gray-500 group-open:rotate-45 transition-transform duration-300" />
+                                <Plus className="w-5 h-5 text-blue-500 group-open:rotate-45 transition-transform duration-300" />
                             </summary>
-                            <div className="px-6 pb-6 text-gray-400 leading-relaxed">
+                            <div className="px-6 pb-6 text-blue-400 leading-relaxed">
                                 {faq.a}
                             </div>
                         </motion.details>

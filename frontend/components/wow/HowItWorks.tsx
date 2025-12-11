@@ -21,7 +21,7 @@ export default function HowItWorks() {
                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading text-white tracking-tight mb-6 leading-[1.1]">
                         How It Works.
                     </h2>
-                    <p className="text-xl md:text-2xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-xl md:text-2xl text-blue-400 font-light max-w-3xl mx-auto leading-relaxed">
                         From AI-powered matching to hyper-personalized outreach—automate your entire fundraising pipeline.
                     </p>
                 </motion.div>
@@ -48,7 +48,7 @@ export default function HowItWorks() {
                         <h3 className="text-xl font-bold font-heading text-white mb-3 tracking-tight">
                             AI Matching
                         </h3>
-                        <p className="text-gray-400 leading-relaxed text-sm">
+                        <p className="text-blue-400 leading-relaxed text-sm">
                             Describe your startup. Our AI analyzes 500k+ profiles to find investors with matching thesis and portfolio.
                         </p>
 
@@ -75,7 +75,7 @@ export default function HowItWorks() {
                         <h3 className="text-xl font-bold font-heading text-white mb-3 tracking-tight">
                             Draft Messages
                         </h3>
-                        <p className="text-gray-400 leading-relaxed text-sm">
+                        <p className="text-blue-400 leading-relaxed text-sm">
                             Generate hyper-personalized LinkedIn and email messages tailored to each investor's history and interests.
                         </p>
 
@@ -102,7 +102,7 @@ export default function HowItWorks() {
                         <h3 className="text-xl font-bold font-heading text-white mb-3 tracking-tight">
                             Automate Outreach
                         </h3>
-                        <p className="text-gray-400 leading-relaxed text-sm">
+                        <p className="text-blue-400 leading-relaxed text-sm">
                             Send 1,000+ messages per week. Track opens, responses, and schedule automated follow-ups.
                         </p>
 
@@ -129,7 +129,7 @@ export default function HowItWorks() {
                         <h3 className="text-xl font-bold font-heading text-white mb-3 tracking-tight">
                             Track & Close
                         </h3>
-                        <p className="text-gray-400 leading-relaxed text-sm">
+                        <p className="text-blue-400 leading-relaxed text-sm">
                             Monitor your pipeline in real-time. See response rates, schedule meetings, and close your round faster.
                         </p>
                     </motion.div>
@@ -146,19 +146,19 @@ export default function HowItWorks() {
                 >
                     <div className="text-center">
                         <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2">500k+</div>
-                        <div className="text-sm text-gray-500 uppercase tracking-wider">Investor Profiles</div>
+                        <div className="text-sm text-blue-500 uppercase tracking-wider">Investor Profiles</div>
                     </div>
                     <div className="text-center">
                         <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2">1,000+</div>
-                        <div className="text-sm text-gray-500 uppercase tracking-wider">Messages/Week</div>
+                        <div className="text-sm text-blue-500 uppercase tracking-wider">Messages/Week</div>
                     </div>
                     <div className="text-center">
                         <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2">3x</div>
-                        <div className="text-sm text-gray-500 uppercase tracking-wider">Faster Fundraising</div>
+                        <div className="text-sm text-blue-500 uppercase tracking-wider">Faster Fundraising</div>
                     </div>
                     <div className="text-center">
                         <div className="text-4xl md:text-5xl font-bold font-heading text-white mb-2">25%</div>
-                        <div className="text-sm text-gray-500 uppercase tracking-wider">Response Rate</div>
+                        <div className="text-sm text-blue-500 uppercase tracking-wider">Response Rate</div>
                     </div>
                 </motion.div>
 

@@ -23,7 +23,7 @@ export default function IntelligenceSection() {
                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-bold font-heading text-white tracking-tight mb-6 leading-[1.1]">
                         Intelligence at Scale.
                     </h2>
-                    <p className="text-xl md:text-2xl text-gray-400 font-light max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-xl md:text-2xl text-blue-400 font-light max-w-3xl mx-auto leading-relaxed">
                         Stop manually searching LinkedIn. Our AI digests millions of data points to find the investors actually interested in your vertical.
                     </p>
                 </motion.div>
@@ -53,7 +53,7 @@ export default function IntelligenceSection() {
                             <h3 className="text-2xl font-bold font-heading text-white mb-3 tracking-tight">
                                 500k+ Profiles
                             </h3>
-                            <p className="text-gray-400 leading-relaxed text-[15px]">
+                            <p className="text-blue-400 leading-relaxed text-[15px]">
                                 Access the world's most comprehensive database of Angels, VCs, and Family Offices.
                             </p>
 
@@ -84,7 +84,7 @@ export default function IntelligenceSection() {
                             <h3 className="text-2xl font-bold font-heading text-white mb-3 tracking-tight">
                                 Semantic Matching
                             </h3>
-                            <p className="text-gray-400 leading-relaxed text-[15px]">
+                            <p className="text-blue-400 leading-relaxed text-[15px]">
                                 Don't rely on keywords. Describe your startup in plain English and let AI find the perfect thesis match.
                             </p>
 
@@ -115,7 +115,7 @@ export default function IntelligenceSection() {
                             <h3 className="text-2xl font-bold font-heading text-white mb-3 tracking-tight">
                                 Privacy First
                             </h3>
-                            <p className="text-gray-400 leading-relaxed text-[15px]">
+                            <p className="text-blue-400 leading-relaxed text-[15px]">
                                 GDPR compliant. Your data is secure, and we never resell your contact info.
                             </p>
 
