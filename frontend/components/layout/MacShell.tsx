@@ -87,7 +87,7 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
                                             "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition-all duration-200 group relative overflow-hidden",
                                             isActive
                                                 ? "text-indigo-600 dark:text-indigo-100 font-bold bg-indigo-50 dark:bg-transparent"
-                                                : "text-indigo-900/60 dark:text-slate-400 hover:text-indigo-900 dark:hover:text-slate-200 hover:bg-indigo-50/50 dark:hover:bg-white/5"
+                                                : "text-indigo-950/80 dark:text-slate-400 hover:text-indigo-950 dark:hover:text-slate-200 hover:bg-indigo-50/50 dark:hover:bg-white/5"
                                         )}
                                     >
                                         {isActive && (

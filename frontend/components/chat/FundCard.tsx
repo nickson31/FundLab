@@ -1,14 +1,13 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { ExternalLink, Linkedin, MapPin, TrendingUp, Sparkles, ChevronDown, ChevronUp, Users, Zap } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Linkedin, MapPin, TrendingUp, Sparkles, Building2, Quote, Zap, ExternalLink, Globe } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/lib/supabase';
-import { selectDynamicLayout, CardLayout, DynamicField } from '@/lib/dynamicCardLayouts';
+import { selectDynamicLayout, DynamicField } from '@/lib/dynamicCardLayouts';
 
 interface FundCardProps {
     fund: any;
@@ -20,345 +19,259 @@ interface FundCardProps {
     query?: string;
 }
 
-export default function FundCard({
-    fund,
-    score,
-    breakdown,
-    onDraftMessage,
-    onSave,
-    isSaved = false,
-    query
-}: FundCardProps) {
-    const [isHovered, setIsHovered] = useState(false);
-    const [saved, setSaved] = useState(isSaved);
-    const [showEmployees, setShowEmployees] = useState(false);
-    const [hasEmployees, setHasEmployees] = useState(false);
-    const [employees, setEmployees] = useState<any[]>([]);
-    const [loadingEmployees, setLoadingEmployees] = useState(false);
+const getInitials = (n: string) => n.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
+
+// --- 1. Compact Layout ---
+function CompactLayout({ data, score, handlers }: { data: any, score: number, handlers: any }) {
+    const { name, headline } = data;
+    return (
+        <div className="flex items-center gap-4 p-3 hover:bg-indigo-50/30 transition-colors rounded-xl border border-transparent hover:border-indigo-100">
+            <Avatar className="h-10 w-10 border border-indigo-100 rounded-lg bg-white">
+                <AvatarFallback className="rounded-lg text-indigo-600 font-bold text-xs">{getInitials(name)}</AvatarFallback>
+            </Avatar>
+            <div className="flex-1 min-w-0">
+                <div className="flex items-baseline gap-2">
+                    <h3 className="text-sm font-bold text-indigo-950 truncate">{name}</h3>
+                    <Badge variant="outline" className="text-[10px] text-indigo-400 border-indigo-100">Fund</Badge>
+                </div>
+            </div>
+            <div className={`px-2 py-1 rounded-md text-xs font-bold ${score > 0.7 ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-indigo-700'}`}>
+                {Math.round(score * 100)}%
+            </div>
+            <Button size="sm" variant="ghost" className="h-8 w-8 p-0" onClick={handlers.draft}>
+                <Sparkles className="w-4 h-4 text-indigo-500" />
+            </Button>
+        </div>
+    );
+}
+
+// --- 2. Standard Layout ---
+function StandardLayout({ data, score, dynamicFields, handlers, expanded }: { data: any, score: number, dynamicFields: DynamicField[], handlers: any, expanded: boolean }) {
+    const { name, headline, location, profilePic, categoryTags } = data;
+    const { onExpand } = handlers;
+
+    return (
+        <div className="p-5">
+            <div className="flex items-start gap-4">
+                <Avatar className="h-14 w-14 border-2 border-white shadow-sm rounded-xl">
+                    <AvatarImage src={profilePic} />
+                    <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-cyan-500 text-white font-bold rounded-xl">{getInitials(name)}</AvatarFallback>
+                </Avatar>
+                <div className="flex-1">
+                    <h3 className="text-lg font-bold text-indigo-950 flex items-center gap-2">
+                        {name}
+                        <TrendingUp className="w-4 h-4 text-emerald-500" />
+                    </h3>
+                    <p className="text-sm text-indigo-900/60 line-clamp-1">{headline}</p>
+                    {location && (
+                        <div className="flex items-center gap-1 mt-1 text-xs text-indigo-400">
+                            <MapPin className="w-3 h-3" /> {location.split(',')[0]}
+                        </div>
+                    )}
+                </div>
+                <div className="flex flex-col items-center justify-center w-14 h-14 rounded-xl bg-indigo-50 border-2 border-indigo-100">
+                    <span className="text-xl font-bold text-indigo-600">{Math.round(score * 100)}</span>
+                </div>
+            </div>
+
+            <div className="flex flex-wrap gap-2 mt-4">
+                {categoryTags.map((tag: string, i: number) => (
+                    <Badge key={i} variant="secondary" className="bg-white border-indigo-100 text-indigo-600 hover:bg-indigo-50">
+                        {tag}
+                    </Badge>
+                ))}
+            </div>
+
+            {/* Smart Thesis Preview */}
+            {dynamicFields.find(f => f.component === 'investment_thesis') && (
+                <div className="mt-4 p-3 bg-indigo-50/30 rounded-lg border border-indigo-50">
+                    <div className="flex gap-2">
+                        <Quote className="w-4 h-4 text-indigo-300 shrink-0" />
+                        <p className="text-xs font-medium text-indigo-900 italic line-clamp-2">
+                            {dynamicFields.find(f => f.component === 'investment_thesis')?.value}
+                        </p>
+                    </div>
+                </div>
+            )}
+
+            <div className="mt-4 pt-4 border-t border-indigo-50 flex justify-between items-center">
+                <Button variant="ghost" size="sm" onClick={onExpand} className="text-indigo-500 hover:bg-indigo-50">
+                    {expanded ? "Collapse" : "View Details"}
+                </Button>
+                <Button size="sm" onClick={handlers.draft} className="bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg">
+                    <Sparkles className="w-3.5 h-3.5 mr-2" /> Intro
+                </Button>
+            </div>
+        </div>
+    );
+}
+
+// --- 3. Rich Layout ---
+function RichLayout({ data, score, dynamicFields, breakdown, handlers, expanded }: { data: any, score: number, dynamicFields: DynamicField[], breakdown: any, handlers: any, expanded: boolean }) {
+    const { name, headline, location, categoryTags } = data;
+    const { onExpand } = handlers;
+
+    const thesis = dynamicFields.find(f => f.component === 'investment_thesis')?.value;
+    const sweetSpot = dynamicFields.find(f => f.component === 'ticket_size')?.value;
+
+    return (
+        <div className="p-0">
+            <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-6 border-b border-indigo-100/50">
+                <div className="flex justify-between items-start">
+                    <div className="flex gap-4">
+                        <Avatar className="h-16 w-16 border-4 border-white shadow-lg rounded-xl bg-white">
+                            <AvatarFallback className="bg-blue-600 text-white text-xl rounded-xl">{getInitials(name)}</AvatarFallback>
+                        </Avatar>
+                        <div>
+                            <h3 className="text-2xl font-bold text-indigo-950 tracking-tight flex items-center gap-2">
+                                {name} <Building2 className="w-5 h-5 text-indigo-400" />
+                            </h3>
+                            <p className="text-base text-indigo-600 font-medium mt-0.5">{headline}</p>
+                            <div className="flex gap-2 mt-2">
+                                {location && <Badge variant="outline" className="bg-white/50 text-indigo-700 border-indigo-200">{location}</Badge>}
+                                <Badge className="bg-blue-100 text-blue-800 border-blue-200 hover:bg-blue-200">{Math.round(score * 100)}% Match</Badge>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div className="md:col-span-2 space-y-6">
+                    {/* Tags */}
+                    <div className="flex flex-wrap gap-2">
+                        {categoryTags.map((tag: string, i: number) => (
+                            <span key={i} className="px-3 py-1 rounded-md bg-white border border-indigo-100 text-indigo-600 text-xs font-bold shadow-sm">
+                                {tag}
+                            </span>
+                        ))}
+                    </div>
+
+                    <div className="prose prose-indigo prose-sm">
+                        <h4 className="text-indigo-950 font-bold mb-2 flex items-center gap-2">
+                            <Zap className="w-4 h-4 text-amber-500" /> Investment Thesis
+                        </h4>
+                        <p className="text-slate-600 leading-relaxed">
+                            {thesis || "No specific thesis available."}
+                        </p>
+                    </div>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <div className="p-4 bg-indigo-50/30 rounded-xl border border-indigo-50">
+                            <p className="text-xs font-bold text-indigo-400 uppercase">Sweet Spot</p>
+                            <p className="text-lg font-bold text-indigo-900">{sweetSpot || "N/A"}</p>
+                        </div>
+                        {dynamicFields.filter(f => f.component === 'focused_round' || f.component === 'stage_tags').slice(0, 1).map((f, i) => (
+                            <div key={i} className="p-4 bg-indigo-50/30 rounded-xl border border-indigo-50">
+                                <p className="text-xs font-bold text-indigo-400 uppercase">{f.label}</p>
+                                <p className="text-lg font-bold text-indigo-900">{f.value}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="space-y-4">
+                    <div className="bg-white rounded-xl border border-indigo-100 p-4 shadow-sm">
+                        <h4 className="font-bold text-indigo-950 mb-3">Analysis</h4>
+                        <p className="text-sm text-slate-500 italic mb-4">
+                            {breakdown?.reasoning || "Strong sector alignment detected based on recent fund activity."}
+                        </p>
+                        <Button className="w-full bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20" onClick={handlers.draft}>
+                            Draft Outreach
+                        </Button>
+                        <Button variant="ghost" className="w-full mt-2 text-indigo-500" onClick={onExpand}>
+                            {expanded ? "Collapse Info" : "View Full Profile"}
+                        </Button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
+
+// --- Main Component ---
+export default function FundCard(props: FundCardProps) {
+    const { fund, query, onDraftMessage, onSave } = props;
     const [isExpanded, setIsExpanded] = useState(false);
 
-    // Map database columns
+    if (!fund) return null;
+
+    // Use Dynamic Layout System
+    const layout = selectDynamicLayout(fund, 'fund', query);
+    const dynamicFields = layout.fields;
+
     const name = fund.name || fund.fullName || 'Unknown Fund';
-    const description = fund.description || fund.short_description || '';
+    const headline = fund.short_description || fund.description || '';
     const location = fund.hq_location || fund.location || 'Global';
-    const linkedinUrl = fund.linkedin_url || fund.linkedinUrl || '';
-    const websiteUrl = fund.website || fund.websiteUrl || '';
     const profilePic = fund.logo_url || fund.profilePic || '';
 
-    // Expanded Data
-    const ticketSize = fund.ticket_size || fund.check_size || 'Not specified';
-    const aum = fund.aum || fund.assets_under_management || 'N/A';
-    const recentInvestments = fund.recent_investments || fund.portfolio_companies || '';
-    const sweetSpot = fund.sweet_spot || fund.investment_thesis || '';
-
-    // Parse categories and stages - ENGLISH ONLY
-    const categories = fund.categories || fund.categories_strong_en || fund.category_keywords || '';
-    const stages = fund.investment_stages || fund.stages_strong_en || fund.stage_keywords || '';
-
+    // Quick Category Extraction
+    const categories = (fund.categories || fund.categories_strong_en || fund.category_keywords || '');
     const categoryTags = (typeof categories === 'string' ? categories.replace(/[\[\]'"]/g, '').split(',') : [])
         .slice(0, 3)
         .map((c: string) => c.trim())
         .filter(Boolean);
-    const stageTags = (typeof stages === 'string' ? stages.replace(/[\[\]'"]/g, '').split(',') : [])
-        .slice(0, 2)
-        .map((s: string) => s.trim())
-        .filter(Boolean);
 
-    // Initial check for employees
-    useEffect(() => {
-        const checkEmployees = async () => {
-            if (!fund.id) return;
-            // Assuming 'fund_id' column exists based on previous code usage
-            const { count } = await supabase
-                .from('fund_employees') // Note: In schema it is 'fund_employees'. Check strict naming.
-                .select('*', { count: 'exact', head: true })
-                .eq('fund_id', fund.id);
-
-            if (count && count > 0) setHasEmployees(true);
-        };
-        checkEmployees();
-    }, [fund.id]);
-
-    // Fetch employees when toggled
-    useEffect(() => {
-        if (showEmployees && !employees.length && fund.id) {
-            fetchEmployees();
-        }
-    }, [showEmployees]);
-
-    const fetchEmployees = async () => {
-        setLoadingEmployees(true);
-        try {
-            const { data, error } = await supabase
-                .from('fund_employees') // Fixed: Single .from call
-                .select('*')
-                .eq('fund_id', fund.id)
-                .limit(5);
-
-            if (!error && data) {
-                // Check if data is array of objects or data wrapper
-                // Schema says `data` jsonb column. We need to extract info from it?
-                // Or maybe the RLS returns rows differently?
-                // Usually select('*') returns the columns.
-                setEmployees(data);
-            }
-        } catch (err) {
-            console.error('Error fetching employees:', err);
-        } finally {
-            setLoadingEmployees(false);
-        }
+    // Handlers
+    const handlers = {
+        draft: (e: any) => { e.stopPropagation(); onDraftMessage && onDraftMessage(fund); },
+        save: (e: any) => { e.stopPropagation(); onSave && onSave(fund); },
+        onExpand: (e: any) => { e.stopPropagation(); setIsExpanded(!isExpanded); }
     };
 
-    const handleSave = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        setSaved(!saved);
-        if (onSave) onSave(fund);
-    };
-
-    const getInitials = (name: string) => {
-        return name
-            .split(' ')
-            .map(n => n[0])
-            .join('')
-            .toUpperCase()
-            .slice(0, 2);
-    };
-
-    const scoreColor = score >= 0.7 ? 'text-green-400' : score >= 0.5 ? 'text-yellow-400' : 'text-slate-400';
-    const scoreBg = score >= 0.7 ? 'bg-green-500/10' : score >= 0.5 ? 'bg-yellow-500/10' : 'bg-slate-500/10';
-
-    // Use Dynamic Layout System (Scoring Engine)
-    const layout = selectDynamicLayout(fund, 'fund', query);
-    const dynamicFields = layout.fields; // Access the fields array
+    const data = { name, headline, location, profilePic, categoryTags };
 
     return (
         <motion.div
             layout
             initial={{ opacity: 0, y: 15 }}
             animate={{ opacity: 1, y: 0 }}
-            whileHover={{ y: -3 }}
-            transition={{ type: "spring", stiffness: 260, damping: 20 }}
-            className="group relative"
+            className={cn(
+                "group relative bg-white dark:bg-white/5 rounded-2xl overflow-hidden transition-all duration-300",
+                layout.template === 'compact' ? "hover:shadow-md" : "hover:shadow-2xl hover:shadow-indigo-500/10 border border-indigo-50 dark:border-white/10"
+            )}
         >
-            {/* Subtle Glow on Hover */}
-            <div className="absolute -inset-0.5 bg-gradient-to-r from-blue-100 via-indigo-100 to-purple-100 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 rounded-2xl opacity-0 group-hover:opacity-100 blur transition-opacity duration-300" />
+            {/* Template Switch */}
+            {layout.template === 'compact' && (
+                <CompactLayout data={data} score={props.score} handlers={handlers} />
+            )}
 
-            {/* Main Card */}
-            <div className="relative glass-card p-4 md:p-6 hover:shadow-2xl hover:shadow-indigo-500/10 transition-all duration-300">
+            {layout.template === 'standard' && (
+                <StandardLayout
+                    data={data} score={props.score}
+                    dynamicFields={dynamicFields} handlers={handlers} expanded={isExpanded}
+                />
+            )}
 
-                {/* Top Row */}
-                <div className="flex items-start gap-3 md:gap-4">
-                    {/* Avatar */}
-                    <div className="relative">
-                        <Avatar className="h-12 w-12 md:h-14 md:w-14 border-2 border-white dark:border-white/10 shadow-sm">
-                            <AvatarImage src={profilePic} alt={name} className="object-cover" />
-                            <AvatarFallback className="bg-gradient-to-br from-blue-500 to-indigo-600 text-white font-bold text-lg">
-                                {getInitials(name)}
-                            </AvatarFallback>
-                        </Avatar>
-                        {/* Fund Type Badge */}
-                        <div className="absolute -bottom-0.5 -right-0.5 w-5 h-5 bg-blue-500 rounded-full border-2 border-white dark:border-slate-950 flex items-center justify-center shadow-sm">
-                            <TrendingUp className="w-3 h-3 text-white" />
-                        </div>
-                    </div>
+            {layout.template === 'rich' && (
+                <RichLayout
+                    data={data} score={props.score}
+                    dynamicFields={dynamicFields} breakdown={props.breakdown}
+                    handlers={handlers} expanded={isExpanded}
+                />
+            )}
 
-                    {/* Name & Info */}
-                    <div className="flex-1 min-w-0">
-                        <h3 className="text-base md:text-lg font-bold text-foreground truncate">
-                            {name}
-                        </h3>
-                        <p className="text-sm md:text-sm text-muted-foreground line-clamp-1 mt-0.5">
-                            {fund.short_description || description || "Investment Fund"}
-                        </p>
-                        {location && (
-                            <div className="flex items-center gap-1 mt-1.5 text-xs text-purple-700 dark:text-slate-500">
-                                <MapPin className="w-3 h-3" />
-                                <span>{location}</span>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Score Badge */}
-                    <div className={cn(
-                        "flex flex-col items-center justify-center w-14 h-14 md:w-16 md:h-16 rounded-xl",
-                        score >= 0.7 ? "bg-emerald-50 dark:bg-emerald-500/10 border border-emerald-200 dark:border-emerald-500/20" :
-                            score >= 0.5 ? "bg-amber-50 dark:bg-amber-500/10 border border-amber-200 dark:border-amber-500/20" :
-                                "bg-slate-50 dark:bg-white/5 border border-slate-200 dark:border-white/10"
-                    )}>
-                        <span className={cn(
-                            "text-xl md:text-2xl font-bold",
-                            score >= 0.7 ? "text-emerald-600 dark:text-emerald-400" :
-                                score >= 0.5 ? "text-amber-600 dark:text-amber-400" :
-                                    "text-slate-600 dark:text-slate-400"
-                        )}>{Math.round(score * 100)}</span>
-                        <span className="text-[9px] font-medium text-slate-500 dark:text-slate-500 uppercase">Match</span>
-                    </div>
-                </div>
-
-                {/* Category Tags */}
-                <div className="flex flex-wrap gap-1.5 md:gap-2 mt-3 md:mt-4">
-                    {categoryTags.map((tag, i) => (
-                        <span
-                            key={i}
-                            className="px-2.5 py-1 md:px-3 md:py-1 rounded-full text-xs font-medium bg-white/50 dark:bg-white/5 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-white/10 shadow-sm"
-                        >
-                            {tag}
-                        </span>
-                    ))}
-                </div>
-
-                {/* Enhanced Expanded Content */}
-                <AnimatePresence>
-                    {isExpanded && (
-                        <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: "auto", opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="overflow-hidden"
-                        >
-                            <div className="pt-4 space-y-4">
-                                {/* AI Reasoning Block */}
-                                <div className="bg-indigo-50/50 dark:bg-indigo-500/10 rounded-xl p-5 border border-indigo-100 dark:border-indigo-500/20 shadow-sm">
-                                    <div className="flex items-center gap-2 mb-3">
-                                        <div className="w-8 h-8 rounded-lg bg-indigo-500 flex items-center justify-center shadow-lg shadow-indigo-500/30">
-                                            <Sparkles className="w-4 h-4 text-white" />
-                                        </div>
-                                        <span className="text-sm font-bold text-indigo-900 dark:text-indigo-100 uppercase tracking-widest">AI Analysis</span>
-                                    </div>
-
-                                    {/* Matched Keywords Badge */}
-                                    {breakdown?.matched_keywords && breakdown.matched_keywords.length > 0 && (
-                                        <div className="flex flex-wrap gap-2 mb-4">
-                                            {breakdown.matched_keywords.map((kw: string, i: number) => (
-                                                <span key={i} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-black/30 text-xs font-bold text-indigo-700 dark:text-indigo-200 border-2 border-indigo-300 dark:border-indigo-500/50 shadow-md">
-                                                    <Zap className="w-4 h-4 text-indigo-500" />
-                                                    {kw}
-                                                </span>
-                                            ))}
-                                        </div>
-                                    )}
-                                    <p className="text-sm text-indigo-900 dark:text-indigo-100 leading-relaxed font-medium">
-                                        {breakdown?.reasoning || fund.reasoning || "High alignment with your vertical and stage. This fund has explicitly expressed interest in this sector recently."}
-                                    </p>
-                                </div>
-
-                                {/* Dynamic Stats Grid based on available data */}
-                                <div className="grid grid-cols-2 gap-3">
-                                    {dynamicFields
-                                        .filter(f => ['ticket_size', 'recent_investments', 'investment_thesis'].includes(f.component)) // Customize which fields go in grid
-                                        .map((field, idx) => (
-                                            <div key={idx} className="p-3 bg-slate-50 dark:bg-white/5 rounded-lg border border-slate-200 dark:border-white/5">
-                                                <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-1">{field.label}</p>
-                                                <p className="text-xs font-medium text-foreground leading-relaxed line-clamp-2">
-                                                    {field.value}
-                                                </p>
-                                            </div>
-                                        ))}
-                                </div>
-
-                                {/* Dynamic Text Sections (Sweet Spot, Description, etc) */}
-                                {dynamicFields
-                                    .filter(f => ['investment_thesis', 'ticket_size', 'recent_investments'].indexOf(f.component) === -1 && f.display_type === 'text' && f.component !== 'headline') // Exclude what's in grid and headline
-                                    .map((field, idx) => (
-                                        <div key={idx}>
-                                            <p className="text-[10px] text-muted-foreground uppercase font-bold tracking-wider mb-2">{field.label}</p>
-                                            <p className="text-sm text-foreground leading-relaxed bg-slate-50 dark:bg-white/5 p-3 rounded-lg border-l-2 border-indigo-500">
-                                                {field.value}
-                                            </p>
-                                        </div>
-                                    ))}
-
-                                {/* Team Section */}
-                                {hasEmployees && (
-                                    <div className="pt-2">
-                                        <button
-                                            onClick={(e) => { e.stopPropagation(); setShowEmployees(!showEmployees); }}
-                                            className="flex items-center gap-2 text-xs font-semibold text-indigo-600 hover:text-indigo-500 transition-colors mb-3"
-                                        >
-                                            <Users className="w-3.5 h-3.5" />
-                                            {showEmployees ? 'Hide Team' : 'View Key Decision Makers'}
-                                        </button>
-
-                                        <AnimatePresence>
-                                            {showEmployees && (
-                                                <motion.div
-                                                    initial={{ opacity: 0, y: -10 }}
-                                                    animate={{ opacity: 1, y: 0 }}
-                                                    className="grid gap-2"
-                                                >
-                                                    {loadingEmployees ? (
-                                                        <div className="text-xs text-purple-500 flex items-center gap-2">
-                                                            <div className="w-3 h-3 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                                                            Fetching team...
-                                                        </div>
-                                                    ) : employees.length > 0 ? (
-                                                        employees.map((emp, i) => (
-                                                            <div key={i} className="flex items-center gap-3 p-2 rounded-lg hover:bg-slate-50 dark:hover:bg-white/5 transition-colors group/emp">
-                                                                <Avatar className="h-8 w-8">
-                                                                    <AvatarImage src={emp.profilePic || emp.photo_url} />
-                                                                    <AvatarFallback className="text-[10px] bg-slate-100 text-slate-600 dark:bg-white/10 dark:text-slate-300">
-                                                                        {getInitials(emp.fullName || emp.name)}
-                                                                    </AvatarFallback>
-                                                                </Avatar>
-                                                                <div className="flex-1 min-w-0">
-                                                                    <p className="text-sm font-medium text-foreground truncate">{emp.fullName || emp.name}</p>
-                                                                    <p className="text-xs text-muted-foreground truncate">{emp.title || emp.position}</p>
-                                                                </div>
-                                                                <Button size="icon" variant="ghost" className="h-6 w-6 opacity-0 group-hover/emp:opacity-100 transition-opacity">
-                                                                    <Linkedin className="w-3 h-3 text-blue-500" />
-                                                                </Button>
-                                                            </div>
-                                                        ))
-                                                    ) : (
-                                                        <div className="text-xs text-purple-500 italic">No public team data available.</div>
-                                                    )}
-                                                </motion.div>
-                                            )}
-                                        </AnimatePresence>
-                                    </div>
-                                )}
-                            </div>
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-
-                {/* Footer Actions */}
-                <div className="mt-4 md:mt-5 pt-3 md:pt-4 border-t border-slate-100 dark:border-white/5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
-                    <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={(e) => { e.stopPropagation(); setIsExpanded(!isExpanded); }}
-                        className="text-slate-500 hover:text-foreground dark:text-slate-400 dark:hover:text-white hover:bg-slate-100 dark:hover:bg-white/10 font-medium transition-colors min-h-[44px] px-4"
+            {/* Expanded Content */}
+            <AnimatePresence>
+                {isExpanded && layout.template !== 'compact' && (
+                    <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        className="bg-slate-50/50 dark:bg-black/20 border-t border-indigo-50 px-6 py-4"
                     >
-                        {isExpanded ? (
-                            <><ChevronUp className="w-4 h-4 mr-1.5" /> Less Info</>
-                        ) : (
-                            <><ChevronDown className="w-4 h-4 mr-1.5" /> Deep Dive</>
-                        )}
-                    </Button>
-
-                    <div className="flex gap-2">
-                        {(linkedinUrl || websiteUrl) && (
-                            <Button
-                                size="sm"
-                                variant="outline"
-                                className="h-11 w-11 md:h-9 md:w-9 p-0 rounded-full border border-slate-200 dark:border-white/10 bg-transparent"
-                                onClick={(e) => { e.stopPropagation(); window.open(linkedinUrl || websiteUrl, '_blank'); }}
-                            >
-                                {linkedinUrl ? <Linkedin className="w-4 h-4 text-[#0077b5]" /> : <ExternalLink className="w-4 h-4 text-slate-400" />}
-                            </Button>
-                        )}
-                        <Button
-                            size="sm"
-                            onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(fund); }}
-                            className="bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white rounded-full px-4 md:px-5 min-h-[44px] font-semibold shadow-lg shadow-indigo-500/20 transition-all"
-                        >
-                            <Sparkles className="w-3.5 h-3.5 mr-2" />
-                            Draft Intro
-                        </Button>
-                    </div>
-                </div>
-            </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {dynamicFields.map((f, i) => (
+                                <div key={i}>
+                                    <p className="text-[10px] font-bold text-slate-400 uppercase">{f.label}</p>
+                                    <p className="text-sm text-slate-700">{Array.isArray(f.value) ? f.value.join(', ') : f.value}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </motion.div>
+                )}
+            </AnimatePresence>
         </motion.div>
     );
 }
