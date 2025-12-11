@@ -6,7 +6,7 @@ import { X, RefreshCw, Save, ChevronRight, Sparkles, Search, Linkedin, Mail, Che
 import { supabase } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
-import { Investor, AngelInvestor, InvestmentFund, FundEmployee } from '@/types/investor';
+import { Investor } from '@/types/investor';
 import { cn } from '@/lib/utils';
 
 interface MessageModalProps {
@@ -25,6 +25,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
     const [isGenerating, setIsGenerating] = useState(false);
     const [isSaving, setIsSaving] = useState(false);
     const [messageType, setMessageType] = useState<'linkedin' | 'email'>('linkedin');
+    const [hasCopied, setHasCopied] = useState(false);
 
     useEffect(() => {
         if (isOpen) {
@@ -79,7 +80,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
         setStep(3);
 
         const minDelay = 10000; // 10 seconds delay
-        const startTime = Date.now();
+        // const startTime = Date.now(); // Unused
 
         try {
             const generatePromise = fetch('/api/message/generate', {
@@ -88,6 +89,7 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
                 body: JSON.stringify({
                     investorData: selectedRecipient,
                     companyContext,
+                    messageType // Pass messageType to API
                 })
             }).then(res => res.json());
 
@@ -109,13 +111,18 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
         setIsSaving(true);
         try {
             // Logic to update status in DB or save message draft
-            // For now just close, as "Save Draft" implies local storage or DB update not fully specced
             onClose();
         } catch (error) {
             console.error('Save error:', error);
         } finally {
             setIsSaving(false);
         }
+    };
+
+    const handleCopy = async () => {
+        await navigator.clipboard.writeText(generatedMessage);
+        setHasCopied(true);
+        setTimeout(() => setHasCopied(false), 2000);
     };
 
     if (!isOpen) return null;
@@ -141,29 +148,160 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
     return (
         <AnimatePresence>
             {isOpen && (
-    const [hasCopied, setHasCopied] = useState(false);
+                <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        onClick={onClose}
+                        className="absolute inset-0 bg-black/40 dark:bg-black/80 backdrop-blur-md"
+                    />
 
-    // ... existing useEffect ...
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+                        animate={{ opacity: 1, scale: 1, y: 0 }}
+                        exit={{ opacity: 0, scale: 0.95, y: 0 }}
+                        className="glass-panel w-full max-w-2xl rounded-2xl shadow-2xl border border-gray-200 dark:border-white/10 overflow-hidden flex flex-col max-h-[90vh] z-10 relative bg-white dark:bg-[#0A0A0A]"
+                    >
+                        {/* Header */}
+                        <div className="p-6 border-b border-gray-200 dark:border-white/5 flex justify-between items-center bg-gray-50/50 dark:bg-white/5">
+                            <div>
+                                <h2 className="text-xl font-bold text-gray-900 dark:text-white">
+                                    {step === 1 ? 'Select Recipient' : step === 2 ? 'Provide Context' : 'Review Message'}
+                                </h2>
+                                <p className="text-sm text-gray-500 dark:text-muted-foreground mt-1">
+                                    {step === 1 ? 'Who are you reaching out to?' : step === 2 ? 'Help the AI understand your pitch.' : 'Polish and send.'}
+                                </p>
+                            </div>
+                            <Button variant="ghost" size="icon" onClick={onClose} className="rounded-full hover:bg-gray-200 dark:hover:bg-white/10 text-gray-500 dark:text-muted-foreground hover:text-gray-900 dark:hover:text-white transition-colors">
+                                <X className="w-6 h-6" />
+                            </Button>
+                        </div>
 
-    const handleCopy = async () => {
-                await navigator.clipboard.writeText(generatedMessage);
-            setHasCopied(true);
-        setTimeout(() => setHasCopied(false), 2000);
-    };
+                        {/* Content */}
+                        <div className="p-6 overflow-y-auto flex-1">
+                            {step === 1 && (
+                                <div className="space-y-4">
+                                    <div className="space-y-2">
+                                        {recipients.map((r, idx) => (
+                                            <div
+                                                key={r.id || idx}
+                                                onClick={() => { setSelectedRecipient(r); setStep(2); }}
+                                                className="flex items-center p-3 hover:bg-gray-100 dark:hover:bg-white/5 rounded-xl cursor-pointer transition-colors border border-transparent hover:border-gray-200 dark:hover:border-white/10 group"
+                                            >
+                                                <Avatar className="h-10 w-10 mr-4 border border-gray-200 dark:border-white/10">
+                                                    <AvatarFallback className="bg-indigo-100 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-300 font-medium">
+                                                        {getRecipientName(r).charAt(0)}
+                                                    </AvatarFallback>
+                                                </Avatar>
+                                                <div>
+                                                    <div className="font-semibold text-gray-900 dark:text-white">{getRecipientName(r)}</div>
+                                                    <div className="text-sm text-gray-500 dark:text-muted-foreground line-clamp-1">{getRecipientHeadline(r)}</div>
+                                                </div>
+                                                <ChevronRight className="ml-auto text-gray-400 dark:text-muted-foreground group-hover:text-indigo-500 dark:group-hover:text-indigo-400 transition-colors w-5 h-5" />
+                                            </div>
+                                        ))}
+                                        {recipients.length === 0 && (
+                                            <div className="text-center py-12">
+                                                <div className="w-16 h-16 bg-gray-100 dark:bg-white/5 rounded-full flex items-center justify-center mx-auto mb-4">
+                                                    <Search className="w-8 h-8 text-gray-400 dark:text-muted-foreground" />
+                                                </div>
+                                                <p className="text-gray-500 dark:text-muted-foreground">No saved investors found yet.</p>
+                                            </div>
+                                        )}
+                                    </div>
+                                </div>
+                            )}
 
-            // ... existing methods ...
+                            {step === 2 && (
+                                <div className="space-y-6">
+                                    <div className="bg-indigo-50 dark:bg-indigo-500/10 p-4 rounded-xl flex items-center border border-indigo-100 dark:border-indigo-500/20">
+                                        <Avatar className="h-10 w-10 mr-3 border border-indigo-200 dark:border-indigo-500/20">
+                                            <AvatarFallback className="bg-indigo-100 dark:bg-indigo-500/50 text-indigo-600 dark:text-white">
+                                                {recipientInitial}
+                                            </AvatarFallback>
+                                        </Avatar>
+                                        <div>
+                                            <div className="text-xs text-indigo-600 dark:text-indigo-400 font-medium uppercase tracking-wider mb-0.5">Drafting Message To</div>
+                                            <div className="font-bold text-gray-900 dark:text-white leading-tight">{recipientName}</div>
+                                        </div>
+                                    </div>
 
-            return (
-            <AnimatePresence>
-                {isOpen && (
-                    <div className="fixed inset-0 z-[10000] flex items-center justify-center p-4">
-                        {/* ... backdrop ... */}
+                                    <div>
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-white mb-3 ml-1">
+                                            Platform & Format
+                                        </label>
+                                        <div className="grid grid-cols-2 gap-3 mb-6">
+                                            <button
+                                                onClick={() => setMessageType('linkedin')}
+                                                className={cn(
+                                                    "p-3 rounded-xl border text-sm font-medium transition-all flex items-center justify-center gap-2",
+                                                    messageType === 'linkedin'
+                                                        ? "bg-blue-600 border-blue-500 text-white shadow-lg shadow-blue-500/20"
+                                                        : "bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10"
+                                                )}
+                                            >
+                                                <Linkedin className="w-4 h-4" />
+                                                LinkedIn
+                                            </button>
+                                            <button
+                                                onClick={() => setMessageType('email')}
+                                                className={cn(
+                                                    "p-3 rounded-xl border text-sm font-medium transition-all flex items-center justify-center gap-2",
+                                                    messageType === 'email'
+                                                        ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-500/20"
+                                                        : "bg-gray-50 dark:bg-white/5 border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-white/10"
+                                                )}
+                                            >
+                                                <Mail className="w-4 h-4" />
+                                                Email
+                                            </button>
+                                        </div>
 
-                        {/* ... modal content ... */}
+                                        <label className="block text-sm font-medium text-gray-700 dark:text-white mb-2 ml-1">
+                                            What's the core of your pitch?
+                                        </label>
+                                        <textarea
+                                            value={companyContext}
+                                            onChange={(e) => setCompanyContext(e.target.value)}
+                                            placeholder="Describe your company, traction, and why this investor is a good fit..."
+                                            className="w-full h-48 p-4 rounded-xl bg-gray-50 dark:bg-black/20 border border-gray-200 dark:border-white/10 focus:ring-2 focus:ring-indigo-500/50 focus:border-transparent resize-none outline-none text-gray-900 dark:text-white placeholder:text-gray-400 dark:placeholder:text-muted-foreground/50 leading-relaxed"
+                                        />
+                                        <div className="flex justify-between mt-2 px-1">
+                                            <span className="text-xs text-gray-500 dark:text-muted-foreground">Be specific about metrics.</span>
+                                            <span className="text-xs text-gray-500 dark:text-muted-foreground">{companyContext.length} chars</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {step === 3 && (
+                                <div className="space-y-6 h-full flex flex-col">
+                                    {isGenerating ? (
+                                        <div className="flex flex-col items-center justify-center py-16 space-y-6">
+                                            <div className="relative">
+                                                <motion.div
+                                                    animate={{ rotate: 360 }}
+                                                    transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                                                    className="w-16 h-16 border-4 border-indigo-100 dark:border-indigo-500/20 border-t-indigo-600 dark:border-t-indigo-500 rounded-full"
+                                                />
+                                                <div className="absolute inset-0 flex items-center justify-center">
+                                                    <Sparkles className="w-6 h-6 text-indigo-600 dark:text-indigo-400 animate-pulse" />
+                                                </div>
+                                            </div>
+                                            <p className="text-gray-500 dark:text-muted-foreground font-medium animate-pulse">Generating personalized message...</p>
+                                        </div>
+                                    ) : (
+                                        <div className="bg-gray-50 dark:bg-black/20 p-6 rounded-xl border border-gray-200 dark:border-white/5 whitespace-pre-wrap font-sans text-gray-900 dark:text-white leading-relaxed flex-1 overflow-y-auto shadow-inner text-sm md:text-base">
+                                            {generatedMessage}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
 
                         {/* Footer */}
                         <div className="p-6 border-t border-gray-200 dark:border-white/5 flex justify-between bg-gray-50/50 dark:bg-white/5 items-center">
-                            {/* ... existing Back button logic ... */}
                             {step > 1 ? (
                                 <Button
                                     variant="ghost"
@@ -218,8 +356,3 @@ export default function MessageModal({ isOpen, onClose, preSelectedInvestor, cur
         </AnimatePresence>
     );
 }
-            )}
-        </AnimatePresence >
-    );
-}
-

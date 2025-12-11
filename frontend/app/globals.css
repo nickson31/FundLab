@@ -4,20 +4,52 @@
 
 @layer base {
   :root {
-    /* Deep Dark Theme - Matches User's #030303 */
+    /* Light Mode */
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 240 5.9% 10%;
+    --primary-foreground: 0 0% 98%;
+
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 10% 3.9%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    /* "Deep Dark" Theme */
     --background: 0 0% 1.2%;
     /* #030303 */
-    --foreground: 240 5% 64.9%;
-    /* Gray-400 approximately */
+    --foreground: 240 5% 84.9%;
+    /* Lighter gray for better contrast */
 
     --card: 0 0% 1.2%;
-    --card-foreground: 240 5% 64.9%;
+    --card-foreground: 0 0% 98%;
 
     --popover: 0 0% 1.2%;
-    --popover-foreground: 240 5% 64.9%;
+    --popover-foreground: 0 0% 98%;
 
     --primary: 226 71% 40%;
-    /* Indigo-600 approx */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 240 3.7% 15.9%;
@@ -35,21 +67,17 @@
     --border: 240 3.7% 15.9%;
     --input: 240 3.7% 15.9%;
     --ring: 240 4.9% 83.9%;
-
-    --radius: 0.75rem;
   }
+}
 
-  .dark {
-    --background: 0 0% 1.2%;
-    --foreground: 240 5% 64.9%;
+@layer base {
+  * {
+    @apply border-border;
   }
 
   body {
-    background-color: #030303;
-    color: #9ca3af;
-    /* gray-400 */
+    @apply bg-background text-foreground antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
     font-family: var(--font-body), sans-serif;
-    @apply antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
   }
 
   h1,
@@ -72,12 +100,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 10px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  @apply bg-gray-200 dark:bg-white/10 rounded-full hover:bg-gray-300 dark:hover:bg-white/20;
 }
 
 @layer utilities {
@@ -89,40 +112,17 @@
     text-wrap: pretty;
   }
 
-  /* Premium Glass Effect - "The Vogue Look" */
+  /* Premium Glass Effect - Adaptive */
   .glass-premium {
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, rgba(255, 255, 255, 0.01) 100%);
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.36);
+    @apply bg-white/70 dark:bg-white/[0.03] backdrop-blur-xl border border-gray-200 dark:border-white/[0.08] shadow-lg dark:shadow-none;
   }
 
   .glass-panel {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    @apply bg-white/50 dark:bg-white/[0.03] backdrop-blur-md border border-gray-200 dark:border-white/[0.08];
   }
 
-  /* Legacy support */
+  /* Legacy support -> pointing to new adaptive classes */
   .glass-card {
     @apply glass-premium rounded-xl;
   }
-}
-
-@keyframes fade-in-up {
-  0% {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in-up {
-  animation: fade-in-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }

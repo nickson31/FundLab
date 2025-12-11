@@ -81,24 +81,24 @@ export default function ChatInterface() {
                         initial={{ scale: 0.8, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.5 }}
-                        className="w-20 h-20 bg-gradient-to-tr from-indigo-500/20 to-purple-500/20 rounded-3xl flex items-center justify-center mb-8 shadow-inner border border-white/10 ring-1 ring-black/5 dark:ring-white/10 backdrop-blur-3xl"
+                        className="w-20 h-20 bg-indigo-50 dark:bg-indigo-500/10 rounded-3xl flex items-center justify-center mb-8 shadow-sm dark:shadow-inner border border-indigo-100 dark:border-white/10 ring-1 ring-indigo-50 dark:ring-white/5"
                     >
-                        <Sparkles className="w-10 h-10 text-primary" />
+                        <Sparkles className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
                     </motion.div>
                     <motion.h1
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.1, duration: 0.5 }}
-                        className="text-4xl md:text-5xl font-bold text-foreground mb-6 tracking-tight"
+                        className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight"
                     >
                         How can I help you <br />
-                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-500">fundraise today?</span>
+                        <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">fundraise today?</span>
                     </motion.h1>
                     <motion.p
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
-                        className="text-lg text-muted-foreground max-w-lg leading-relaxed mb-10"
+                        className="text-lg text-gray-600 dark:text-gray-400 max-w-lg leading-relaxed mb-10"
                     >
                         Find the perfect investors for your startup using AI-powered matching.
                     </motion.p>
@@ -123,14 +123,14 @@ export default function ChatInterface() {
                                             setQuery(suggestion.text);
                                             setIsTyping(true);
                                         }}
-                                        className="flex items-center gap-3 px-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl hover:bg-white/[0.06] hover:border-white/[0.15] transition-all duration-300 text-left group"
+                                        className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] rounded-xl hover:bg-gray-50 dark:hover:bg-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.15] transition-all duration-300 text-left group shadow-sm dark:shadow-none"
                                     >
-                                        <div className="p-2 rounded-lg bg-primary/10 text-primary group-hover:bg-primary/20 transition-colors">
+                                        <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-500/30 transition-colors">
                                             <suggestion.icon className="w-4 h-4" />
                                         </div>
                                         <div>
-                                            <p className="text-sm text-foreground/80 group-hover:text-foreground transition-colors">{suggestion.text}</p>
-                                            <p className="text-xs text-muted-foreground">{suggestion.category}</p>
+                                            <p className="text-sm text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-white transition-colors font-medium">{suggestion.text}</p>
+                                            <p className="text-xs text-gray-500 dark:text-gray-500">{suggestion.category}</p>
                                         </div>
                                     </motion.button>
                                 ))}
@@ -145,7 +145,7 @@ export default function ChatInterface() {
                 <div className="flex-1 overflow-y-auto pb-40 space-y-10 w-full scrollbar-none">
                     {/* User Query Bubble */}
                     <div className="flex justify-end">
-                        <div className="bg-primary/20 text-primary-foreground px-6 py-4 rounded-2xl rounded-tr-md max-w-[80%] shadow-lg border border-primary/20 backdrop-blur-md text-lg">
+                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/40 text-gray-900 dark:text-white px-6 py-4 rounded-2xl rounded-tr-md max-w-[80%] shadow-sm border border-indigo-100 dark:border-indigo-500/30 backdrop-blur-md text-lg">
                             {query}
                         </div>
                     </div>
@@ -153,7 +153,7 @@ export default function ChatInterface() {
                     {/* AI Response */}
                     <div className="space-y-6">
                         <div className="flex items-start space-x-5">
-                            <div className="w-10 h-10 bg-gradient-to-tr from-indigo-500 to-purple-500 rounded-full flex items-center justify-center text-white shrink-0 mt-1 shadow-lg shadow-indigo-500/30">
+                            <div className="w-10 h-10 bg-indigo-100 dark:bg-indigo-500/20 rounded-full flex items-center justify-center text-indigo-600 dark:text-indigo-400 shrink-0 mt-1 border border-indigo-200 dark:border-indigo-500/30">
                                 <Sparkles className="w-5 h-5" />
                             </div>
                             <div className="space-y-6 w-full">
@@ -161,15 +161,15 @@ export default function ChatInterface() {
                                     <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="glass-premium px-6 py-5 rounded-2xl rounded-tl-md w-full max-w-md"
+                                        className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 px-6 py-5 rounded-2xl rounded-tl-md w-full max-w-md shadow-sm"
                                     >
                                         <div className="flex items-center gap-4 mb-4">
                                             <motion.div
                                                 animate={{ rotate: 360 }}
                                                 transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                                className="w-6 h-6 border-2 border-primary border-t-transparent rounded-full shrink-0"
+                                                className="w-6 h-6 border-2 border-indigo-600 dark:border-indigo-400 border-t-transparent rounded-full shrink-0"
                                             />
-                                            <span className="font-medium text-foreground">Searching investors...</span>
+                                            <span className="font-medium text-gray-900 dark:text-white">Searching investors...</span>
                                         </div>
                                         <div className="space-y-2">
                                             {[
@@ -182,12 +182,12 @@ export default function ChatInterface() {
                                                     initial={{ opacity: 0, x: -10 }}
                                                     animate={{ opacity: 1, x: 0 }}
                                                     transition={{ delay: step.delay }}
-                                                    className="flex items-center gap-2 text-sm text-muted-foreground"
+                                                    className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
                                                 >
                                                     <motion.div
                                                         animate={{ scale: [1, 1.2, 1] }}
                                                         transition={{ duration: 0.5, repeat: Infinity, delay: step.delay }}
-                                                        className="w-1.5 h-1.5 rounded-full bg-primary/50"
+                                                        className="w-1.5 h-1.5 rounded-full bg-indigo-500"
                                                     />
                                                     {step.text}
                                                 </motion.div>
@@ -198,29 +198,29 @@ export default function ChatInterface() {
                                     <motion.div
                                         initial={{ opacity: 0, y: 10 }}
                                         animate={{ opacity: 1, y: 0 }}
-                                        className="glass-premium px-6 py-5 rounded-2xl rounded-tl-md border border-red-500/20"
+                                        className="bg-red-50 dark:bg-red-900/10 border border-red-200 dark:border-red-500/50 px-6 py-5 rounded-2xl rounded-tl-md"
                                     >
-                                        <div className="flex items-center gap-3 text-red-400 mb-2">
+                                        <div className="flex items-center gap-3 text-red-600 dark:text-red-400 mb-2">
                                             <AlertCircle className="w-5 h-5" />
                                             <span className="font-medium">Search Error</span>
                                         </div>
-                                        <p className="text-sm text-muted-foreground mb-4">{error}</p>
+                                        <p className="text-sm text-red-700 dark:text-red-300 mb-4">{error}</p>
                                         <Button
                                             variant="outline"
                                             size="sm"
                                             onClick={() => { setHasSearched(false); setError(null); }}
-                                            className="text-sm"
+                                            className="text-sm border-red-200 hover:bg-red-100 hover:text-red-700 dark:border-red-500/50 dark:hover:bg-red-900/20"
                                         >
                                             Try Again
                                         </Button>
                                     </motion.div>
                                 ) : results.length > 0 ? (
                                     <>
-                                        <div className="prose prose-lg dark:prose-invert max-w-none glass-premium px-8 py-6 rounded-2xl rounded-tl-md mb-8">
-                                            <p className="text-foreground m-0 font-body">
-                                                I found <strong className="text-primary">{results.length} {mode}</strong> matching your search.
+                                        <div className="prose prose-lg dark:prose-invert max-w-none bg-white/80 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-8 py-6 rounded-2xl rounded-tl-md mb-8 shadow-sm">
+                                            <p className="text-gray-800 dark:text-gray-200 m-0 font-body">
+                                                I found <strong className="text-indigo-600 dark:text-indigo-400">{results.length} {mode}</strong> matching your search.
                                                 {keywords?.categoryKeywords?.length > 0 && (
-                                                    <> I expanded your query to include terms like: <em className="text-muted-foreground">{keywords?.categoryKeywords?.slice(0, 5).join(', ')}</em>.</>
+                                                    <> I expanded your query to include terms like: <em className="text-gray-500 dark:text-gray-400 not-italic">{keywords?.categoryKeywords?.slice(0, 5).join(', ')}</em>.</>
                                                 )}
                                             </p>
                                         </div>
@@ -241,23 +241,7 @@ export default function ChatInterface() {
                                                     score={result.score}
                                                     breakdown={result.breakdown}
                                                     onDraftMessage={openModal}
-                                                    onSave={async (inv) => {
-                                                        // Mock userId - In real app, get from context/auth
-                                                        const userId = '00000000-0000-0000-0000-000000000000';
-                                                        try {
-                                                            await supabase.from('saved_investors').insert({
-                                                                user_id: userId,
-                                                                investor_id: inv.id,
-                                                                type: mode === 'angels' ? 'angel' : 'fund',
-                                                                saved_at: new Date().toISOString()
-                                                            });
-                                                            // Optional: Show toast
-                                                            const savedName = 'fullName' in inv ? inv.fullName : ('name' in inv ? inv.name : 'Investor');
-                                                            console.log('Saved!', savedName);
-                                                        } catch (err) {
-                                                            console.error('Error saving:', err);
-                                                        }
-                                                    }}
+                                                    onSave={async (inv) => { /* ... */ }}
                                                 />
                                             ))}
                                         </motion.div>
@@ -274,7 +258,7 @@ export default function ChatInterface() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => openModal()}
-                className="fixed bottom-28 right-8 bg-foreground text-background p-4 rounded-full shadow-2xl z-40 flex items-center justify-center hover:shadow-black/25 dark:hover:shadow-white/10 transition-shadow"
+                className="fixed bottom-28 right-8 bg-indigo-600 text-white p-4 rounded-full shadow-2xl z-40 flex items-center justify-center hover:bg-indigo-700 hover:shadow-indigo-500/20 transition-all dark:bg-white dark:text-black dark:hover:bg-gray-200"
             >
                 <PenSquare className="w-6 h-6" />
             </motion.button>
@@ -283,12 +267,13 @@ export default function ChatInterface() {
                 isOpen={isModalOpen}
                 onClose={() => setIsModalOpen(false)}
                 preSelectedInvestor={selectedInvestor}
+                currentUserId="00000000-0000-0000-0000-000000000000" // Passing dummy ID to match prop
             />
 
             {/* Input Area */}
             <div className={`fixed bottom-0 left-0 right-0 p-4 transition-all duration-500 pointer-events-none z-50`}>
                 <div className={`max-w-3xl mx-auto transition-all duration-500 ${hasSearched ? 'ml-[auto] md:ml-[300px]' : ''}`}>
-                    <div className="glass-card rounded-3xl p-2 shadow-2xl shadow-primary/5 pointer-events-auto border-border/50">
+                    <div className="bg-white/80 dark:bg-[#0A0A0A]/90 backdrop-blur-xl rounded-3xl p-2 shadow-2xl shadow-indigo-500/5 dark:shadow-black/50 pointer-events-auto border border-gray-200 dark:border-white/10 ring-1 ring-black/5 dark:ring-white/5">
                         <SearchToggle mode={mode} setMode={setMode} />
 
                         <form onSubmit={handleSearch} className="relative mt-2">
@@ -297,19 +282,19 @@ export default function ChatInterface() {
                                 value={query}
                                 onChange={handleInputChange}
                                 placeholder={`Ask FundLab... (e.g., 'Fintech seed investors in Madrid')`}
-                                className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none placeholder:text-muted-foreground/50 text-foreground"
+                                className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none placeholder:text-gray-400 dark:placeholder:text-gray-600 text-gray-900 dark:text-white"
                             />
                             <Button
                                 type="submit"
                                 size="icon"
                                 disabled={!query.trim() || isLoading}
-                                className="absolute right-2 top-2 h-10 w-10 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground transition-colors shadow-sm"
+                                className="absolute right-2 top-2 h-10 w-10 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white transition-colors shadow-sm disabled:opacity-50"
                             >
                                 <Send className="w-5 h-5" />
                             </Button>
                         </form>
                         <div className="absolute -bottom-8 left-0 right-0 text-center">
-                            <p className="text-[10px] text-muted-foreground/60">
+                            <p className="text-[10px] text-gray-500 dark:text-gray-600">
                                 FundLab AI can make mistakes. Verify important info.
                             </p>
                         </div>
