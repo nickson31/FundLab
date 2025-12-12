@@ -4,8 +4,16 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 export interface SmartCardContent {
     investorId: string;
-    rewrittenAbout: string; // "Reasoning" + "Custom Pitch" style
-    smartTags: string[]; // 3 tags relevant to the query
+    // 2. Resumen de 1 frase corta
+    oneLineSummary: string;
+    // 5. 3-4 tarjetas de colores (Expertise rewritten)
+    expertises: string[];
+    // 6. Resumen de 2-3 frases (Query + Investor synthesis)
+    generalExplanation: string;
+    // 7. Curiosidades / Golden Nuggets
+    goldenNuggets: { title: string; content: string }[];
+    // Score label (e.g. "Perfect Match")
+    matchLabel: string;
 }
 
 export async function generateSmartCardContent(query: string, results: any[]): Promise<SmartCardContent[]> {
@@ -14,33 +22,36 @@ export async function generateSmartCardContent(query: string, results: any[]): P
     // Limit to top 3 for performance/rate-limits
     const topResults = results.slice(0, 3);
 
-    // Prepare Minimal Context for Gemini
-    // We intentionally provide RAW dumps to encourage synthesis, not copying
+    // Context: Provide RAW dumps but instruct strict rewriting
     const context = topResults.map(r => ({
         id: r.investor.id || r.investor.linkedinUrl || r.investor.website_url,
         name: r.investor.name || r.investor.fullName,
-        raw_data: JSON.stringify(r.investor).slice(0, 1500) // Give it a chunk of data
+        raw_data: JSON.stringify(r.investor).slice(0, 2000) // Moderate chunk
     }));
 
     const prompt = `
-    You are an expert VC Investment Banker pitching these investors to a founder.
-    The founder is looking for: "${query}"
+    You are an expert VC Analyst. The user is a founder searching for: "${query}".
 
-    For each investor, write a COMPLETELY UNIQUE, narrative-style pitch paragraph (40-60 words).
+    Your goal is to analyze these investors and generate a **Rich Insight Card** for each.
     
-    RULES:
-    1. DO NOT simply list facts like "Location: London" or "Thesis: Fintech".
-    2. COMPLETELY REWRITE the information into a persuasive story.
-    3. Example: "With a strong foothold in European Fintech, this fund is the perfect partner for your seed round. Their history of backing B2B marketplaces like X and Y demonstrates their conviction in your model."
-    4. Ignore empty fields. Synthesize what is there.
-    5. Pick 3 "Smart Tags" that bridge the gap between the query and the investor (e.g. "Fintech Match", "London Native", "Seed Specialist").
+    CRITICAL RULES:
+    1. **NEVER** copy raw data. Always rewrite, synthesize, and summarize.
+    2. **Expertise**: Extract 3-4 key strengths (e.g., sectors, stages, unique value) and rewrite them as short, punchy tags (max 2 words each).
+    3. **Golden Nuggets**: Find 1-4 specific, high-value, or "unusual" details (e.g. "Board Member at Revolut", "Writes checks in 48h", "Focuses on female founders"). Title them dynamically.
+    4. **Tone**: Professional, insightful, insider-y.
 
     Output STRICT JSON array:
     [
         {
             "investorId": "id from input",
-            "rewrittenAbout": "Your narrative pitch here...",
-            "smartTags": ["Tag1", "Tag2", "Tag3"]
+            "oneLineSummary": "Short, punchy 1-sentence summary of who they are.",
+            "expertises": ["TAG 1", "TAG 2", "TAG 3"],
+            "generalExplanation": "2-3 sentences explaining exactly WHY they match the user's query ("${query}"). Connect the dots.",
+            "goldenNuggets": [
+                { "title": "Speed", "content": "Known for 24h term sheets." },
+                { "title": "Network", "content": "Ex-Stripe mafia connections." }
+            ],
+            "matchLabel": "One word score label (e.g. 'Perfect', 'Strong', 'Good')"
         }
     ]
 

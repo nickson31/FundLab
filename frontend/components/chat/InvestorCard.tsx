@@ -105,89 +105,134 @@ function StandardLayout({ data, score, dynamicFields, breakdown, handlers, expan
 }
 
 // --- 3. Rich Layout (Magazine Style, High Data) ---
-function RichLayout({ data, score, dynamicFields, breakdown, handlers, expanded }: { data: any, score: number, dynamicFields: DynamicField[], breakdown: any, handlers: any, expanded: boolean }) {
-    const { investor, name, headline, location, categoryTags } = data;
+function RichLayout({ data, score, dynamicFields, breakdown, handlers, expanded, smartData }: { data: any, score: number, dynamicFields: DynamicField[], breakdown: any, handlers: any, expanded: boolean, smartData?: any }) {
+    const { investor, name, headline, location } = data;
     const { onExpand } = handlers;
 
-    // Rich layout highlights the "Story"
-    const thesis = dynamicFields.find(f => f.component === 'investment_thesis' || f.component === 'about')?.value;
-    const portfolio = dynamicFields.find(f => f.component === 'portfolio_companies' || f.component === 'recent_investments');
+    // Use Smart Data if available, otherwise fall back to best-effort dynamic fields
+    const summary = smartData?.oneLineSummary || headline;
+    const explanation = smartData?.generalExplanation || dynamicFields.find(f => f.component === 'investment_thesis')?.value;
+    const expertise = smartData?.expertises || dynamicFields.filter(f => f.component === 'category_tags').slice(0, 3).map(f => f.value).flat();
+    const nuggets = smartData?.goldenNuggets || [];
+
+    // Colors for expertise chips
+    const chipColors = [
+        "bg-rose-100 text-rose-700 border-rose-200",
+        "bg-blue-100 text-blue-700 border-blue-200",
+        "bg-amber-100 text-amber-700 border-amber-200", // Amber is distinct from "Orange" allowed here? User said "No Orange" previously, let's substitute Amber for Violet/Emerald if risky.
+        "bg-emerald-100 text-emerald-700 border-emerald-200"
+    ];
+    // Safe Palette avoids "Orange"
+    const safeChipColors = [
+        "bg-pink-100 text-pink-700 border-pink-200",
+        "bg-indigo-100 text-indigo-700 border-indigo-200",
+        "bg-purple-100 text-purple-700 border-purple-200",
+        "bg-emerald-100 text-emerald-700 border-emerald-200"
+    ];
+
+    const linkedInUrl = investor.linkedinUrl || investor.website_url;
 
     return (
-        <div className="p-0">
-            {/* Header / Banner */}
-            <div className="bg-gradient-to-r from-indigo-50 to-purple-50 p-6 border-b border-indigo-100/50">
-                <div className="flex justify-between items-start">
+        <div className="p-0 flex flex-col h-full bg-white dark:bg-white/5">
+            {/* 1. Header: Name & Score */}
+            <div className="p-6 pb-2">
+                <div className="flex justify-between items-start gap-4">
                     <div className="flex gap-4">
-                        <Avatar className="h-16 w-16 border-4 border-white shadow-lg bg-indigo-100">
-                            <AvatarFallback className="bg-indigo-600 text-white text-xl">{getInitials(name)}</AvatarFallback>
-                        </Avatar>
+                        {/* No Photo, just sleek initials */}
+                        <div className="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-indigo-500 to-purple-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-500/20">
+                            {getInitials(name)}
+                        </div>
                         <div>
-                            <h3 className="text-2xl font-bold text-indigo-950 tracking-tight">{name}</h3>
-                            <p className="text-base text-indigo-600 font-medium mt-0.5">{headline}</p>
-                            <div className="flex gap-2 mt-2">
-                                {location && <Badge variant="outline" className="bg-white/50 text-indigo-700 border-indigo-200">{location}</Badge>}
-                                <Badge className="bg-emerald-100 text-emerald-800 border-emerald-200 hover:bg-emerald-200">{Math.round(score * 100)}% Match</Badge>
+                            <h3 className="text-2xl font-bold text-indigo-950 dark:text-white tracking-tight leading-tight">{name}</h3>
+                            {/* 3. Location */}
+                            <div className="flex items-center gap-2 mt-1 text-sm text-slate-500">
+                                <MapPin className="w-3.5 h-3.5 text-slate-400" />
+                                {location}
                             </div>
                         </div>
                     </div>
+                    {/* 4. Score Circle */}
+                    <div className="flex flex-col items-center">
+                        <div className="relative flex items-center justify-center w-14 h-14">
+                            <svg className="w-full h-full transform -rotate-90">
+                                <circle cx="28" cy="28" r="26" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-slate-100 dark:text-white/10" />
+                                <circle cx="28" cy="28" r="26" stroke="currentColor" strokeWidth="4" fill="transparent" strokeDasharray={163} strokeDashoffset={163 - (163 * score)} className="text-indigo-500 transition-all duration-1000 ease-out" />
+                            </svg>
+                            <span className="absolute text-lg font-bold text-indigo-600 dark:text-indigo-400">{Math.round(score * 100)}</span>
+                        </div>
+                        <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-wider mt-1">{smartData?.matchLabel || "Match"}</span>
+                    </div>
                 </div>
+
+                {/* 2. One Liner Summary */}
+                <p className="mt-4 text-base font-medium text-indigo-900/80 dark:text-indigo-200 leading-snug">
+                    {summary}
+                </p>
             </div>
 
-            <div className="p-6 grid grid-cols-1 md:grid-cols-3 gap-6">
-                {/* Left Column: Thesis/Bio */}
-                <div className="md:col-span-2 space-y-6">
-                    {breakdown?.matched_keywords?.length > 0 && (
-                        <div className="flex flex-wrap gap-2">
-                            {breakdown.matched_keywords.map((kw: string, i: number) => (
-                                <span key={i} className="px-3 py-1 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center gap-1">
-                                    <Zap className="w-3 h-3" /> {kw}
-                                </span>
+            {/* 5. Expertise Chips (Colored) */}
+            <div className="px-6 py-2 flex flex-wrap gap-2">
+                {expertise && expertise.map((tag: string, i: number) => (
+                    <span key={i} className={cn("px-3 py-1.5 rounded-lg text-xs font-bold border capitalize shadow-sm", safeChipColors[i % safeChipColors.length])}>
+                        {tag}
+                    </span>
+                ))}
+            </div>
+
+            {/* Body Content */}
+            <div className="p-6 pt-4 space-y-6">
+
+                {/* 6. General Explanation */}
+                <div className="bg-slate-50 dark:bg-black/20 p-4 rounded-xl border border-slate-100 dark:border-white/5">
+                    <div className="flex items-start gap-3">
+                        <Sparkles className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+                        <div>
+                            <h4 className="text-xs font-bold text-indigo-900 dark:text-indigo-300 uppercase mb-1">Why this match?</h4>
+                            <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                                {explanation || "This investor's thesis strongly aligns with your sector and stage."}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                {/* 7. Golden Nuggets */}
+                {nuggets.length > 0 && (
+                    <div className="space-y-3">
+                        <h4 className="text-xs font-bold text-slate-400 uppercase flex items-center gap-2">
+                            <Zap className="w-3 h-3" /> Key Insights
+                        </h4>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            {nuggets.map((nugget: any, i: number) => (
+                                <div key={i} className="bg-white dark:bg-white/5 p-3 rounded-lg border border-indigo-50 dark:border-white/10 hover:border-indigo-200 transition-colors">
+                                    <p className="text-[10px] font-bold text-indigo-500 uppercase mb-1">{nugget.title}</p>
+                                    <p className="text-sm font-medium text-slate-700 dark:text-slate-300">{nugget.content}</p>
+                                </div>
                             ))}
                         </div>
+                    </div>
+                )}
+
+                {/* 8 & 9 Actions */}
+                <div className="flex items-center gap-3 pt-4 border-t border-slate-100 dark:border-white/5">
+                    <Button
+                        onClick={handlers.draft}
+                        className="flex-1 bg-indigo-600 hover:bg-indigo-500 text-white font-bold py-6 rounded-xl shadow-lg shadow-indigo-500/20 active:scale-95 transition-all"
+                    >
+                        <span className="flex items-center gap-2">
+                            <Sparkles className="w-4 h-4 text-indigo-200" />
+                            Generate Message
+                        </span>
+                    </Button>
+
+                    {linkedInUrl && (
+                        <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="shrink-0">
+                            <Button variant="outline" className="h-14 w-14 rounded-xl border-2 border-slate-200 hover:border-blue-400 hover:bg-blue-50 text-slate-400 hover:text-blue-600 transition-all p-0 flex items-center justify-center">
+                                <Linkedin className="w-6 h-6" />
+                            </Button>
+                        </a>
                     )}
-
-                    <div className="prose prose-indigo prose-sm">
-                        <div className="relative pl-4 border-l-4 border-indigo-200">
-                            <Quote className="absolute -top-2 -left-3 w-4 h-4 text-indigo-300 bg-white" />
-                            <p className="text-indigo-900/80 italic text-lg leading-relaxed">
-                                {thesis || "Expert investor focused on high-growth technology sectors with a proven track record of scaling startups."}
-                            </p>
-                        </div>
-                    </div>
-
-                    {/* Stats Grid */}
-                    <div className="grid grid-cols-2 gap-4">
-                        {dynamicFields.filter(f => ['ticket_size', 'stage_tags', 'category_tags'].includes(f.component)).slice(0, 4).map((f, i) => (
-                            <div key={i} className="bg-slate-50 p-3 rounded-lg border border-slate-100">
-                                <p className="text-[10px] uppercase font-bold text-slate-400">{f.label}</p>
-                                <p className="font-semibold text-slate-700">{Array.isArray(f.value) ? f.value.join(', ') : f.value}</p>
-                            </div>
-                        ))}
-                    </div>
                 </div>
 
-                {/* Right Column: Portfolio & Actions */}
-                <div className="space-y-4">
-                    <div className="bg-white rounded-xl border border-indigo-100 p-4 shadow-sm">
-                        <h4 className="font-bold text-indigo-950 flex items-center gap-2 mb-3">
-                            <Briefcase className="w-4 h-4 text-indigo-500" /> Recent Activity
-                        </h4>
-                        {portfolio ? (
-                            <p className="text-sm text-slate-600">
-                                {String(portfolio.value).split(',').map(p => p.trim()).slice(0, 5).join(', ')}...
-                            </p>
-                        ) : (
-                            <p className="text-sm text-slate-400 italic">No public portfolio data available.</p>
-                        )}
-                        <Button className="w-full mt-4 bg-indigo-600 hover:bg-indigo-700 text-white shadow-lg shadow-indigo-500/20" onClick={handlers.draft}>
-                            Draft Outreach
-                        </Button>
-                        <Button variant="ghost" className="w-full mt-2 text-indigo-500" onClick={onExpand}>
-                            {expanded ? "Collapse Info" : "View Full Profile"}
-                        </Button>
-                    </div>
-                </div>
             </div>
         </div>
     );
@@ -256,6 +301,7 @@ export default function InvestorCard(props: InvestorCardProps) {
                     data={data} score={props.score}
                     dynamicFields={dynamicFields} breakdown={props.breakdown}
                     handlers={handlers} expanded={isExpanded}
+                    smartData={layout.smartData}
                 />
             )}
 

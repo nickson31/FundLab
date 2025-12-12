@@ -26,15 +26,16 @@ export type LayoutComponent =
 export interface DynamicField {
     component: LayoutComponent;
     label: string;
-    value: string | string[];
-    priority: number; // 1-100, dynamically scored
-    display_type: 'text' | 'list' | 'badge' | 'link';
+    value: string | string[] | any; // Allow objects for complex fields
+    priority: number;
+    display_type: 'text' | 'list' | 'badge' | 'link' | 'nuggets'; // Added nuggets
 }
 
 export interface CardLayout {
     template: 'compact' | 'standard' | 'rich';
     components: LayoutComponent[];
     fields: DynamicField[];
+    smartData?: any; // Direct access to the full smart object
 }
 
 /**
@@ -269,9 +270,13 @@ export function selectDynamicLayout(
     const richfieldCount = fields.filter(f => f.priority > 20).length;
     const template = richfieldCount >= 4 ? 'rich' : richfieldCount >= 2 ? 'standard' : 'compact';
 
+    // Extract smart data if present for direct usage in RichLayout
+    const smartData = (investor as any).smartData;
+
     return {
         template,
         components,
-        fields
+        fields,
+        smartData
     };
 }

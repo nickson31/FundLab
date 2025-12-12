@@ -77,8 +77,7 @@ export async function POST(req: NextRequest) {
                     ...r,
                     investor: {
                         ...r.investor,
-                        smartAbout: smartData.rewrittenAbout,
-                        smartTags: smartData.smartTags
+                        smartData: smartData // Pass the full structured object
                     }
                 };
             }
