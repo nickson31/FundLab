@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Linkedin, MapPin, Sparkles, Zap, Globe } from 'lucide-react'; // Added Globe for funds
+import { Linkedin, MapPin, Sparkles, Zap, Globe, ChevronDown, ChevronUp } from 'lucide-react'; // Added Chevrons
 import { cn } from '@/lib/utils';
-import { InvestmentFund } from '@/types/investor'; // Assuming this exists or using any
+import { InvestmentFund } from '@/types/investor';
+import { generateAvatarGradient } from '@/lib/avatarGenerator';
 
 interface FundCardProps {
-    fund: any; // Using any to be safe with dynamic props
+    fund: any;
     score: number;
     breakdown: any;
     onDraftMessage?: (fund: any) => void;
@@ -22,6 +23,7 @@ const getInitials = (n: string) => n.split(' ').map(p => p[0]).join('').toUpperC
 
 export default function FundCard(props: FundCardProps) {
     const { fund, score, onDraftMessage } = props;
+    const [isExpanded, setIsExpanded] = useState(false);
 
     if (!fund) return null;
 
@@ -54,6 +56,9 @@ export default function FundCard(props: FundCardProps) {
         "bg-blue-50 text-blue-700 border-blue-100"
     ];
 
+    // Dynamic Gradient for "Programmed Photo"
+    const bgGradient = generateAvatarGradient(name);
+
     return (
         <motion.div
             layout
@@ -67,8 +72,8 @@ export default function FundCard(props: FundCardProps) {
                 <div className="p-6 pb-2">
                     <div className="flex justify-between items-start gap-4">
                         <div className="flex gap-4">
-                            {/* Initials Avatar */}
-                            <div className="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-500/20">
+                            {/* Initials Avatar (Programmed Photo) */}
+                            <div className={cn("w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-500/20", bgGradient)}>
                                 {getInitials(name)}
                             </div>
 
@@ -114,41 +119,65 @@ export default function FundCard(props: FundCardProps) {
                     )}
                 </div>
 
-                {/* Body Content */}
-                <div className="p-6 pt-4 space-y-6">
+                {/* --- TOGGLE BUTTON FOR DROPDOWN --- */}
+                <div className="px-6 py-4">
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="flex items-center gap-2 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors focus:outline-none"
+                    >
+                        {isExpanded ? "Hide Fund Analysis" : "View Fund Analysis"}
+                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </button>
+                </div>
 
-                    {/* 4. Deep Summary (Prompt + Investor) */}
-                    <div className="bg-indigo-50/30 dark:bg-black/20 p-5 rounded-2xl border border-indigo-50 dark:border-white/5">
-                        <div className="flex items-start gap-3">
-                            <Sparkles className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
-                            <div>
-                                <h4 className="text-xs font-bold text-indigo-900 dark:text-indigo-300 uppercase mb-2">Fund Thesis</h4>
-                                <p className="text-sm font-medium text-indigo-800/70 dark:text-slate-300 leading-relaxed">
-                                    {explanation}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                {/* --- COLLAPSIBLE CONTENT (DROPDOWN) --- */}
+                <AnimatePresence>
+                    {isExpanded && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="bg-slate-50/50 dark:bg-black/20 border-t border-indigo-50/50 overflow-hidden"
+                        >
+                            <div className="p-6 pt-4 space-y-6">
 
-                    {/* 5. Golden Nuggets */}
-                    {nuggets.length > 0 && (
-                        <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-indigo-300 uppercase flex items-center gap-2 tracking-widest">
-                                <Zap className="w-3 h-3" /> Key Insights
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {nuggets.map((nugget: any, i: number) => (
-                                    <div key={i} className="bg-white dark:bg-white/5 p-4 rounded-xl border border-indigo-50 dark:border-white/10 shadow-sm">
-                                        <p className="text-[10px] font-bold text-indigo-500 uppercase mb-1">{nugget.title}</p>
-                                        <p className="text-sm font-semibold text-indigo-950 dark:text-slate-200">{nugget.content}</p>
+                                {/* 4. Deep Summary (Prompt + Investor) */}
+                                <div className="bg-indigo-50/30 dark:bg-indigo-500/10 p-5 rounded-2xl border border-indigo-100 dark:border-white/5">
+                                    <div className="flex items-start gap-3">
+                                        <Sparkles className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+                                        <div>
+                                            <h4 className="text-xs font-bold text-indigo-900 dark:text-indigo-300 uppercase mb-2">Fund Thesis</h4>
+                                            <p className="text-sm font-medium text-indigo-800/70 dark:text-slate-300 leading-relaxed">
+                                                {explanation}
+                                            </p>
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                                </div>
 
-                    {/* 6. Action Buttons */}
-                    <div className="flex items-center gap-3 pt-2">
+                                {/* 5. Golden Nuggets */}
+                                {nuggets.length > 0 && (
+                                    <div className="space-y-3">
+                                        <h4 className="text-xs font-bold text-indigo-300 uppercase flex items-center gap-2 tracking-widest">
+                                            <Zap className="w-3 h-3" /> Key Insights
+                                        </h4>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            {nuggets.map((nugget: any, i: number) => (
+                                                <div key={i} className="bg-white dark:bg-white/5 p-4 rounded-xl border border-indigo-50 dark:border-white/10 shadow-sm">
+                                                    <p className="text-[10px] font-bold text-indigo-500 uppercase mb-1">{nugget.title}</p>
+                                                    <p className="text-sm font-semibold text-indigo-950 dark:text-slate-200">{nugget.content}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* 6. Action Buttons */}
+                <div className="px-6 pb-6 pt-2">
+                    <div className="flex items-center gap-3">
                         <Button
                             onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(fund); }}
                             className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 rounded-2xl shadow-xl shadow-indigo-500/30 active:scale-95 transition-all text-base"

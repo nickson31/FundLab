@@ -253,7 +253,7 @@ export default function ChatInterface() {
                                 value={query}
                                 onChange={handleInputChange}
                                 placeholder={`Ask FundLab... (e.g., 'Fintech seed investors in Madrid')`}
-                                className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none placeholder:text-indigo-300 dark:placeholder:text-indigo-300/50 text-indigo-900 dark:text-white"
+                                className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none focus:ring-0 placeholder:text-indigo-300 dark:placeholder:text-indigo-300/50 text-indigo-900 dark:text-white"
                             />
                             <Button
                                 type="submit"

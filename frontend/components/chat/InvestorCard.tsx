@@ -4,9 +4,10 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Linkedin, MapPin, Sparkles, Zap } from 'lucide-react';
+import { Linkedin, MapPin, Sparkles, Zap, ChevronDown, ChevronUp } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Investor, MatchBreakdown } from '@/types/investor';
+import { generateAvatarGradient } from '@/lib/avatarGenerator';
 
 // --- Shared Types ---
 interface InvestorCardProps {
@@ -36,7 +37,7 @@ export default function InvestorCard(props: InvestorCardProps) {
     // Fallbacks if Smart Data is missing (e.g. latency or error)
     const summary = smartData?.oneLineSummary || ('headline' in investor ? investor.headline : "Investor Profile");
     const explanation = smartData?.generalExplanation || "This investor matches your criteria based on their investment thesis and past activity.";
-    const expertise = smartData?.expertises || []; // If empty, we might want to fallback to category tags, but prompt says "Reescritos", so prefer empty/clean to raw data.
+    const expertise = smartData?.expertises || [];
     const nuggets = smartData?.goldenNuggets || [];
     const matchLabel = smartData?.matchLabel || "Strong Match";
     const linkedInUrl = 'linkedinUrl' in investor ? investor.linkedinUrl : ('website_url' in investor ? investor.website_url : undefined);
@@ -46,6 +47,9 @@ export default function InvestorCard(props: InvestorCardProps) {
         "bg-violet-50 text-violet-700 border-violet-100",
         "bg-emerald-50 text-emerald-700 border-emerald-100"
     ];
+
+    // Dynamic Gradient for "Programmed Photo"
+    const bgGradient = generateAvatarGradient(name);
 
     return (
         <motion.div
@@ -60,8 +64,8 @@ export default function InvestorCard(props: InvestorCardProps) {
                 <div className="p-6 pb-2">
                     <div className="flex justify-between items-start gap-4">
                         <div className="flex gap-4">
-                            {/* Initials Avatar (No Photo) */}
-                            <div className="w-16 h-16 shrink-0 rounded-2xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-500/20">
+                            {/* Initials Avatar (Programmed Photo) */}
+                            <div className={cn("w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-indigo-500/20", bgGradient)}>
                                 {getInitials(name)}
                             </div>
 
@@ -94,55 +98,84 @@ export default function InvestorCard(props: InvestorCardProps) {
                     </p>
                 </div>
 
-                {/* 3. Expertise Chips (UPPERCASE via CSS) */}
+                {/* 3. Expertise Chips */}
                 <div className="px-6 py-2 flex flex-wrap gap-2">
                     {expertise.length > 0 ? expertise.map((tag: string, i: number) => (
                         <span key={i} className={cn("px-4 py-1.5 rounded-full text-xs font-bold border uppercase tracking-wide", safeChipColors[i % safeChipColors.length])}>
                             {tag}
                         </span>
                     )) : (
-                        // Fallback tags if AI hasn't loaded logic yet
                         <span className="px-4 py-1.5 rounded-full text-xs font-bold border border-indigo-50 bg-indigo-50/50 text-indigo-300 uppercase">
                             Analysis Pending...
                         </span>
                     )}
                 </div>
 
-                {/* Body Content */}
-                <div className="p-6 pt-4 space-y-6">
+                {/* --- TOGGLE BUTTON FOR DROPDOWN --- */}
+                <div className="px-6 py-4">
+                    <button
+                        onClick={() => setIsExpanded(!isExpanded)}
+                        className="flex items-center gap-2 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors focus:outline-none"
+                    >
+                        {isExpanded ? "Hide Analysis" : "View Analysis"}
+                        {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
+                    </button>
+                </div>
 
-                    {/* 4. Deep Summary (Prompt + Investor) */}
-                    <div className="bg-indigo-50/30 dark:bg-black/20 p-5 rounded-2xl border border-indigo-50 dark:border-white/5">
-                        <div className="flex items-start gap-3">
-                            <Sparkles className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
-                            <div>
-                                <h4 className="text-xs font-bold text-indigo-900 dark:text-indigo-300 uppercase mb-2">Investment Logic</h4>
-                                <p className="text-sm font-medium text-indigo-800/70 dark:text-slate-300 leading-relaxed">
-                                    {explanation}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
+                {/* --- COLLAPSIBLE CONTENT (DROPDOWN) --- */}
+                <AnimatePresence>
+                    {isExpanded && (
+                        <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: "auto", opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="bg-slate-50/50 dark:bg-black/20 border-t border-indigo-50/50 overflow-hidden"
+                        >
+                            <div className="p-6 pt-4 space-y-6">
 
-                    {/* 5. Golden Nuggets */}
-                    {nuggets.length > 0 && (
-                        <div className="space-y-3">
-                            <h4 className="text-xs font-bold text-indigo-300 uppercase flex items-center gap-2 tracking-widest">
-                                <Zap className="w-3 h-3" /> Golden Nuggets
-                            </h4>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                {nuggets.map((nugget: any, i: number) => (
-                                    <div key={i} className="bg-white dark:bg-white/5 p-4 rounded-xl border border-indigo-50 dark:border-white/10 shadow-sm">
-                                        <p className="text-[10px] font-bold text-indigo-500 uppercase mb-1">{nugget.title}</p>
-                                        <p className="text-sm font-semibold text-indigo-950 dark:text-slate-200">{nugget.content}</p>
+                                {/* 4. Deep Summary (Prompt + Investor) */}
+                                <div className="bg-indigo-50/30 dark:bg-indigo-500/10 p-5 rounded-2xl border border-indigo-100 dark:border-white/5">
+                                    <div className="flex items-start gap-3">
+                                        <Sparkles className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
+                                        <div>
+                                            <h4 className="text-xs font-bold text-indigo-900 dark:text-indigo-300 uppercase mb-2">Investment Logic</h4>
+                                            <p className="text-sm font-medium text-indigo-800/70 dark:text-slate-300 leading-relaxed">
+                                                {explanation}
+                                            </p>
+                                        </div>
                                     </div>
-                                ))}
-                            </div>
-                        </div>
-                    )}
+                                </div>
 
-                    {/* 6. Action Buttons */}
-                    <div className="flex items-center gap-3 pt-2">
+                                {/* 5. Golden Nuggets */}
+                                {nuggets.length > 0 && (
+                                    <div className="space-y-3">
+                                        <h4 className="text-xs font-bold text-indigo-300 uppercase flex items-center gap-2 tracking-widest">
+                                            <Zap className="w-3 h-3" /> Golden Nuggets
+                                        </h4>
+                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                                            {nuggets.map((nugget: any, i: number) => (
+                                                <div key={i} className="bg-white dark:bg-white/5 p-4 rounded-xl border border-indigo-50 dark:border-white/10 shadow-sm">
+                                                    <p className="text-[10px] font-bold text-indigo-500 uppercase mb-1">{nugget.title}</p>
+                                                    <p className="text-sm font-semibold text-indigo-950 dark:text-slate-200">{nugget.content}</p>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
+                        </motion.div>
+                    )}
+                </AnimatePresence>
+
+                {/* 6. Action Buttons - Always visible at bottom? Or inside dropdown? 
+                   User said "dropdown to add more info". Actions should probably remain always visible or at least visible. 
+                   Let's keep them OUTSIDE the expanded area so they are always accessible, OR inside if we want a very compact card.
+                   Current design had them at the bottom. The user focused on "dropdown to ADD info". 
+                   So keeping buttons visible *below* the dropdown (or fixed at bottom) is safer.
+                   Actually, if I put buttons *after* the dropdown, they will slide down.
+               */}
+                <div className="px-6 pb-6 pt-2">
+                    <div className="flex items-center gap-3">
                         <Button
                             onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(investor); }}
                             className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 rounded-2xl shadow-xl shadow-indigo-500/30 active:scale-95 transition-all text-base"
@@ -161,8 +194,8 @@ export default function InvestorCard(props: InvestorCardProps) {
                             </a>
                         )}
                     </div>
-
                 </div>
+
             </div>
         </motion.div>
     );
