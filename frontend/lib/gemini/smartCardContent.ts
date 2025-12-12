@@ -21,112 +21,135 @@ export interface SmartCardContent {
 export async function generateSmartCardContent(query: string, results: any[], mode: 'angels' | 'funds' = 'angels'): Promise<SmartCardContent[]> {
     if (!results || results.length === 0) return [];
 
-    // Context: Provide RAW dumps but instruct strict rewriting
-    const context = results.map(r => ({
+    // Helper to separate batches
+    const chunkArray = (array: any[], size: number) => {
+        const chunked = [];
+        for (let i = 0; i < array.length; i += size) {
+            chunked.push(array.slice(i, i + size));
+        }
+        return chunked;
+    };
+
+    // Prepare full context
+    const fullContext = results.map(r => ({
         id: r.investor.id || r.investor.linkedinUrl || r.investor.website_url,
         name: r.investor.name || r.investor.fullName,
-        raw_data: JSON.stringify(r.investor).slice(0, 2000) // Moderate chunk
+        raw_data: JSON.stringify(r.investor).slice(0, 2000)
     }));
 
-    // Explicit count
-    const count = context.length;
+    // Process in batches of 5 to avoid token limits
+    const BATCH_SIZE = 5;
+    const batches = chunkArray(fullContext, BATCH_SIZE);
 
-    let prompt = '';
+    console.log(`[SmartCard] Processing ${fullContext.length} items in ${batches.length} batches...`);
 
-    if (mode === 'funds') {
-        prompt = `
-        You are an expert VC Fund Analyst. The user is a founder searching for: "${query}".
-        
-        INPUT: A list of ${count} VENTURE FUNDS.
-        TASK: JSON Response.
-        
-        CRITICAL INSTRUCTIONS:
-        1. **PROCESS EVERY SINGLE FUND** in the input list (${count} items). Do not skip any.
-        2. **Investment Logic**: Extract specific thesis details.
-        3. **Expertise**: Deduce 3 specific tags.
-        4. **Golden Nuggets**: MUST BE HARD FACTS (Exits, Fund Size, Ticket). NO FLUFF.
-        5. **Targeted Deep Dive**: Generate 4-5 EXTRA distinct insights.
-        6. **Tone**: Institutional.
+    const processBatch = async (batchContext: any[], batchIndex: number) => {
+        const count = batchContext.length;
+        let prompt = '';
 
-        Output STRICT JSON array of exactly ${count} objects:
-        [
-            {
-                "investorId": "id from input",
-                "oneLineSummary": "A leading [Stage] fund specializing in [Sector].",
-                "expertises": ["Fintech", "Series A", "Lead Investor"],
-                "generalExplanation": "Explain why this FUND fits the user's query perfectly based on their known thesis.",
-                "goldenNuggets": [
-                    { "title": "Portfolio", "content": "Early backer of Revolut & Monzo." },
-                    { "title": "Power", "content": "$1Bn AUM across 4 funds." }
-                ],
-                "extendedAnalysis": [
-                    { "title": "Market Power", "content": "Dominates European Fintech seed rounds." },
-                    { "title": "Reserves", "content": "Reserves 50% of follow-ons." },
-                    { "title": "Board Style", "content": "Hands-on, operational support." },
-                    { "title": "Network", "content": "Direct line to Tier 1 US VCs." }
-                ],
-                "matchLabel": "Top Tier Fund"
-            }
-        ]
+        if (mode === 'funds') {
+            prompt = `
+            You are an expert VC Fund Analyst. The user is a founder searching for: "${query}".
+            
+            INPUT: A list of ${count} VENTURE FUNDS.
+            TASK: JSON Response.
+            
+            CRITICAL INSTRUCTIONS:
+            1. **PROCESS EVERY SINGLE FUND** in the input list (${count} items).
+            2. **Investment Logic**: Extract specific thesis details.
+            3. **Expertise**: Deduce 3 specific tags.
+            4. **Golden Nuggets**: MUST BE HARD FACTS (Exits, Fund Size, Ticket). NO FLUFF.
+            5. **Targeted Deep Dive**: Generate 4-5 EXTRA distinct insights.
+            6. **Tone**: Institutional.
 
-        Funds to Analyze (${count}):
-        ${JSON.stringify(context, null, 2)}
-        `;
-    } else {
-        prompt = `
-        You are an expert VC Analyst. The user is a founder searching for: "${query}".
-        
-        INPUT: A list of ${count} ANGEL INVESTORS.
-        TASK: JSON Response.
-        
-        CRITICAL INSTRUCTIONS:
-        1. **PROCESS EVERY SINGLE INVESTOR** in the input list (${count} items). Do not skip any.
-        2. **Neve Copy/Paste**: Refine the text.
-        3. **Expertise**: 3-4 specific strengths (Sector, Stage, Value).
-        4. **Golden Nuggets**: IMPRESSIVE FACTS (Ex-Founder, Big Tech VP, Investments).
-        5. **Targeted Deep Dive**: 4-5 EXTRA distinct insights.
-        6. **Tone**: Insider-y, High Signal.
+            Output STRICT JSON array of exactly ${count} objects:
+            [
+                {
+                    "investorId": "id from input",
+                    "oneLineSummary": "A leading [Stage] fund specializing in [Sector].",
+                    "expertises": ["Fintech", "Series A", "Lead Investor"],
+                    "generalExplanation": "Explain why this FUND fits the user's query perfectly based on their known thesis.",
+                    "goldenNuggets": [
+                        { "title": "Portfolio", "content": "Early backer of Revolut & Monzo." },
+                        { "title": "Power", "content": "$1Bn AUM across 4 funds." }
+                    ],
+                    "extendedAnalysis": [
+                        { "title": "Market Power", "content": "Dominates European Fintech seed rounds." },
+                        { "title": "Reserves", "content": "Reserves 50% of follow-ons." },
+                        { "title": "Board Style", "content": "Hands-on, operational support." },
+                        { "title": "Network", "content": "Direct line to Tier 1 US VCs." }
+                    ],
+                    "matchLabel": "Top Tier Fund"
+                }
+            ]
 
-        Output STRICT JSON array of exactly ${count} objects:
-        [
-            {
-                "investorId": "id from input",
-                "oneLineSummary": "Former VP Product at Uber turned Fintech Angel.",
-                "expertises": ["Fintech", "Seed Stage", "Product Guru"],
-                "generalExplanation": "Why is this investor good for THIS user query?",
-                "goldenNuggets": [
-                    { "title": "Speed", "content": "Known for same-day term sheets." },
-                    { "title": "Track Record", "content": "Early investor in Notion." }
-                ],
-                "extendedAnalysis": [
-                    { "title": "Operator Skill", "content": "Can help with B2B Sales strategy." },
-                    { "title": "Deal Flow", "content": "Sees 100+ deals/mo, high signal." },
-                    { "title": "References", "content": "Founders love him, very supportive." },
-                    { "title": "Check Velocity", "content": "Fast mover, no complex DD." }
-                ],
-                "matchLabel": "Perfect Match"
-            }
-        ]
+            Funds to Analyze (${count}):
+            ${JSON.stringify(batchContext, null, 2)}
+            `;
+        } else {
+            prompt = `
+            You are an expert VC Analyst. The user is a founder searching for: "${query}".
+            
+            INPUT: A list of ${count} ANGEL INVESTORS.
+            TASK: JSON Response.
+            
+            CRITICAL INSTRUCTIONS:
+            1. **PROCESS EVERY SINGLE INVESTOR** in the input list (${count} items).
+            2. **Neve Copy/Paste**: Refine the text.
+            3. **Expertise**: 3-4 specific strengths (Sector, Stage, Value).
+            4. **Golden Nuggets**: IMPRESSIVE FACTS (Ex-Founder, Big Tech VP, Investments).
+            5. **Targeted Deep Dive**: 4-5 EXTRA distinct insights.
+            6. **Tone**: Insider-y, High Signal.
 
-        Investors to Analyze (${count}):
-        ${JSON.stringify(context, null, 2)}
-        `;
-    }
+            Output STRICT JSON array of exactly ${count} objects:
+            [
+                {
+                    "investorId": "id from input",
+                    "oneLineSummary": "Former VP Product at Uber turned Fintech Angel.",
+                    "expertises": ["Fintech", "Seed Stage", "Product Guru"],
+                    "generalExplanation": "Why is this investor good for THIS user query?",
+                    "goldenNuggets": [
+                        { "title": "Speed", "content": "Known for same-day term sheets." },
+                        { "title": "Track Record", "content": "Early investor in Notion." }
+                    ],
+                    "extendedAnalysis": [
+                        { "title": "Operator Skill", "content": "Can help with B2B Sales strategy." },
+                        { "title": "Deal Flow", "content": "Sees 100+ deals/mo, high signal." },
+                        { "title": "References", "content": "Founders love him, very supportive." },
+                        { "title": "Check Velocity", "content": "Fast mover, no complex DD." }
+                    ],
+                    "matchLabel": "Perfect Match"
+                }
+            ]
 
-    try {
-        const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
-        const result = await model.generateContent({
-            contents: [{ role: 'user', parts: [{ text: prompt }] }],
-            generationConfig: { responseMimeType: 'application/json' }
-        });
+            Investors to Analyze (${count}):
+            ${JSON.stringify(batchContext, null, 2)}
+            `;
+        }
 
-        const responseText = result.response.text();
-        // Sanitize: Remove markdown code blocks if present
-        const cleanedText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
-        const data = JSON.parse(cleanedText);
-        return data;
-    } catch (e) {
-        console.error("Smart Card Gen Error:", e);
-        return [];
-    }
+        try {
+            const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' });
+            const result = await model.generateContent({
+                contents: [{ role: 'user', parts: [{ text: prompt }] }],
+                generationConfig: { responseMimeType: 'application/json' }
+            });
+
+            const responseText = result.response.text();
+            const cleanedText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+            const data = JSON.parse(cleanedText);
+            console.log(`[SmartCard] Batch ${batchIndex + 1}/${batches.length} success. Got ${data.length} cards.`);
+            return data;
+        } catch (e) {
+            console.error(`[SmartCard] Batch ${batchIndex + 1} Error:`, e);
+            return []; // Fail gracefully for this batch
+        }
+    };
+
+    // Execute batches in parallel
+    const allResults = await Promise.all(batches.map((batch, index) => processBatch(batch, index)));
+
+    // Flatten result from [[cards], [cards]] -> [cards]
+    const currentResults = allResults.flat();
+    console.log(`[SmartCard] Total cards generated: ${currentResults.length}`);
+    return currentResults;
 }
