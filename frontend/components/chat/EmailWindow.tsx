@@ -111,13 +111,13 @@ export default function EmailWindow({
                             </div>
 
                             <div className="pt-4 grid grid-cols-3 gap-2">
-                                <Button variant="outline" className="w-full border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-indigo-900 dark:text-indigo-200 file:font-medium">
+                                <Button variant="outline" className="w-full border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-200 font-bold hover:text-indigo-600 dark:hover:text-indigo-400">
                                     Gmail
                                 </Button>
-                                <Button variant="outline" className="w-full border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-indigo-900 dark:text-indigo-200 font-medium">
+                                <Button variant="outline" className="w-full border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-200 font-bold hover:text-indigo-600 dark:hover:text-indigo-400">
                                     Yahoo
                                 </Button>
-                                <Button variant="outline" className="w-full border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-indigo-900 dark:text-indigo-200 font-medium">
+                                <Button variant="outline" className="w-full border-slate-200 dark:border-white/10 hover:bg-slate-50 dark:hover:bg-white/5 text-slate-700 dark:text-slate-200 font-bold hover:text-indigo-600 dark:hover:text-indigo-400">
                                     Outlook
                                 </Button>
                             </div>
