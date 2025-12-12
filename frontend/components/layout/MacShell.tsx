@@ -178,7 +178,7 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
 
                     {/* Optional Right Panel */}
                     {sidePanel && (
-                        <aside className="w-96 border-l border-indigo-100 dark:border-white/5 flex flex-col bg-white/40 dark:bg-black/20 backdrop-blur-md">
+                        <aside className="w-[500px] xl:w-[600px] border-l border-indigo-100 dark:border-white/5 flex flex-col bg-white/40 dark:bg-black/20 backdrop-blur-md transition-all duration-300">
                             {sidePanel}
                         </aside>
                     )}

@@ -242,7 +242,6 @@ export function selectDynamicLayout(
     }
 
     // Sort by Priority (High to Low)
-    // This effectively "chooses" the best layout based on content
     fields = fields.sort((a, b) => b.priority - a.priority);
 
     // Filter duplicates if any
@@ -251,6 +250,20 @@ export function selectDynamicLayout(
             t.component === field.component
         ))
     );
+
+    // INTELLIGENT DE-DUPLICATION
+    // If we have AI Reasoning (smartAbout), we hide the generic "About", "Thesis", and "Description" fields
+    // to prevent user seeing the same info twice (once raw, once rewritten).
+    const hasSmartAbout = fields.some(f => f.label === 'AI Reasoning');
+    if (hasSmartAbout) {
+        fields = fields.filter(f => !['about', 'investment_thesis', 'headline'].includes(f.component));
+    }
+
+    // If we have Smart Tags, hide generic Category Tags
+    const hasSmartTags = fields.some(f => f.label === 'Smart Match');
+    if (hasSmartTags) {
+        fields = fields.filter(f => f.component !== 'category_tags' || f.label === 'Smart Match');
+    }
 
     // Determine template based on rich field count (score > 20)
     const richfieldCount = fields.filter(f => f.priority > 20).length;
