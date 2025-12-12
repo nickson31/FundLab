@@ -7,17 +7,20 @@ import { Button } from '@/components/ui/button';
 
 interface LoadingStateProps {
     searchQuery: string;
+    mode?: 'angels' | 'funds';
 }
 
-export default function LoadingState({ searchQuery }: LoadingStateProps) {
+export default function LoadingState({ searchQuery, mode = 'angels' }: LoadingStateProps) {
     const [thoughts, setThoughts] = useState<string[]>([]);
     const [currentThought, setCurrentThought] = useState("Initializing Gemini Agent...");
     const [isExpanded, setIsExpanded] = useState(false);
 
     // 8-12s Real-time Logic Simulation
+    const entityName = mode === 'funds' ? 'Funds' : 'Angels';
+
     const script = [
         { text: "Connecting to FundLab Neural Index...", delay: 500 },
-        { text: "Scanning 50,000+ investor profiles...", delay: 2000 },
+        { text: `Scanning 50,000+ ${entityName.toLowerCase()} profiles...`, delay: 2000 },
         { text: "Reading 'Investment Thesis' columns...", delay: 4000 },
         { text: "Analyzing semantic fit for '" + searchQuery + "'...", delay: 6000 },
         { text: "Gemini is rewriting static data...", delay: 8000 },
@@ -27,6 +30,8 @@ export default function LoadingState({ searchQuery }: LoadingStateProps) {
 
     useEffect(() => {
         let timeouts: NodeJS.Timeout[] = [];
+        setThoughts([]);
+        setCurrentThought("Initializing Gemini Agent...");
 
         script.forEach(({ text, delay }) => {
             const t = setTimeout(() => {
@@ -37,10 +42,10 @@ export default function LoadingState({ searchQuery }: LoadingStateProps) {
         });
 
         return () => timeouts.forEach(clearTimeout);
-    }, [searchQuery]);
+    }, [searchQuery, mode]);
 
     return (
-        <div className="flex flex-col items-center justify-center py-20 w-full min-h-[400px]">
+        <div className="flex flex-col items-center justify-center py-10 w-full min-h-[300px]">
 
             {/* Main Centerpiece */}
             <div className="w-full max-w-md relative mb-8 flex flex-col items-center">

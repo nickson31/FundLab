@@ -243,7 +243,7 @@ export default function ChatInterface() {
 
             {/* Input Area */}
             <div className={`fixed bottom-0 left-0 right-0 p-4 transition-all duration-500 pointer-events-none z-50`}>
-                <div className={`max-w-3xl mx-auto transition-all duration-500 ${hasSearched ? 'ml-[auto] md:ml-[300px]' : ''}`}>
+                <div className={`max-w-3xl mx-auto transition-all duration-500`}>
                     <div className="bg-white/80 dark:bg-[#0A0A0A]/90 backdrop-blur-xl rounded-3xl p-2 shadow-2xl shadow-indigo-500/5 dark:shadow-black/50 pointer-events-auto border border-indigo-100 dark:border-white/10 ring-1 ring-black/5 dark:ring-white/5">
                         <SearchToggle mode={mode} setMode={setMode} />
 

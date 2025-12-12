@@ -38,10 +38,13 @@ export async function matchFunds(
             const stageScore = calculateStageScore(data, params.stageKeywords);
             const locationScore = calculateLocationScore(data, params.locationKeywords);
 
+            const descriptionScore = calculateDescriptionScore(data, params.categoryKeywords);
+
             const totalScore = (
-                categoryScore * 0.5 +
+                categoryScore * 0.4 +
                 stageScore * 0.3 +
-                locationScore * 0.2
+                locationScore * 0.1 +
+                descriptionScore * 0.2
             );
 
             return {
@@ -96,6 +99,7 @@ function calculateStageScore(fundData: any, queryKeywords: string[]): number {
     }
 }
 
+
 function calculateLocationScore(fundData: any, queryKeywords: string[]): number {
     if (!queryKeywords.length) return 0;
     try {
@@ -106,4 +110,18 @@ function calculateLocationScore(fundData: any, queryKeywords: string[]): number 
     } catch {
         return 0;
     }
+}
+
+function calculateDescriptionScore(fundData: any, queryKeywords: string[]): number {
+    if (!queryKeywords.length) return 0;
+    const text = (
+        (fundData.description || '') + ' ' +
+        (fundData.short_description || '')
+    ).toLowerCase();
+
+    if (!text.trim()) return 0;
+
+    const matches = queryKeywords.filter(k => text.includes(k.toLowerCase())).length;
+    // Lower threshold for description text as it's unstructured
+    return Math.min(matches / (queryKeywords.length * 0.8), 1);
 }

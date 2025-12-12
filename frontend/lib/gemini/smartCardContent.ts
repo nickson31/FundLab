@@ -19,8 +19,8 @@ export interface SmartCardContent {
 export async function generateSmartCardContent(query: string, results: any[]): Promise<SmartCardContent[]> {
     if (!results || results.length === 0) return [];
 
-    // Limit to top 3 for performance/rate-limits
-    const topResults = results.slice(0, 3);
+    // Limit to top 10 for better coverage as requested
+    const topResults = results.slice(0, 10);
 
     // Context: Provide RAW dumps but instruct strict rewriting
     const context = topResults.map(r => ({
