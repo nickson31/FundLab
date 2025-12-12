@@ -15,69 +15,13 @@ import { SystemMessage } from '@/components/chat/SystemMessage';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/lib/supabase';
 import { generateLoadingMessages, FALLBACK_MESSAGES } from '@/lib/loadingMessages';
+import LoadingStateV2 from '@/components/chat/LoadingStateV2';
 
 interface LoadingStateProps {
     userQuery: string;
 }
 
-function LoadingState({ userQuery }: LoadingStateProps) {
-    const [progress, setProgress] = useState(0);
-    const [msgIndex, setMsgIndex] = useState(0);
-    const [messages, setMessages] = useState<string[]>(FALLBACK_MESSAGES);
 
-    useEffect(() => {
-        // Generate personalized messages based on user query
-        const { messages: personalizedMessages } = generateLoadingMessages(userQuery);
-        setMessages(personalizedMessages);
-    }, [userQuery]);
-
-    useEffect(() => {
-        const interval = setInterval(() => {
-            setProgress(prev => {
-                const next = prev + 1;
-                return next > 100 ? 100 : next;
-            });
-        }, 100); // 10s total for 100 steps
-
-        const msgInterval = setInterval(() => {
-            setMsgIndex(prev => (prev + 1) % messages.length);
-        }, 2000); // 2s per message
-
-        return () => {
-            clearInterval(interval);
-            clearInterval(msgInterval);
-        };
-    }, [messages]);
-
-    return (
-        <div className="w-full max-w-sm space-y-3">
-            <AnimatePresence mode="wait">
-                <motion.div
-                    key={msgIndex}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    transition={{ duration: 0.3 }}
-                    className="flex items-center gap-3 text-sm text-indigo-600 dark:text-indigo-400"
-                >
-                    <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                    <span className="min-w-[200px] font-medium">
-                        {messages[msgIndex]}
-                    </span>
-                </motion.div>
-            </AnimatePresence>
-            <div className="h-1 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
-                <motion.div
-                    className="h-full bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 shadow-[0_0_10px_rgba(99,102,241,0.5)]"
-                    style={{ width: `${progress}%` }}
-                    initial={{ width: "0%" }}
-                    animate={{ width: `${progress}%` }}
-                    transition={{ ease: "linear", duration: 0.1 }}
-                />
-            </div>
-        </div>
-    );
-}
 
 export default function ChatPage() {
     const router = useRouter();
@@ -297,7 +241,7 @@ export default function ChatPage() {
                         </AnimatePresence>
                     </div>
                 ) : (
-                    <div className="p-6 space-y-8">
+                    <div className="w-full h-full overflow-y-auto p-6 space-y-8 flex flex-col justify-start scrollbar-thin">
                         {/* User Query - Use lastQuery here */}
                         <motion.div
                             initial={{ opacity: 0, x: 50, scale: 0.95 }}
@@ -312,36 +256,7 @@ export default function ChatPage() {
 
                         {/* AI Response */}
                         {isLoading ? (
-                            <motion.div
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ type: "spring", stiffness: 150, damping: 15 }}
-                                className="flex items-start gap-4"
-                            >
-                                <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 shadow-lg bg-indigo-600 shadow-indigo-500/20">
-                                    <Sparkles className="w-4 h-4 text-white animate-pulse" />
-                                </div>
-                                <div className="space-y-4 flex-1">
-                                    <div className="bg-white/80 dark:bg-slate-900/50 border border-white/20 dark:border-white/10 rounded-2xl rounded-tl-sm p-6 w-full max-w-md shadow-lg backdrop-blur-md">
-                                        <div className="w-full max-w-sm space-y-3">
-                                            <div className="flex items-center gap-3 text-sm text-indigo-600 dark:text-indigo-400">
-                                                <div className="w-4 h-4 border-2 border-indigo-500 border-t-transparent rounded-full animate-spin" />
-                                                <span key={loadingMessage} className="animate-[fadeIn_0.5s_ease-out] min-w-[200px]">
-                                                    {loadingMessage}
-                                                </span>
-                                            </div>
-                                            <div className="h-1 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
-                                                <motion.div
-                                                    className="h-full bg-indigo-500"
-                                                    initial={{ width: "0%" }}
-                                                    animate={{ width: "100%" }}
-                                                    transition={{ ease: "linear", duration: 2 }}
-                                                />
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </motion.div>
+                            <LoadingStateV2 searchQuery={lastQuery} mode={mode} />
                         ) : error ? (
                             <div className="flex items-start gap-4 animate-[fadeIn_0.5s_ease-out_forwards]">
                                 <div className="w-8 h-8 rounded-full flex items-center justify-center shrink-0 mt-1 shadow-lg bg-red-500 shadow-red-500/20">
