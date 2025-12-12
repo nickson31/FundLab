@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Button } from '@/components/ui/button';
-import { Linkedin, MapPin, Sparkles, Zap, ChevronDown, ChevronUp } from 'lucide-react';
+import { Linkedin, MapPin, Sparkles, Zap, ChevronDown, ChevronUp, Mail } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Investor, MatchBreakdown } from '@/types/investor';
 import { generateAvatarGradient } from '@/lib/avatarGenerator';
@@ -30,6 +30,7 @@ export default function InvestorCard(props: InvestorCardProps) {
     // Data Extraction & Safeguards
     const name = ('fullName' in investor ? investor.fullName : ('name' in investor ? investor.name : 'Unknown Investor')) || 'Unknown Investor';
     const location = ('addressWithCountry' in investor ? investor.addressWithCountry : null) || ('location_city' in investor ? `${investor.location_city}` : 'Global');
+    const email = 'email' in investor ? investor.email : null;
 
     // Smart Data Access (Backend injects this)
     const smartData = (investor as any).smartData;
