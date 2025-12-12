@@ -10,7 +10,7 @@ interface SearchToggleProps {
 
 export default function SearchToggle({ mode, setMode }: SearchToggleProps) {
     return (
-        <div className="flex items-center justify-center mb-8">
+        <div className="flex items-center justify-center">
             <div className="bg-slate-100 dark:bg-white/5 p-1 rounded-xl inline-flex relative shadow-inner">
                 <button
                     onClick={() => setMode('angels')}
