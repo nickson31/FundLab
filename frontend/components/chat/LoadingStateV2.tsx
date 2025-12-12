@@ -10,7 +10,7 @@ interface LoadingStateProps {
     mode?: 'angels' | 'funds';
 }
 
-export default function LoadingState({ searchQuery, mode = 'angels' }: LoadingStateProps) {
+export default function LoadingStateV2({ searchQuery, mode = 'angels' }: LoadingStateProps) {
     const [thoughts, setThoughts] = useState<string[]>([]);
     const [currentThought, setCurrentThought] = useState("Initializing Gemini Agent...");
     const [isExpanded, setIsExpanded] = useState(true); // Default expanded so user sees something happening

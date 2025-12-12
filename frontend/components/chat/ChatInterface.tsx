@@ -8,7 +8,7 @@ import InvestorCard from './InvestorCard';
 import MessageModal from './MessageModal';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
-import LoadingState from './LoadingState';
+import LoadingState from './LoadingStateV2';
 
 export default function ChatInterface() {
     const [query, setQuery] = useState('');
