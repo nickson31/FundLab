@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Sparkles, PenSquare, Search, AlertCircle, Zap, TrendingUp, Users, Building2 } from 'lucide-react';
 import SearchToggle from './SearchToggle';
-import { EmailWindow } from './EmailWindow';
+import EmailWindow from './EmailWindow';
 import InvestorCard from './InvestorCard';
 import MessageModal from './MessageModal';
 import { Button } from '@/components/ui/button';
