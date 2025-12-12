@@ -8,6 +8,7 @@ import InvestorCard from './InvestorCard';
 import MessageModal from './MessageModal';
 import { Button } from '@/components/ui/button';
 import { supabase } from '@/lib/supabase';
+import LoadingState from './LoadingState';
 
 export default function ChatInterface() {
     const [query, setQuery] = useState('');
@@ -40,13 +41,19 @@ export default function ChatInterface() {
         setResults([]);
         setError(null);
 
+        // Enforce a minimum "Thinking" time of 12 seconds
+        const minTimePromise = new Promise(resolve => setTimeout(resolve, 12000));
+
         try {
             const userId = '00000000-0000-0000-0000-000000000000';
-            const res = await fetch('/api/search', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ query, mode, userId }),
-            });
+            const [res] = await Promise.all([
+                fetch('/api/search', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ query, mode, userId }),
+                }),
+                minTimePromise
+            ]);
 
             if (!res.ok) throw new Error('Search failed');
 
@@ -158,42 +165,7 @@ export default function ChatInterface() {
                             </div>
                             <div className="space-y-6 w-full">
                                 {isLoading ? (
-                                    <motion.div
-                                        initial={{ opacity: 0, y: 10 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        className="bg-white dark:bg-white/5 border border-gray-200 dark:border-white/10 px-6 py-5 rounded-2xl rounded-tl-md w-full max-w-md shadow-sm"
-                                    >
-                                        <div className="flex items-center gap-4 mb-4">
-                                            <motion.div
-                                                animate={{ rotate: 360 }}
-                                                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-                                                className="w-6 h-6 border-2 border-indigo-600 dark:border-indigo-400 border-t-transparent rounded-full shrink-0"
-                                            />
-                                            <span className="font-medium text-gray-900 dark:text-white">Searching investors...</span>
-                                        </div>
-                                        <div className="space-y-2">
-                                            {[
-                                                { text: "Analyzing your query with AI", delay: 0 },
-                                                { text: "Scanning 500,000+ investor profiles", delay: 0.5 },
-                                                { text: "Calculating match scores", delay: 1 }
-                                            ].map((step, i) => (
-                                                <motion.div
-                                                    key={i}
-                                                    initial={{ opacity: 0, x: -10 }}
-                                                    animate={{ opacity: 1, x: 0 }}
-                                                    transition={{ delay: step.delay }}
-                                                    className="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400"
-                                                >
-                                                    <motion.div
-                                                        animate={{ scale: [1, 1.2, 1] }}
-                                                        transition={{ duration: 0.5, repeat: Infinity, delay: step.delay }}
-                                                        className="w-1.5 h-1.5 rounded-full bg-indigo-500"
-                                                    />
-                                                    {step.text}
-                                                </motion.div>
-                                            ))}
-                                        </div>
-                                    </motion.div>
+                                    <LoadingState searchQuery={query} />
                                 ) : error ? (
                                     <motion.div
                                         initial={{ opacity: 0, y: 10 }}
@@ -216,11 +188,11 @@ export default function ChatInterface() {
                                     </motion.div>
                                 ) : results.length > 0 ? (
                                     <>
-                                        <div className="prose prose-lg dark:prose-invert max-w-none bg-white/80 dark:bg-white/5 border border-gray-200 dark:border-white/10 px-8 py-6 rounded-2xl rounded-tl-md mb-8 shadow-sm">
-                                            <p className="text-gray-800 dark:text-gray-200 m-0 font-body">
+                                        <div className="prose prose-lg dark:prose-invert max-w-none bg-white/80 dark:bg-white/5 border border-indigo-100 dark:border-white/10 px-8 py-6 rounded-2xl rounded-tl-md mb-8 shadow-sm">
+                                            <p className="text-indigo-900 dark:text-indigo-200 m-0 font-body">
                                                 I found <strong className="text-indigo-600 dark:text-indigo-400">{results.length} {mode}</strong> matching your search.
                                                 {keywords?.categoryKeywords?.length > 0 && (
-                                                    <> I expanded your query to include terms like: <em className="text-gray-500 dark:text-gray-400 not-italic">{keywords?.categoryKeywords?.slice(0, 5).join(', ')}</em>.</>
+                                                    <> I expanded your query to include terms like: <em className="text-indigo-500 dark:text-indigo-300 not-italic">{keywords?.categoryKeywords?.slice(0, 5).join(', ')}</em>.</>
                                                 )}
                                             </p>
                                         </div>
@@ -272,7 +244,7 @@ export default function ChatInterface() {
             {/* Input Area */}
             <div className={`fixed bottom-0 left-0 right-0 p-4 transition-all duration-500 pointer-events-none z-50`}>
                 <div className={`max-w-3xl mx-auto transition-all duration-500 ${hasSearched ? 'ml-[auto] md:ml-[300px]' : ''}`}>
-                    <div className="bg-white/80 dark:bg-[#0A0A0A]/90 backdrop-blur-xl rounded-3xl p-2 shadow-2xl shadow-indigo-500/5 dark:shadow-black/50 pointer-events-auto border border-gray-200 dark:border-white/10 ring-1 ring-black/5 dark:ring-white/5">
+                    <div className="bg-white/80 dark:bg-[#0A0A0A]/90 backdrop-blur-xl rounded-3xl p-2 shadow-2xl shadow-indigo-500/5 dark:shadow-black/50 pointer-events-auto border border-indigo-100 dark:border-white/10 ring-1 ring-black/5 dark:ring-white/5">
                         <SearchToggle mode={mode} setMode={setMode} />
 
                         <form onSubmit={handleSearch} className="relative mt-2">
@@ -281,7 +253,7 @@ export default function ChatInterface() {
                                 value={query}
                                 onChange={handleInputChange}
                                 placeholder={`Ask FundLab... (e.g., 'Fintech seed investors in Madrid')`}
-                                className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none placeholder:text-gray-400 dark:placeholder:text-gray-600 text-gray-900 dark:text-white"
+                                className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none placeholder:text-indigo-300 dark:placeholder:text-gray-600 text-indigo-900 dark:text-white"
                             />
                             <Button
                                 type="submit"
@@ -293,7 +265,7 @@ export default function ChatInterface() {
                             </Button>
                         </form>
                         <div className="absolute -bottom-8 left-0 right-0 text-center">
-                            <p className="text-[10px] text-gray-500 dark:text-gray-600">
+                            <p className="text-[10px] text-indigo-300/60 dark:text-gray-600">
                                 FundLab AI can make mistakes. Verify important info.
                             </p>
                         </div>
