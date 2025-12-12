@@ -61,16 +61,18 @@ export async function matchAngels(
             locationScore * 0.10
         );
 
-        // SIMULATED BOOST (User Request: 75-99 range)
-        // Maps input [0.1 ... 0.6] -> [0.75 ... 0.99]
-        let totalScore = 0.75 + (rawScore * 0.4);
+        // SIMULATED SCORE VARIANCE (User Request: "No repeating 99s")
+        // Range [78, 96] based on Name Hash
+        const seed = (typedAngel.name || "angel").split("").reduce((acc: number, char: string) => acc + char.charCodeAt(0), 0);
+        const variance = (seed % 100) / 100; // 0.00 to 0.99
 
-        // Deterministic variation
-        const variation = (typedAngel.name || "").length % 5 / 100;
-        totalScore += variation;
+        let totalScore = 0.78 + (variance * 0.18);
 
-        // Clamp strict to 0.75 - 0.99
-        totalScore = Math.max(0.75, Math.min(0.99, totalScore));
+        // Nudge for real data matches
+        if (rawScore > 0.4) totalScore += 0.02;
+
+        // Clamp
+        totalScore = Math.min(0.98, totalScore);
 
         // Find specific matching keywords for UI display
         const matchedKeywords: string[] = [];
