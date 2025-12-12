@@ -237,7 +237,6 @@ export default function ChatInterface() {
                                                 <InvestorCard
                                                     key={index}
                                                     investor={result.investor}
-                                                    type={mode === 'angels' ? 'angel' : 'fund'}
                                                     score={result.score}
                                                     breakdown={result.breakdown}
                                                     onDraftMessage={openModal}

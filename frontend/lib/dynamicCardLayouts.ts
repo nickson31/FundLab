@@ -20,6 +20,7 @@ export type LayoutComponent =
     | 'about'
     | 'linkedin'
     | 'website'
+    | 'focused_round'
     | 'co_investors';
 
 export interface DynamicField {

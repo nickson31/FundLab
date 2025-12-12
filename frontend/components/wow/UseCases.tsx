@@ -51,9 +51,9 @@ export default function UseCases() {
                             title: "Scale Your Round",
                             description: "Reach institutional investors and growth funds. Manage complex cap tables and syndicate deals.",
                             features: ["Institutional access", "Syndicate builder", "Term sheet analyzer"],
-                            gradient: "from-orange-500/20 to-rose-500/20",
-                            border: "border-orange-500/30",
-                            accent: "text-orange-400"
+                            gradient: "from-pink-500/20 to-rose-500/20",
+                            border: "border-pink-500/30",
+                            accent: "text-pink-400"
                         }
                     ].map((useCase, i) => (
                         <motion.div

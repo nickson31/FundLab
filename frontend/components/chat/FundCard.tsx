@@ -149,7 +149,7 @@ function RichLayout({ data, score, dynamicFields, breakdown, handlers, expanded 
 
                     <div className="prose prose-indigo prose-sm">
                         <h4 className="text-indigo-950 font-bold mb-2 flex items-center gap-2">
-                            <Zap className="w-4 h-4 text-amber-500" /> Investment Thesis
+                            <Zap className="w-4 h-4 text-indigo-500" /> Investment Thesis
                         </h4>
                         <p className="text-slate-600 leading-relaxed">
                             {thesis || "No specific thesis available."}

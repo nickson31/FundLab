@@ -95,7 +95,7 @@ export default function LoadingState({ searchQuery }: LoadingStateProps) {
                         >
                             {i === 0 ? <Globe className="w-4 h-4 text-emerald-500" /> :
                                 i === 1 ? <Radio className="w-4 h-4 text-blue-500" /> :
-                                    <Zap className="w-4 h-4 text-amber-500" />}
+                                    <Zap className="w-4 h-4 text-indigo-500" />}
                         </motion.div>
                     </motion.div>
                 ))}

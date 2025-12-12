@@ -219,7 +219,6 @@ export default function ChatPage() {
                                 {mode === 'angels' ? (
                                     <InvestorCard
                                         investor={result.investor}
-                                        type="angel"
                                         score={result.score}
                                         breakdown={result.breakdown}
                                         onDraftMessage={openModal}

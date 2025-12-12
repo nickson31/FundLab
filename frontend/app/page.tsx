@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { ArrowRight, Search, Zap, Globe, ShieldCheck, BarChart3, Users, Building2, BrainCircuit } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Navbar } from '@/components/wow/Navbar';
+import Navbar from '@/components/wow/Navbar';
 
 export default function Home() {
   return (
