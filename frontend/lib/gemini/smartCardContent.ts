@@ -19,11 +19,8 @@ export interface SmartCardContent {
 export async function generateSmartCardContent(query: string, results: any[], mode: 'angels' | 'funds' = 'angels'): Promise<SmartCardContent[]> {
     if (!results || results.length === 0) return [];
 
-    // Limit to top 10 for better coverage as requested
-    const topResults = results.slice(0, 10);
-
     // Context: Provide RAW dumps but instruct strict rewriting
-    const context = topResults.map(r => ({
+    const context = results.map(r => ({
         id: r.investor.id || r.investor.linkedinUrl || r.investor.website_url,
         name: r.investor.name || r.investor.fullName,
         raw_data: JSON.stringify(r.investor).slice(0, 2000) // Moderate chunk
