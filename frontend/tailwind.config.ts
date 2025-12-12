@@ -57,7 +57,6 @@ const config: Config = {
                 sm: "calc(var(--radius) - 4px)",
             },
             fontFamily: {
-                // Add the new font here
                 heading: ["var(--font-heading)", "sans-serif"],
                 body: ["var(--font-body)", "sans-serif"],
                 technical: ["var(--font-technical)", "sans-serif"],
@@ -95,6 +94,6 @@ const config: Config = {
             },
         },
     },
-    plugins: [],
+    plugins: [require("tailwindcss-animate"), require("@tailwindcss/typography")],
 };
 export default config;

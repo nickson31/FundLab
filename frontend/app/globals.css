@@ -4,69 +4,73 @@
 
 @layer base {
   :root {
-    /* Light Mode - Premium Slate/Blue tint */
-    --background: 210 40% 98%;
-    /* Soft blue-white */
-    --foreground: 222.2 84% 4.9%;
+    /* Light Mode - Pure White & Vivid Indigo/Violet */
+    --background: 0 0% 100%;
+    /* Deep Indigo for text (No Black/Grey) */
+    --foreground: 231 48% 13%;
 
     --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card-foreground: 231 48% 13%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover-foreground: 231 48% 13%;
 
-    --primary: 221.2 83.2% 53.3%;
+    /* Vivid Indigo */
+    --primary: 247 74% 56%;
     --primary-foreground: 210 40% 98%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    /* Soft Violet Tint */
+    --secondary: 249 95% 96%;
+    --secondary-foreground: 247 74% 56%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    /* Soft Indigo Tint */
+    --muted: 226 100% 97%;
+    --muted-foreground: 237 38% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    /* Soft Purple/Pink Tint */
+    --accent: 262 83% 97%;
+    --accent-foreground: 262 80% 50%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 221.2 83.2% 53.3%;
+    /* Light Indigo Border (No Gray) */
+    --border: 226 100% 94%;
+    --input: 226 100% 94%;
+    --ring: 247 74% 56%;
 
     --radius: 1rem;
   }
 
   .dark {
-    /* Dark Mode - Deep Blue/Black (No Gray) */
-    --background: 222.2 84% 4.9%;
-    /* Rich dark navy/black */
+    /* Dark Mode - Deep Void (No Gray) */
+    --background: 260 40% 4%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    --card: 260 40% 6%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 260 40% 6%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 217.2 91.2% 59.8%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    --primary: 247 74% 65%;
+    --primary-foreground: 210 40% 98%;
 
-    --secondary: 217.2 32.6% 17.5%;
+    --secondary: 247 30% 15%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 217.2 32.6% 17.5%;
+    --muted: 247 30% 15%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 217.2 32.6% 17.5%;
+    --accent: 247 30% 15%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 224.3 76.3% 48%;
+    --border: 247 30% 15%;
+    --input: 247 30% 15%;
+    --ring: 247 74% 65%;
   }
 }
 
@@ -76,7 +80,7 @@
   }
 
   body {
-    @apply bg-background text-foreground antialiased selection:bg-indigo-500/30 selection:text-indigo-200;
+    @apply bg-background text-foreground antialiased selection:bg-indigo-500/30 selection:text-indigo-700;
     font-family: var(--font-body), sans-serif;
   }
 
@@ -90,7 +94,7 @@
   }
 }
 
-/* Custom Scrollbar - Sleek & Minimal */
+/* Custom Scrollbar - Vivid & Clean */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -101,7 +105,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-slate-200 dark:bg-slate-700/50 rounded-full hover:bg-slate-300 dark:hover:bg-slate-600;
+  @apply bg-indigo-100 dark:bg-indigo-900/50 rounded-full hover:bg-indigo-200 dark:hover:bg-indigo-800;
 }
 
 @layer utilities {
@@ -113,22 +117,21 @@
     text-wrap: pretty;
   }
 
-  /* Premium Glass Effect - Adaptive */
+  /* Premium Glass Effect - Clean White */
   .glass-premium {
-    @apply bg-white/70 dark:bg-slate-950/40 backdrop-blur-xl border border-white/20 dark:border-white/10 shadow-lg dark:shadow-none;
+    @apply bg-white/70 dark:bg-black/40 backdrop-blur-xl border border-white/40 dark:border-white/10 shadow-xl shadow-indigo-500/5;
   }
 
   .glass-panel {
-    @apply bg-white/50 dark:bg-slate-900/20 backdrop-blur-md border border-white/20 dark:border-white/5;
+    @apply bg-white/60 dark:bg-black/20 backdrop-blur-md border border-white/30 dark:border-white/5;
   }
 
-  /* Legacy support coverage */
   .glass-card {
     @apply glass-premium rounded-xl;
   }
 
-  /* Utilities preventing Gray usage */
+  /* Subtle Text Replacement */
   .text-subtle {
-    @apply text-slate-500 dark:text-slate-400;
+    @apply text-indigo-400 dark:text-indigo-300/70;
   }
 }

@@ -35,23 +35,23 @@ export async function generateSmartCardContent(query: string, results: any[]): P
     Your goal is to analyze these investors and generate a **Rich Insight Card** for each.
     
     CRITICAL RULES:
-    1. **NEVER** copy raw data. Always rewrite, synthesize, and summarize.
-    2. **Expertise**: Extract 3-4 key strengths (e.g., sectors, stages, unique value) and rewrite them as short, punchy tags (max 2 words each).
-    3. **Golden Nuggets**: Find 1-4 specific, high-value, or "unusual" details (e.g. "Board Member at Revolut", "Writes checks in 48h", "Focuses on female founders"). Title them dynamically.
-    4. **Tone**: Professional, insightful, insider-y.
+    1. **NEVER COPY/PASTE**: Read the data, interpret it, and write completely NEW text.
+    2. **Expertise**: Deduce 3-4 specific strengths (Sector, Stage, or Unique Value). Write them as CLEAN, SHORT tags (max 2 words).
+    3. **Golden Nuggets**: Dig for 1-4 specific, high-value details (e.g. "Ex-Founder of X", "24h decision speed", "Top Tier Network").
+    4. **Tone**: Professional, insider-y, and high-signal.
 
     Output STRICT JSON array:
     [
         {
             "investorId": "id from input",
-            "oneLineSummary": "Short, punchy 1-sentence summary of who they are.",
-            "expertises": ["TAG 1", "TAG 2", "TAG 3"],
-            "generalExplanation": "2-3 sentences explaining exactly WHY they match the user's query ("${query}"). Connect the dots.",
+            "oneLineSummary": "A powerful 1-sentence bio emphasizing their relevance.",
+            "expertises": ["Fintech", "Seed Stage", "Operator VC"],
+            "generalExplanation": "2-3 sentences explaining the MATCH LOGIC. Why is this investor good for THIS user query? Be specific.",
             "goldenNuggets": [
-                { "title": "Speed", "content": "Known for 24h term sheets." },
-                { "title": "Network", "content": "Ex-Stripe mafia connections." }
+                { "title": "Speed", "content": "Known for same-day term sheets." },
+                { "title": "Network", "content": "Strong ties to YC alumni." }
             ],
-            "matchLabel": "One word score label (e.g. 'Perfect', 'Strong', 'Good')"
+            "matchLabel": "Perfect Match"
         }
     ]
 

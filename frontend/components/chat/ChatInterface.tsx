@@ -96,7 +96,7 @@ export default function ChatInterface() {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.1, duration: 0.5 }}
-                        className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6 tracking-tight"
+                        className="text-4xl md:text-5xl font-bold text-indigo-950 dark:text-white mb-6 tracking-tight"
                     >
                         How can I help you <br />
                         <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">fundraise today?</span>
@@ -105,7 +105,7 @@ export default function ChatInterface() {
                         initial={{ y: 20, opacity: 0 }}
                         animate={{ y: 0, opacity: 1 }}
                         transition={{ delay: 0.2, duration: 0.5 }}
-                        className="text-lg text-gray-600 dark:text-gray-400 max-w-lg leading-relaxed mb-10"
+                        className="text-lg text-indigo-900/60 dark:text-indigo-200/60 max-w-lg leading-relaxed mb-10"
                     >
                         Find the perfect investors for your startup using AI-powered matching.
                     </motion.p>
@@ -130,14 +130,14 @@ export default function ChatInterface() {
                                             setQuery(suggestion.text);
                                             setIsTyping(true);
                                         }}
-                                        className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-white/[0.03] border border-gray-200 dark:border-white/[0.08] rounded-xl hover:bg-gray-50 dark:hover:bg-white/[0.06] hover:border-gray-300 dark:hover:border-white/[0.15] transition-all duration-300 text-left group shadow-sm dark:shadow-none"
+                                        className="flex items-center gap-3 px-4 py-3 bg-white dark:bg-white/[0.03] border border-indigo-100 dark:border-white/[0.08] rounded-xl hover:bg-indigo-50 dark:hover:bg-white/[0.06] hover:border-indigo-200 dark:hover:border-white/[0.15] transition-all duration-300 text-left group shadow-sm dark:shadow-none"
                                     >
                                         <div className="p-2 rounded-lg bg-indigo-50 dark:bg-indigo-500/20 text-indigo-600 dark:text-indigo-400 group-hover:bg-indigo-100 dark:group-hover:bg-indigo-500/30 transition-colors">
                                             <suggestion.icon className="w-4 h-4" />
                                         </div>
                                         <div>
-                                            <p className="text-sm text-gray-900 dark:text-gray-100 group-hover:text-indigo-600 dark:group-hover:text-white transition-colors font-medium">{suggestion.text}</p>
-                                            <p className="text-xs text-gray-500 dark:text-gray-500">{suggestion.category}</p>
+                                            <p className="text-sm text-indigo-900 dark:text-indigo-100 group-hover:text-indigo-600 dark:group-hover:text-white transition-colors font-medium">{suggestion.text}</p>
+                                            <p className="text-xs text-indigo-400 dark:text-indigo-300/70">{suggestion.category}</p>
                                         </div>
                                     </motion.button>
                                 ))}
@@ -152,7 +152,7 @@ export default function ChatInterface() {
                 <div className="flex-1 overflow-y-auto pb-40 space-y-10 w-full scrollbar-none">
                     {/* User Query Bubble */}
                     <div className="flex justify-end">
-                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/40 text-gray-900 dark:text-white px-6 py-4 rounded-2xl rounded-tr-md max-w-[80%] shadow-sm border border-indigo-100 dark:border-indigo-500/30 backdrop-blur-md text-lg">
+                        <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/40 text-indigo-900 dark:text-white px-6 py-4 rounded-2xl rounded-tr-md max-w-[80%] shadow-sm border border-indigo-100 dark:border-indigo-500/30 backdrop-blur-md text-lg">
                             {query}
                         </div>
                     </div>
@@ -229,7 +229,7 @@ export default function ChatInterface() {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => openModal()}
-                className="fixed bottom-28 right-8 bg-indigo-600 text-white p-4 rounded-full shadow-2xl z-40 flex items-center justify-center hover:bg-indigo-700 hover:shadow-indigo-500/20 transition-all dark:bg-white dark:text-black dark:hover:bg-gray-200"
+                className="fixed bottom-28 right-8 bg-indigo-600 text-white p-4 rounded-full shadow-2xl z-40 flex items-center justify-center hover:bg-indigo-700 hover:shadow-indigo-500/20 transition-all dark:bg-white dark:text-black dark:hover:bg-indigo-50"
             >
                 <PenSquare className="w-6 h-6" />
             </motion.button>
@@ -253,7 +253,7 @@ export default function ChatInterface() {
                                 value={query}
                                 onChange={handleInputChange}
                                 placeholder={`Ask FundLab... (e.g., 'Fintech seed investors in Madrid')`}
-                                className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none placeholder:text-indigo-300 dark:placeholder:text-gray-600 text-indigo-900 dark:text-white"
+                                className="w-full bg-transparent border-0 rounded-2xl py-4 pl-6 pr-16 text-lg focus:outline-none placeholder:text-indigo-300 dark:placeholder:text-indigo-300/50 text-indigo-900 dark:text-white"
                             />
                             <Button
                                 type="submit"
@@ -265,7 +265,7 @@ export default function ChatInterface() {
                             </Button>
                         </form>
                         <div className="absolute -bottom-8 left-0 right-0 text-center">
-                            <p className="text-[10px] text-indigo-300/60 dark:text-gray-600">
+                            <p className="text-[10px] text-indigo-300/60 dark:text-indigo-300/50">
                                 FundLab AI can make mistakes. Verify important info.
                             </p>
                         </div>
