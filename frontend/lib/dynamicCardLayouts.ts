@@ -134,11 +134,38 @@ export function selectDynamicLayout(
         const location = angelData.addressWithCountry || `${angelData.location_city || ''}, ${angelData.location_country || ''}`.trim();
         if (location && location !== ',') addField('location', 'Location', location);
 
+        // SMART CONTENT INJECTION (AI Reasoning Phase)
+        // If Gemini provided a rewritten "About" or "Smart Tags", prioritize them above all else.
+        if ((investor as any).smartAbout) {
+            fields.push({
+                component: 'about', // Reuse 'about' component but with smart content
+                label: 'AI Reasoning', // Label it clearly so user knows it's AI
+                value: (investor as any).smartAbout,
+                priority: 95, // Extremely high priority, beats almost everything
+                display_type: 'text'
+            });
+            components.push('about'); // Ensure it's in the component list
+        }
+
+        if ((investor as any).smartTags && Array.isArray((investor as any).smartTags)) {
+            fields.push({
+                component: 'category_tags',
+                label: 'Smart Match',
+                value: (investor as any).smartTags,
+                priority: 90,
+                display_type: 'list' // Badge list
+            });
+            components.push('category_tags');
+        }
+
         const categories = [
             ...(angel.categories_strong_en || '').split(','),
             ...(angel.categories_general_en || '').split(',')
         ].filter(Boolean).map(s => s.trim()).slice(0, 3);
-        addField('category_tags', 'Expertise', categories);
+        // Only add standard categories if we didn't add smart tags, or add them with lower priority
+        if (!(investor as any).smartTags) {
+            addField('category_tags', 'Expertise', categories);
+        }
 
         const stages = [
             ...(angel.stages_strong_en || '').split(','),
@@ -176,7 +203,30 @@ export function selectDynamicLayout(
         const location = `${fundData.location_city || ''}, ${fundData.location_country || ''}`.trim();
         if (location && location !== ',') addField('location', 'Location', location);
 
-        if (fund.category_keywords) {
+        // SMART CONTENT INJECTION (AI Reasoning Phase)
+        if ((investor as any).smartAbout) {
+            fields.push({
+                component: 'investment_thesis', // For funds, map explanation to Thesis component
+                label: 'AI Reasoning',
+                value: (investor as any).smartAbout,
+                priority: 95,
+                display_type: 'text'
+            });
+            components.push('investment_thesis');
+        }
+
+        if ((investor as any).smartTags && Array.isArray((investor as any).smartTags)) {
+            fields.push({
+                component: 'category_tags',
+                label: 'Smart Match',
+                value: (investor as any).smartTags,
+                priority: 90,
+                display_type: 'list'
+            });
+            components.push('category_tags');
+        }
+
+        if (fund.category_keywords && !(investor as any).smartTags) {
             const categories = fund.category_keywords
                 .replace(/[\[\]'"]/g, '')
                 .split(',')

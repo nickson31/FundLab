@@ -46,59 +46,31 @@ export default function LoadingState({ searchQuery }: LoadingStateProps) {
 
     return (
         <div className="flex flex-col items-center justify-center py-20 w-full min-h-[400px]">
-            {/* Neural Radar Visual */}
-            <div className="relative w-64 h-64 mb-12 flex items-center justify-center">
-                {/* Expanding Radar Rings */}
-                {[0, 1, 2].map((i) => (
+            {/* Modern Progress Bar */}
+            <div className="w-full max-w-md relative mb-12">
+                {/* Bar Container */}
+                <div className="h-1 w-full bg-slate-100 dark:bg-white/10 rounded-full overflow-hidden">
                     <motion.div
-                        key={i}
-                        className="absolute inset-0 rounded-full border border-indigo-500/20 dark:border-indigo-400/20"
-                        initial={{ scale: 0.5, opacity: 0 }}
-                        animate={{ scale: 2, opacity: 0 }}
-                        transition={{
-                            duration: 3,
-                            repeat: Infinity,
-                            delay: i * 0.8,
-                            ease: "linear"
-                        }}
+                        className="h-full bg-indigo-600 dark:bg-indigo-400 rounded-full shadow-[0_0_15px_rgba(99,102,241,0.5)]"
+                        initial={{ width: "0%" }}
+                        animate={{ width: "95%" }}
+                        transition={{ duration: 8, ease: "circOut" }}
                     />
-                ))}
-
-                {/* Core Brain/Node */}
-                <div className="relative z-10 w-24 h-24 bg-white/50 dark:bg-black/40 backdrop-blur-xl rounded-full border border-indigo-100 dark:border-indigo-500/30 flex items-center justify-center shadow-2xl shadow-indigo-500/20">
-                    <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 10, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-2 border-t-2 border-r-2 border-indigo-500/50 rounded-full"
-                    />
-                    <motion.div
-                        animate={{ rotate: -360 }}
-                        transition={{ duration: 15, repeat: Infinity, ease: "linear" }}
-                        className="absolute inset-4 border-b-2 border-l-2 border-purple-500/50 rounded-full"
-                    />
-                    <BrainCircuit className="w-10 h-10 text-indigo-600 dark:text-indigo-400" />
                 </div>
 
-                {/* Orbiting Satellites */}
-                {[0, 120, 240].map((deg, i) => (
-                    <motion.div
-                        key={i}
-                        className="absolute w-full h-full"
-                        initial={{ rotate: deg }}
-                        animate={{ rotate: deg + 360 }}
-                        transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
-                    >
+                {/* Floating Node Animation */}
+                <div className="absolute top-0 left-0 w-full flex justify-center -mt-16">
+                    <div className="relative">
+                        <div className="absolute inset-0 bg-indigo-500/20 blur-xl rounded-full" />
                         <motion.div
-                            className="absolute -top-3 left-1/2 w-8 h-8 -ml-4 bg-white dark:bg-slate-900 rounded-full border border-indigo-200 dark:border-indigo-500/50 flex items-center justify-center shadow-lg"
-                            animate={{ rotate: -(deg + 360) }} // Keep icon upright
-                            transition={{ duration: 8, repeat: Infinity, ease: "linear" }}
+                            animate={{ rotate: 360 }}
+                            transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                            className="relative w-12 h-12 bg-white dark:bg-black rounded-xl border border-indigo-100 dark:border-white/10 flex items-center justify-center shadow-lg"
                         >
-                            {i === 0 ? <Globe className="w-4 h-4 text-emerald-500" /> :
-                                i === 1 ? <Radio className="w-4 h-4 text-blue-500" /> :
-                                    <Zap className="w-4 h-4 text-indigo-500" />}
+                            <BrainCircuit className="w-6 h-6 text-indigo-500" />
                         </motion.div>
-                    </motion.div>
-                ))}
+                    </div>
+                </div>
             </div>
 
             {/* Neural Stream Text */}

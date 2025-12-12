@@ -62,6 +62,31 @@ export async function POST(req: NextRequest) {
         // 3. Auto-save is now handled within matchAngels / matchFunds
         // to ensure correct ID mapping and Atomic persistence.
 
+        // --- NEW: Smart Card System (The "Reasoning" Layer) ---
+        console.log('[Search API] Step 2.5: Generating Smart Card Content (Reasoning)...');
+        // We only do this for the top 5 to save latency/tokens, but frontend handles full list
+        const { generateSmartCardContent } = await import('@/lib/gemini/smartCardContent');
+        const smartContent = await generateSmartCardContent(query, results);
+
+        results = results.map(r => {
+            const rAny = r.investor as any;
+            const id = rAny.id || rAny.linkedinUrl || rAny.website_url;
+            const smartData = smartContent.find(s => s.investorId === id);
+            if (smartData) {
+                return {
+                    ...r,
+                    investor: {
+                        ...r.investor,
+                        smartAbout: smartData.rewrittenAbout,
+                        smartTags: smartData.smartTags
+                    }
+                };
+            }
+            return r;
+        });
+        console.log(`[Search API] ✅ Enhanced ${smartContent.length} cards with AI reasoning`);
+        // -----------------------------------------------------
+
         // 4. Generate AI Summary
         let summary = '';
         try {
