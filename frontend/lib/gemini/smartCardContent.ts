@@ -12,6 +12,8 @@ export interface SmartCardContent {
     generalExplanation: string;
     // 7. Curiosidades / Golden Nuggets
     goldenNuggets: { title: string; content: string }[];
+    // New: Specific "Did you know?" highlight
+    unique_highlight?: string;
     // 8. EXTRA INFO for Dropdown (4-5 items)
     extendedAnalysis: { title: string; content: string }[];
     // Score label (e.g. "Perfect Match")
@@ -59,8 +61,9 @@ export async function generateSmartCardContent(query: string, results: any[], mo
             2. **Investment Logic**: Extract specific thesis details.
             3. **Expertise**: Deduce 3 specific tags.
             4. **Golden Nuggets**: MUST BE HARD FACTS (Exits, Fund Size, Ticket). NO FLUFF.
-            5. **Targeted Deep Dive**: Generate 4-5 EXTRA distinct insights.
-            6. **Tone**: Institutional.
+            5. **CURIOSITY / UNIQUE HIGHLIGHT**: Find ONE extremely specific, non-obvious fact in the columns (e.g. "Only invests in B2B", "Founded by ex-Spotify VP").
+            6. **Targeted Deep Dive**: Generate 4-5 EXTRA distinct insights.
+            7. **Tone**: Institutional.
 
             Output STRICT JSON array of exactly ${count} objects:
             [
@@ -69,6 +72,7 @@ export async function generateSmartCardContent(query: string, results: any[], mo
                     "oneLineSummary": "A leading [Stage] fund specializing in [Sector].",
                     "expertises": ["Fintech", "Series A", "Lead Investor"],
                     "generalExplanation": "Explain why this FUND fits the user's query perfectly based on their known thesis.",
+                    "unique_highlight": "Managed by former PayPal Mafia members.",
                     "goldenNuggets": [
                         { "title": "Portfolio", "content": "Early backer of Revolut & Monzo." },
                         { "title": "Power", "content": "$1Bn AUM across 4 funds." }
@@ -98,8 +102,9 @@ export async function generateSmartCardContent(query: string, results: any[], mo
             2. **Neve Copy/Paste**: Refine the text.
             3. **Expertise**: 3-4 specific strengths (Sector, Stage, Value).
             4. **Golden Nuggets**: IMPRESSIVE FACTS (Ex-Founder, Big Tech VP, Investments).
-            5. **Targeted Deep Dive**: 4-5 EXTRA distinct insights.
-            6. **Tone**: Insider-y, High Signal.
+            5. **CURIOSITY / UNIQUE HIGHLIGHT**: Find ONE extremely specific, non-obvious fact (e.g. "Ex-Google Director", "Invests in 48h", "Loves deep tech").
+            6. **Targeted Deep Dive**: 4-5 EXTRA distinct insights.
+            7. **Tone**: Insider-y, High Signal.
 
             Output STRICT JSON array of exactly ${count} objects:
             [
@@ -108,6 +113,7 @@ export async function generateSmartCardContent(query: string, results: any[], mo
                     "oneLineSummary": "Former VP Product at Uber turned Fintech Angel.",
                     "expertises": ["Fintech", "Seed Stage", "Product Guru"],
                     "generalExplanation": "Why is this investor good for THIS user query?",
+                    "unique_highlight": "Holds a PhD in AI from Stanford.",
                     "goldenNuggets": [
                         { "title": "Speed", "content": "Known for same-day term sheets." },
                         { "title": "Track Record", "content": "Early investor in Notion." }

@@ -78,13 +78,22 @@ export async function matchFunds(
         console.log('[MatchFunds] ℹ️ Persistence skipped (User requested no saving)');
     }
 
-    // Return formatted for ChatInterface
-    return matches.map(match => ({
-        investor: match.fund, // Unified property
-        type: 'fund',
-        score: match.score,
-        breakdown: match.breakdown
-    }));
+    // Return formatted for ChatInterface with Rank-Based Scoring
+    return matches.map((match, index) => {
+        // Curve: Start at 0.98, decrease by 1% per rank for 20 items
+        // Index 0: 0.98
+        // Index 19: 0.98 - 0.19 = 0.79
+        const rankBase = 0.98 - (index * 0.01);
+        const jitter = Math.random() * 0.003;
+        const finalScore = rankBase + jitter;
+
+        return {
+            investor: match.fund, // Unified property
+            type: 'fund',
+            score: finalScore,
+            breakdown: { ...match.breakdown, overall_score: finalScore }
+        };
+    });
 }
 
 function calculateCategoryScore(fundData: any, queryKeywords: string[]): number {

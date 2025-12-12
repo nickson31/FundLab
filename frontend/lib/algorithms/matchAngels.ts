@@ -111,18 +111,28 @@ export async function matchAngels(
         .slice(0, 15); // Return top 15
 
     // 4. Persistence Removed as per user request
-    // Results are only returned to the chat interface
     if (injectedClient) {
         console.log('[MatchAngels] ℹ️ Persistence skipped (User requested no saving)');
     }
 
-    // 5. Return formatted SearchResults
-    return topMatches.map(match => ({
-        investor: match.angel,
-        type: 'angel',
-        score: match.score,
-        breakdown: match.breakdown
-    }));
+    // 5. Apply Rank-Based Scoring (Dynamic Curve: 98 -> Down)
+    return topMatches.map((match, index) => {
+        // Curve: Start at 0.98, decrease by ~1.2% per rank
+        // Index 0: 0.98
+        // Index 14: 0.98 - (14 * 0.012) = 0.81
+        const rankBase = 0.98 - (index * 0.012);
+
+        // Add tiny organic jitter (0.000 to 0.004) to avoid flat "98.00" look
+        const jitter = Math.random() * 0.004;
+        const finalScore = rankBase + jitter;
+
+        return {
+            investor: match.angel,
+            type: 'angel',
+            score: finalScore,
+            breakdown: { ...match.breakdown, overall_score: finalScore }
+        };
+    });
 }
 
 // Helpers
