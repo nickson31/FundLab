@@ -38,8 +38,8 @@ export default function MacShell({ children, sidePanel }: MacShellProps) {
     ];
 
     return (
-        <div className="flex w-screen h-screen items-center justify-center p-4 lg:p-10 overflow-hidden bg-white/90 dark:bg-black/40">
-            <div className="flex flex-col overflow-hidden w-full h-full max-w-7xl max-h-[95vh] glass-panel rounded-2xl shadow-2xl backdrop-blur-2xl border border-indigo-100 dark:border-white/10 ring-1 ring-white/5 relative bg-white/80 dark:bg-[#0a0a0a]/60">
+        <div className="flex w-screen h-screen items-center justify-center p-2 lg:p-6 overflow-hidden bg-white/90 dark:bg-black/40">
+            <div className="flex flex-col overflow-hidden w-full h-full max-w-[1900px] glass-panel rounded-2xl shadow-2xl backdrop-blur-2xl border border-indigo-100 dark:border-white/10 ring-1 ring-white/5 relative bg-white/80 dark:bg-[#0a0a0a]/60">
 
                 {/* Mac Title Bar */}
                 <div className="flex border-b border-indigo-100 dark:border-white/5 pt-4 pr-5 pb-4 pl-5 items-center justify-between bg-white/50 dark:bg-black/40 z-50 select-none">

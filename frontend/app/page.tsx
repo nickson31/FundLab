@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Search, Zap, Globe, ShieldCheck, BarChart3, Users, Building2, BrainCircuit } from 'lucide-react';
+import { ArrowRight, Search, Zap, Globe, ShieldCheck, BarChart3, Users, Building2, BrainCircuit, Database } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import Navbar from '@/components/wow/Navbar';
 
@@ -79,31 +79,39 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Feature Grid / Value Prop (Restored from Legacy) */}
-      <section className="py-24 bg-white/5 border-t border-white/10 relative">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl lg:text-4xl font-bold text-white mb-4">Intelligence, not just Data.</h2>
-            <p className="text-slate-400 max-w-2xl mx-auto">
-              Legacy databases give you spreadsheets. FundLab gives you answers. Our neural engine analyzes investment patterns to find matches human researchers miss.
+      {/* Intelligence at Scale (Redesigned) */}
+      <section className="py-32 bg-black relative overflow-hidden">
+        {/* Background Gradients */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full max-w-4xl bg-indigo-500/10 blur-[120px] rounded-full pointer-events-none" />
+
+        <div className="container mx-auto px-4 relative z-10">
+          <div className="text-center mb-20">
+            <h2 className="text-5xl md:text-6xl font-bold text-white mb-6 tracking-tight">
+              Intelligence at <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-400">Scale.</span>
+            </h2>
+            <p className="text-xl text-slate-400 max-w-2xl mx-auto leading-relaxed">
+              Stop manually searching LinkedIn. Our AI digests millions of data points to find the investors actually interested in your vertical.
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8">
-            <FeatureCard
+          <div className="grid md:grid-cols-3 gap-6">
+            <PremiumFeatureCard
+              icon={Database}
+              title="500k+ Profiles"
+              desc="Access the world's most comprehensive database of Angels, VCs, and Family Offices."
+              gradient="from-blue-500/20 to-indigo-500/20"
+            />
+            <PremiumFeatureCard
               icon={BrainCircuit}
               title="Semantic Matching"
-              desc="Don't search for keyword matches. Search for 'Investors who like B2B marketplaces in LatAm' and get semantic results."
+              desc="Don't rely on keywords. Describe your startup in plain English and let AI find the perfect thesis match."
+              gradient="from-purple-500/20 to-pink-500/20"
             />
-            <FeatureCard
-              icon={Globe}
-              title="Global Coverage"
-              desc="Real-time data on 15,000+ Funds and 35,000+ Angels across North America, Europe, and emerging markets."
-            />
-            <FeatureCard
-              icon={Zap}
-              title="Instant Outreach"
-              desc="Generate hyper-personalized cold emails referencing the investor's specific recent deals and thesis."
+            <PremiumFeatureCard
+              icon={ShieldCheck}
+              title="Privacy First"
+              desc="GDPR compliant. Your data is secure, and we never resell your contact info."
+              gradient="from-emerald-500/20 to-teal-500/20"
             />
           </div>
         </div>
@@ -171,14 +179,22 @@ export default function Home() {
   );
 }
 
-function FeatureCard({ icon: Icon, title, desc }: { icon: any, title: string, desc: string }) {
+
+
+function PremiumFeatureCard({ icon: Icon, title, desc, gradient }: { icon: any, title: string, desc: string, gradient: string }) {
   return (
-    <div className="group p-8 bg-white/5 rounded-2xl border border-white/5 hover:border-indigo-500/30 hover:bg-white/10 transition-all duration-300">
-      <div className="w-12 h-12 bg-indigo-500/10 rounded-xl flex items-center justify-center mb-6 text-indigo-400 group-hover:bg-indigo-500 group-hover:text-white transition-colors">
-        <Icon className="w-6 h-6" />
+    <div className="group relative p-1 rounded-3xl bg-gradient-to-b from-white/10 to-transparent hover:from-indigo-500/50 transition-all duration-500">
+      <div className="relative h-full bg-[#0A0A0A] rounded-[22px] p-8 overflow-hidden">
+        <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${gradient} blur-[40px] rounded-full group-hover:scale-150 transition-transform duration-700`} />
+
+        <div className="relative z-10">
+          <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+            <Icon className="w-7 h-7 text-indigo-400 group-hover:text-white transition-colors" />
+          </div>
+          <h3 className="text-2xl font-bold text-white mb-4">{title}</h3>
+          <p className="text-slate-400 leading-relaxed text-lg">{desc}</p>
+        </div>
       </div>
-      <h3 className="text-xl font-bold text-white mb-3">{title}</h3>
-      <p className="text-slate-400 leading-relaxed">{desc}</p>
     </div>
   );
 }
