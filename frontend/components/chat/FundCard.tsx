@@ -70,49 +70,49 @@ export default function FundCard(props: FundCardProps) {
             <div className="p-0 flex flex-col h-full">
 
                 {/* 1. Top Section: Identity & Score */}
-                <div className="p-10 pb-6">
-                    <div className="flex justify-between items-start gap-6">
-                        <div className="flex gap-6">
+                <div className="p-12 pb-8">
+                    <div className="flex justify-between items-start gap-8">
+                        <div className="flex gap-8">
                             {/* Avatar */}
-                            <div className={cn("w-20 h-20 shrink-0 rounded-3xl flex items-center justify-center text-white text-2xl font-bold shadow-2xl shadow-indigo-500/20 ring-4 ring-white dark:ring-white/5", bgGradient)}>
+                            <div className={cn("w-24 h-24 shrink-0 rounded-[2rem] flex items-center justify-center text-white text-3xl font-bold shadow-2xl shadow-indigo-500/20 ring-4 ring-white dark:ring-white/5", bgGradient)}>
                                 {getInitials(name)}
                             </div>
 
-                            <div className="space-y-2 py-1">
+                            <div className="space-y-3 py-1">
                                 <div>
-                                    <h3 className="text-3xl font-bold text-indigo-950 dark:text-white tracking-tight leading-tight">{name}</h3>
-                                    <div className="flex items-center gap-2 mt-1 text-base font-medium text-indigo-400/80">
-                                        <MapPin className="w-4 h-4" />
+                                    <h3 className="text-4xl font-bold text-indigo-950 dark:text-white tracking-tight leading-none">{name}</h3>
+                                    <div className="flex items-center gap-2 mt-2 text-lg font-medium text-indigo-400/80">
+                                        <MapPin className="w-5 h-5" />
                                         {location}
                                     </div>
                                 </div>
-                                {/* Unique Highlight (Curiosity) */}
+                                {/* Unique Highlight (Curiosity) - BIGGER */}
                                 {smartData?.unique_highlight && (
-                                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-amber-50 text-amber-700 rounded-full text-xs font-bold border border-amber-100">
-                                        <Zap className="w-3 h-3 fill-amber-500 text-amber-500" />
-                                        {smartData.unique_highlight}
+                                    <div className="inline-flex items-start gap-3 p-3 bg-fuchsia-50/80 dark:bg-fuchsia-900/10 text-fuchsia-700 dark:text-fuchsia-200 rounded-xl text-sm font-semibold border border-fuchsia-100 dark:border-fuchsia-900/20 max-w-md">
+                                        <Zap className="w-5 h-5 fill-fuchsia-500 text-fuchsia-500 shrink-0 mt-0.5" />
+                                        <span className="leading-snug">{smartData.unique_highlight}</span>
                                     </div>
                                 )}
                             </div>
                         </div>
 
                         {/* Score */}
-                        <div className="flex flex-col items-center gap-2">
-                            <div className="relative flex items-center justify-center w-16 h-16">
+                        <div className="flex flex-col items-center gap-3">
+                            <div className="relative flex items-center justify-center w-20 h-20">
                                 <svg className="w-full h-full transform -rotate-90">
-                                    <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="4" fill="transparent" className="text-indigo-50 dark:text-white/10" />
-                                    <circle cx="32" cy="32" r="28" stroke="currentColor" strokeWidth="4" fill="transparent" strokeDasharray={176} strokeDashoffset={176 - (176 * score)} className="text-indigo-600 transition-all duration-1000 ease-out" />
+                                    <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="5" fill="transparent" className="text-indigo-50 dark:text-white/10" />
+                                    <circle cx="40" cy="40" r="36" stroke="currentColor" strokeWidth="5" fill="transparent" strokeDasharray={226} strokeDashoffset={226 - (226 * score)} className="text-indigo-600 transition-all duration-1000 ease-out" />
                                 </svg>
-                                <span className="absolute text-xl font-bold text-indigo-700 dark:text-indigo-400">{Math.round(score * 100)}</span>
+                                <span className="absolute text-2xl font-bold text-indigo-700 dark:text-indigo-400">{Math.round(score * 100)}</span>
                             </div>
                             <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-widest">{matchLabel}</span>
                         </div>
                     </div>
 
                     {/* 2. Headline Summary */}
-                    <div className="mt-8 mb-6">
-                        <p className="text-xl font-medium text-indigo-900/90 dark:text-indigo-100 leading-relaxed">
-                            {summary}
+                    <div className="mt-10 mb-8">
+                        <p className="text-2xl font-medium text-indigo-900/90 dark:text-indigo-100 leading-relaxed font-serif tracking-wide">
+                            "{summary}"
                         </p>
                     </div>
 

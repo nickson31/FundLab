@@ -98,15 +98,7 @@ export default function InvestorCard(props: InvestorCardProps) {
                         {summary}
                     </p>
 
-                    {/* 3. Match Logic / Explanation (Moved from Dropdown) */}
-                    <div className="mt-4 p-3 bg-indigo-50/50 dark:bg-white/5 rounded-xl border border-indigo-100 dark:border-white/5">
-                        <h4 className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1 flex items-center gap-1">
-                            <Sparkles className="w-3 h-3" /> Analysis
-                        </h4>
-                        <p className="text-sm text-indigo-800 dark:text-zinc-400 leading-relaxed">
-                            {explanation}
-                        </p>
-                    </div>
+
                 </div>
 
                 {/* 4. Expertise Chips (UPPERCASE per request) */}
