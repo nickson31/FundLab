@@ -39,6 +39,7 @@ export default function InvestorCard(props: InvestorCardProps) {
     const explanation = smartData?.generalExplanation || "This investor matches your criteria based on their investment thesis and past activity.";
     const expertise = smartData?.expertises || [];
     const nuggets = smartData?.goldenNuggets || [];
+    const extendedAnalysis = smartData?.extendedAnalysis || [];
     const matchLabel = smartData?.matchLabel || "Strong Match";
     const linkedInUrl = 'linkedinUrl' in investor ? investor.linkedinUrl : ('website_url' in investor ? investor.website_url : undefined);
 
@@ -129,52 +130,29 @@ export default function InvestorCard(props: InvestorCardProps) {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="bg-slate-50/50 dark:bg-black/20 border-t border-indigo-50/50 overflow-hidden"
+                            className="bg-slate-50/30 dark:bg-black/20 overflow-hidden"
                         >
-                            <div className="p-6 pt-4 space-y-6">
-
-                                {/* 4. Deep Summary (Prompt + Investor) */}
-                                <div className="bg-indigo-50/30 dark:bg-indigo-500/10 p-5 rounded-2xl border border-indigo-100 dark:border-white/5">
-                                    <div className="flex items-start gap-3">
-                                        <Sparkles className="w-5 h-5 text-indigo-500 shrink-0 mt-0.5" />
-                                        <div>
-                                            <h4 className="text-xs font-bold text-indigo-900 dark:text-indigo-300 uppercase mb-2">Investment Logic</h4>
-                                            <p className="text-sm font-medium text-indigo-800/70 dark:text-slate-300 leading-relaxed">
-                                                {explanation}
-                                            </p>
-                                        </div>
+                            <div className="p-6 space-y-4">
+                                <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Extended Analysis</h4>
+                                {extendedAnalysis && extendedAnalysis.length > 0 ? (
+                                    <div className="grid grid-cols-1 gap-3">
+                                        {extendedAnalysis.map((item: any, i: number) => (
+                                            <div key={i} className="flex flex-col gap-1 p-3 rounded-lg border border-indigo-100 dark:border-white/5 bg-white/50 dark:bg-white/5">
+                                                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300 uppercase">{item.title}</span>
+                                                <span className="text-sm text-indigo-900 dark:text-slate-300">{item.content}</span>
+                                            </div>
+                                        ))}
                                     </div>
-                                </div>
-
-                                {/* 5. Golden Nuggets */}
-                                {nuggets.length > 0 && (
-                                    <div className="space-y-3">
-                                        <h4 className="text-xs font-bold text-indigo-300 uppercase flex items-center gap-2 tracking-widest">
-                                            <Zap className="w-3 h-3" /> Golden Nuggets
-                                        </h4>
-                                        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                                            {nuggets.map((nugget: any, i: number) => (
-                                                <div key={i} className="bg-white dark:bg-white/5 p-4 rounded-xl border border-indigo-50 dark:border-white/10 shadow-sm">
-                                                    <p className="text-[10px] font-bold text-indigo-500 uppercase mb-1">{nugget.title}</p>
-                                                    <p className="text-sm font-semibold text-indigo-950 dark:text-slate-200">{nugget.content}</p>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
+                                ) : (
+                                    <p className="text-sm text-indigo-400 italic">No extended analysis available for this investor.</p>
                                 )}
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
 
-                {/* 6. Action Buttons - Always visible at bottom? Or inside dropdown? 
-                   User said "dropdown to add more info". Actions should probably remain always visible or at least visible. 
-                   Let's keep them OUTSIDE the expanded area so they are always accessible, OR inside if we want a very compact card.
-                   Current design had them at the bottom. The user focused on "dropdown to ADD info". 
-                   So keeping buttons visible *below* the dropdown (or fixed at bottom) is safer.
-                   Actually, if I put buttons *after* the dropdown, they will slide down.
-               */}
-                <div className="px-6 pb-6 pt-2">
+                {/* 6. Action Buttons */}
+                <div className="px-6 pb-6 pt-4">
                     <div className="flex items-center gap-3">
                         <Button
                             onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(investor); }}
