@@ -31,8 +31,8 @@ export default function FundCard(props: FundCardProps) {
     const name = fund.name || fund.fullName || 'Unknown Fund';
     // Fund location usually splits differently or uses different fields
     const location = fund.hq_location || fund.location_city || 'Global';
-    const websiteUrl = fund.website_url;
-    const linkedInUrl = fund.linkedinUrl;
+    const websiteUrl = fund.website_url || fund.website || fund['website/value'];
+    const linkedInUrl = fund.linkedinUrl || fund.linkedin_url || fund['linkedin/value'];
 
     // Smart Data Access (Backend injects this)
     const smartData = (fund as any).smartData;
