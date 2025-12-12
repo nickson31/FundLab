@@ -115,7 +115,9 @@ export async function generateSmartCardContent(query: string, results: any[], mo
         });
 
         const responseText = result.response.text();
-        const data = JSON.parse(responseText);
+        // Sanitize: Remove markdown code blocks if present
+        const cleanedText = responseText.replace(/```json/g, '').replace(/```/g, '').trim();
+        const data = JSON.parse(cleanedText);
         return data;
     } catch (e) {
         console.error("Smart Card Gen Error:", e);
