@@ -66,7 +66,7 @@ export async function POST(req: NextRequest) {
         console.log('[Search API] Step 2.5: Generating Smart Card Content (Reasoning)...');
         // We only do this for the top 5 to save latency/tokens, but frontend handles full list
         const { generateSmartCardContent } = await import('@/lib/gemini/smartCardContent');
-        const smartContent = await generateSmartCardContent(query, results);
+        const smartContent = await generateSmartCardContent(query, results, mode);
 
         results = results.map(r => {
             const rAny = r.investor as any;

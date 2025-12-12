@@ -149,7 +149,7 @@ export default function ChatInterface() {
 
             {/* Results Stream */}
             {hasSearched && (
-                <div className="flex-1 overflow-y-auto pb-40 space-y-10 w-full scrollbar-none">
+                <div className="flex-1 overflow-y-auto pb-40 space-y-10 w-full scrollbar-none flex flex-col justify-start">
                     {/* User Query Bubble */}
                     <div className="flex justify-end">
                         <div className="bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/40 dark:to-purple-900/40 text-indigo-900 dark:text-white px-6 py-4 rounded-2xl rounded-tr-md max-w-[80%] shadow-sm border border-indigo-100 dark:border-indigo-500/30 backdrop-blur-md text-lg">
