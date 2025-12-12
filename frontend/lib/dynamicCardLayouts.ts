@@ -136,25 +136,26 @@ export function selectDynamicLayout(
         if (location && location !== ',') addField('location', 'Location', location);
 
         // SMART CONTENT INJECTION (AI Reasoning Phase)
-        // If Gemini provided a rewritten "About" or "Smart Tags", prioritize them above all else.
-        if ((investor as any).smartAbout) {
+        const smart = (investor as any).smartData;
+
+        if (smart?.generalExplanation) {
             fields.push({
-                component: 'about', // Reuse 'about' component but with smart content
-                label: 'AI Reasoning', // Label it clearly so user knows it's AI
-                value: (investor as any).smartAbout,
-                priority: 95, // Extremely high priority, beats almost everything
+                component: 'about',
+                label: 'FundLab Insight',
+                value: smart.generalExplanation,
+                priority: 95,
                 display_type: 'text'
             });
-            components.push('about'); // Ensure it's in the component list
+            components.push('about');
         }
 
-        if ((investor as any).smartTags && Array.isArray((investor as any).smartTags)) {
+        if (smart?.expertises && Array.isArray(smart.expertises)) {
             fields.push({
                 component: 'category_tags',
                 label: 'Smart Match',
-                value: (investor as any).smartTags,
+                value: smart.expertises,
                 priority: 90,
-                display_type: 'list' // Badge list
+                display_type: 'list'
             });
             components.push('category_tags');
         }
@@ -163,8 +164,8 @@ export function selectDynamicLayout(
             ...(angel.categories_strong_en || '').split(','),
             ...(angel.categories_general_en || '').split(',')
         ].filter(Boolean).map(s => s.trim()).slice(0, 3);
-        // Only add standard categories if we didn't add smart tags, or add them with lower priority
-        if (!(investor as any).smartTags) {
+
+        if (!smart?.expertises) {
             addField('category_tags', 'Expertise', categories);
         }
 
@@ -205,29 +206,31 @@ export function selectDynamicLayout(
         if (location && location !== ',') addField('location', 'Location', location);
 
         // SMART CONTENT INJECTION (AI Reasoning Phase)
-        if ((investor as any).smartAbout) {
+        const smart = (investor as any).smartData; // Access the injected Smart object
+
+        if (smart?.generalExplanation) {
             fields.push({
-                component: 'investment_thesis', // For funds, map explanation to Thesis component
-                label: 'AI Reasoning',
-                value: (investor as any).smartAbout,
+                component: 'investment_thesis',
+                label: 'FundLab Insight',
+                value: smart.generalExplanation,
                 priority: 95,
                 display_type: 'text'
             });
             components.push('investment_thesis');
         }
 
-        if ((investor as any).smartTags && Array.isArray((investor as any).smartTags)) {
+        if (smart?.expertises && Array.isArray(smart.expertises)) {
             fields.push({
                 component: 'category_tags',
                 label: 'Smart Match',
-                value: (investor as any).smartTags,
+                value: smart.expertises,
                 priority: 90,
                 display_type: 'list'
             });
             components.push('category_tags');
         }
 
-        if (fund.category_keywords && !(investor as any).smartTags) {
+        if (fund.category_keywords && !smart?.expertises) {
             const categories = fund.category_keywords
                 .replace(/[\[\]'"]/g, '')
                 .split(',')
@@ -237,7 +240,7 @@ export function selectDynamicLayout(
             addField('category_tags', 'Focus', categories);
         }
 
-        addField('ticket_size', 'Sweet Spot', fundData.sweet_spot || '');
+        addField('ticket_size', 'Sweet Spot', fundData.ticket_size || fundData.sweet_spot || ''); // Added ticket_size fallback
         addField('investment_thesis', 'Thesis', fundData.investment_thesis || '');
         addField('website', 'Website', fund.website_url || '');
     }

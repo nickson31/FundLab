@@ -144,8 +144,9 @@ export default function LoadingStateV2({ searchQuery, mode = 'angels' }: Loading
             </div>
 
             <p className="mt-4 text-xs font-mono text-indigo-400 dark:text-indigo-300/50 uppercase tracking-[0.2em] animate-pulse">
-                Gemini 2.0 Thinking
+                FundLab AI Reasoning
             </p>
+
         </div>
     );
 }
