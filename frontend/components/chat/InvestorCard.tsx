@@ -32,6 +32,7 @@ export default function InvestorCard(props: InvestorCardProps) {
     const location = ('addressWithCountry' in investor ? investor.addressWithCountry : null) || ('location_city' in investor ? `${investor.location_city}` : 'Global');
     const email = 'email' in investor ? investor.email : null;
 
+
     // Smart Data Access (Backend injects this)
     const smartData = (investor as any).smartData;
 
@@ -192,6 +193,14 @@ export default function InvestorCard(props: InvestorCardProps) {
                                         <Sparkles className="w-5 h-5 mr-2 opacity-80" />
                                         Generate Message
                                     </Button>
+
+                                    {email && (
+                                        <a href={`mailto:${email}`} onClick={(e) => e.stopPropagation()}>
+                                            <Button variant="outline" className="h-14 w-14 rounded-xl border-indigo-200 text-indigo-600 hover:bg-indigo-50">
+                                                <Mail className="w-6 h-6" />
+                                            </Button>
+                                        </a>
+                                    )}
 
                                     {linkedInUrl && (
                                         <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" onClick={(e) => e.stopPropagation()}>
