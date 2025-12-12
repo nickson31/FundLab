@@ -41,8 +41,8 @@ export default function ChatInterface() {
         setResults([]);
         setError(null);
 
-        // Enforce a minimum "Thinking" time of 12 seconds
-        const minTimePromise = new Promise(resolve => setTimeout(resolve, 12000));
+        // Enforce a minimum "Thinking" time of 6 seconds
+        const minTimePromise = new Promise(resolve => setTimeout(resolve, 6000));
 
         try {
             const userId = '00000000-0000-0000-0000-000000000000';

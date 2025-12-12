@@ -47,14 +47,18 @@ export async function matchFunds(
                 descriptionScore * 0.2
             );
 
+            // BOOST CURVE: Square root to lift lower scores (e.g. 0.36 -> 0.6)
+            // Then clamp to max 0.99
+            const boostedScore = Math.min(Math.sqrt(totalScore), 0.99);
+
             return {
                 fund: { ...data, id: data.linkedinUrl || data.linkedin_url || data.website_url || `fund_${Math.random()}` },
-                score: totalScore,
+                score: boostedScore,
                 breakdown: {
                     category_match: categoryScore,
                     stage_match: stageScore,
                     location_match: locationScore,
-                    overall_score: totalScore
+                    overall_score: boostedScore
                 },
             };
         })

@@ -135,3 +135,13 @@
     @apply text-indigo-400 dark:text-indigo-300/70;
   }
 }
+
+/* AGGRESSIVE INPUT RESET - User Request */
+input:focus,
+input:focus-visible,
+input:active {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  ring: 0 !important;
+}

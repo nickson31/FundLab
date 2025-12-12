@@ -99,15 +99,15 @@ export default function InvestorCard(props: InvestorCardProps) {
                     </p>
                 </div>
 
-                {/* 3. Expertise Chips */}
+                {/* 3. Expertise Chips (UPPERCASE per request) */}
                 <div className="px-6 py-2 flex flex-wrap gap-2">
                     {expertise.length > 0 ? expertise.map((tag: string, i: number) => (
                         <span key={i} className={cn("px-4 py-1.5 rounded-full text-xs font-bold border uppercase tracking-wide", safeChipColors[i % safeChipColors.length])}>
-                            {tag}
+                            {tag.toUpperCase()}
                         </span>
                     )) : (
                         <span className="px-4 py-1.5 rounded-full text-xs font-bold border border-indigo-50 bg-indigo-50/50 text-indigo-300 uppercase">
-                            Analysis Pending...
+                            ANALYSIS PENDING...
                         </span>
                     )}
                 </div>
@@ -130,49 +130,76 @@ export default function InvestorCard(props: InvestorCardProps) {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="bg-slate-50/30 dark:bg-black/20 overflow-hidden"
+                            className="bg-slate-50/30 dark:bg-black/20 overflow-hidden border-t border-indigo-50 dark:border-white/5"
                         >
-                            <div className="p-6 space-y-4">
-                                <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Extended Analysis</h4>
-                                {extendedAnalysis && extendedAnalysis.length > 0 ? (
-                                    <div className="grid grid-cols-1 gap-3">
-                                        {extendedAnalysis.map((item: any, i: number) => (
-                                            <div key={i} className="flex flex-col gap-1 p-3 rounded-lg border border-indigo-100 dark:border-white/5 bg-white/50 dark:bg-white/5">
-                                                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300 uppercase">{item.title}</span>
-                                                <span className="text-sm text-indigo-900 dark:text-slate-300">{item.content}</span>
-                                            </div>
-                                        ))}
+                            <div className="p-6 space-y-6">
+
+                                {/* Deep Summary (Moved to Dropdown) */}
+                                <div>
+                                    <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Deep Dive</h4>
+                                    <p className="text-sm text-indigo-900/80 dark:text-slate-300 leading-relaxed">
+                                        {explanation}
+                                    </p>
+                                </div>
+
+                                {/* Golden Nuggets (Moved to Dropdown) */}
+                                {nuggets.length > 0 && (
+                                    <div>
+                                        <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-3">Key Insights</h4>
+                                        <div className="grid gap-3">
+                                            {nuggets.map((nugget: any, i: number) => (
+                                                <div key={i} className="flex items-start gap-3 bg-indigo-50/50 dark:bg-white/5 p-3 rounded-xl border border-indigo-100 dark:border-white/5">
+                                                    <Zap className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
+                                                    <div>
+                                                        <span className="block text-xs font-bold text-indigo-900 dark:text-white mb-0.5">{nugget.title}</span>
+                                                        <span className="text-xs text-indigo-700/80 dark:text-slate-400">{nugget.content}</span>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                ) : (
-                                    <p className="text-sm text-indigo-400 italic">No extended analysis available for this investor.</p>
                                 )}
+
+                                {/* Extended Analysis (Moved to Dropdown) */}
+                                {extendedAnalysis && extendedAnalysis.length > 0 && (
+                                    <div>
+                                        <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Extended Metrics</h4>
+                                        <div className="grid grid-cols-1 gap-2">
+                                            {extendedAnalysis.map((item: any, i: number) => (
+                                                <div key={i} className="flex justify-between items-center p-2 rounded-lg border-b border-indigo-50 dark:border-white/5 last:border-0">
+                                                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300 uppercase">{item.title}</span>
+                                                    <span className="text-xs text-indigo-900 dark:text-slate-300 text-right">{item.content}</span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
+
+                                {/* ACTION BUTTONS (Moved to Dropdown) */}
+                                <div className="pt-4 flex items-center gap-3">
+                                    <Button
+                                        onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(investor); }}
+                                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 rounded-2xl shadow-xl shadow-indigo-500/30 active:scale-95 transition-all text-base"
+                                    >
+                                        <span className="flex items-center gap-2">
+                                            <Sparkles className="w-5 h-5 text-indigo-200" />
+                                            Generate Message
+                                        </span>
+                                    </Button>
+
+                                    {linkedInUrl && (
+                                        <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                                            <Button variant="outline" className="h-14 w-14 rounded-2xl border-2 border-indigo-50 hover:border-indigo-200 hover:bg-indigo-50 text-indigo-300 hover:text-indigo-600 transition-all p-0 flex items-center justify-center">
+                                                <Linkedin className="w-6 h-6" />
+                                            </Button>
+                                        </a>
+                                    )}
+                                </div>
+
                             </div>
                         </motion.div>
                     )}
                 </AnimatePresence>
-
-                {/* 6. Action Buttons */}
-                <div className="px-6 pb-6 pt-4">
-                    <div className="flex items-center gap-3">
-                        <Button
-                            onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(investor); }}
-                            className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 rounded-2xl shadow-xl shadow-indigo-500/30 active:scale-95 transition-all text-base"
-                        >
-                            <span className="flex items-center gap-2">
-                                <Sparkles className="w-5 h-5 text-indigo-200" />
-                                Generate Message
-                            </span>
-                        </Button>
-
-                        {linkedInUrl && (
-                            <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
-                                <Button variant="outline" className="h-14 w-14 rounded-2xl border-2 border-indigo-50 hover:border-indigo-200 hover:bg-indigo-50 text-indigo-300 hover:text-indigo-600 transition-all p-0 flex items-center justify-center">
-                                    <Linkedin className="w-6 h-6" />
-                                </Button>
-                            </a>
-                        )}
-                    </div>
-                </div>
 
             </div>
         </motion.div>
