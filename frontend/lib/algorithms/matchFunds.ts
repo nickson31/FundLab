@@ -41,15 +41,23 @@ export async function matchFunds(
             const descriptionScore = calculateDescriptionScore(data, params.categoryKeywords);
 
             const totalScore = (
-                categoryScore * 0.4 +
+                categoryScore * 0.5 +
                 stageScore * 0.3 +
                 locationScore * 0.1 +
-                descriptionScore * 0.2
+                descriptionScore * 0.3 // Increased weight
             );
 
-            // BOOST CURVE: Square root to lift lower scores (e.g. 0.36 -> 0.6)
-            // Then clamp to max 0.99
-            const boostedScore = Math.min(Math.sqrt(totalScore), 0.99);
+            // SIMULATED BOOST (User Request: 75-99 range)
+            // Lifts any relevant match into the "Good" to "Excellent" range visually.
+            // Maps input [0.1 ... 0.6] -> [0.75 ... 0.99]
+            let boostedScore = 0.75 + (totalScore * 0.4);
+
+            // Add slight deterministic variation based on name length to avoid identical scores if inputs are identical
+            const variation = (data.name || "").length % 5 / 100; // 0.00 to 0.04
+            boostedScore += variation;
+
+            // Clamp strict to 0.75 - 0.99
+            boostedScore = Math.max(0.75, Math.min(0.99, boostedScore));
 
             return {
                 fund: { ...data, id: data.linkedinUrl || data.linkedin_url || data.website_url || `fund_${Math.random()}` },

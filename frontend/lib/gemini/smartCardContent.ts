@@ -28,22 +28,27 @@ export async function generateSmartCardContent(query: string, results: any[], mo
         raw_data: JSON.stringify(r.investor).slice(0, 2000) // Moderate chunk
     }));
 
+    // Explicit count
+    const count = context.length;
+
     let prompt = '';
 
     if (mode === 'funds') {
         prompt = `
         You are an expert VC Fund Analyst. The user is a founder searching for: "${query}".
-
-        Your goal is to analyze these VENTURE FUNDS and generate a **Rich Insight Card** for each.
         
-        CRITICAL RULES FOR FUNDS:
-        1. **Investment Logic**: Extract specific thesis details (e.g. "Only B2B SaaS", "Focus on Deeptech").
-        2. **Expertise**: Deduce 3 specific tags: [Sector Focus], [Stage Focus], [Ticket Size hint if avail].
-        3. **Golden Nuggets**: Dig for Portfolio Highlights, LP composition, or specialized value add (e.g. "Part of YC network", "Series A leader").
-        4. **Targeted Deep Dive (NEW)**: Generate 4-5 EXTRA distinct insights for a "Deep Dive" dropdown. Topics: "Market Power", "Reputation", "Speed to Term Sheet", "Follow-on Reserves".
-        5. **Tone**: Institutional, precise, and high-value.
+        INPUT: A list of ${count} VENTURE FUNDS.
+        TASK: JSON Response.
+        
+        CRITICAL INSTRUCTIONS:
+        1. **PROCESS EVERY SINGLE FUND** in the input list (${count} items). Do not skip any.
+        2. **Investment Logic**: Extract specific thesis details.
+        3. **Expertise**: Deduce 3 specific tags.
+        4. **Golden Nuggets**: MUST BE HARD FACTS (Exits, Fund Size, Ticket). NO FLUFF.
+        5. **Targeted Deep Dive**: Generate 4-5 EXTRA distinct insights.
+        6. **Tone**: Institutional.
 
-        Output STRICT JSON array:
+        Output STRICT JSON array of exactly ${count} objects:
         [
             {
                 "investorId": "id from input",
@@ -51,58 +56,59 @@ export async function generateSmartCardContent(query: string, results: any[], mo
                 "expertises": ["Fintech", "Series A", "Lead Investor"],
                 "generalExplanation": "Explain why this FUND fits the user's query perfectly based on their known thesis.",
                 "goldenNuggets": [
-                    { "title": "Portfolio", "content": "Invested in X, Y, Z." },
-                    { "title": "Thesis", "content": "Looks for strong network effects." }
+                    { "title": "Portfolio", "content": "Early backer of Revolut & Monzo." },
+                    { "title": "Power", "content": "$1Bn AUM across 4 funds." }
                 ],
                 "extendedAnalysis": [
-                     { "title": "Market Power", "content": "Dominates European Fintech seed rounds." },
-                     { "title": "Reserves", "content": "Reserves 50% of fund for follow-ons." },
-                     { "title": "Board Style", "content": "Hands-on, operational support." },
-                     { "title": "Network", "content": "Direct line to Tier 1 US VCs." }
+                    { "title": "Market Power", "content": "Dominates European Fintech seed rounds." },
+                    { "title": "Reserves", "content": "Reserves 50% of follow-ons." },
+                    { "title": "Board Style", "content": "Hands-on, operational support." },
+                    { "title": "Network", "content": "Direct line to Tier 1 US VCs." }
                 ],
                 "matchLabel": "Top Tier Fund"
             }
         ]
 
-        Funds:
+        Funds to Analyze (${count}):
         ${JSON.stringify(context, null, 2)}
         `;
     } else {
-        // ANGELS PROMPT (Original but refined)
         prompt = `
         You are an expert VC Analyst. The user is a founder searching for: "${query}".
-
-        Your goal is to analyze these ANGEL INVESTORS and generate a **Rich Insight Card** for each.
         
-        CRITICAL RULES:
-        1. **NEVER COPY/PASTE**: Read the data, interpret it, and write completely NEW text.
-        2. **Expertise**: Deduce 3-4 specific strengths (Sector, Stage, or Unique Value). Write them as CLEAN, SHORT tags (max 2 words).
-        3. **Golden Nuggets**: Dig for 1-4 specific, high-value details (e.g. "Ex-Founder of X", "24h decision speed", "Top Tier Network").
-        4. **Targeted Deep Dive (NEW)**: Generate 4-5 EXTRA distinct insights for a "Deep Dive" dropdown. Topics: "Operational Help", "Hiring Network", "Deal Velocity", "Syndication".
-        5. **Tone**: Professional, insider-y, and high-signal.
+        INPUT: A list of ${count} ANGEL INVESTORS.
+        TASK: JSON Response.
+        
+        CRITICAL INSTRUCTIONS:
+        1. **PROCESS EVERY SINGLE INVESTOR** in the input list (${count} items). Do not skip any.
+        2. **Neve Copy/Paste**: Refine the text.
+        3. **Expertise**: 3-4 specific strengths (Sector, Stage, Value).
+        4. **Golden Nuggets**: IMPRESSIVE FACTS (Ex-Founder, Big Tech VP, Investments).
+        5. **Targeted Deep Dive**: 4-5 EXTRA distinct insights.
+        6. **Tone**: Insider-y, High Signal.
 
-        Output STRICT JSON array:
+        Output STRICT JSON array of exactly ${count} objects:
         [
             {
                 "investorId": "id from input",
-                "oneLineSummary": "A powerful 1-sentence bio emphasizing their relevance.",
-                "expertises": ["Fintech", "Seed Stage", "Operator VC"],
-                "generalExplanation": "2-3 sentences explaining the MATCH LOGIC. Why is this investor good for THIS user query? Be specific.",
+                "oneLineSummary": "Former VP Product at Uber turned Fintech Angel.",
+                "expertises": ["Fintech", "Seed Stage", "Product Guru"],
+                "generalExplanation": "Why is this investor good for THIS user query?",
                 "goldenNuggets": [
                     { "title": "Speed", "content": "Known for same-day term sheets." },
-                    { "title": "Network", "content": "Strong ties to YC alumni." }
+                    { "title": "Track Record", "content": "Early investor in Notion." }
                 ],
                 "extendedAnalysis": [
-                     { "title": "Operator Skill", "content": "Can help with B2B Sales strategy." },
-                     { "title": "Deal Flow", "content": "Sees 100+ deals/mo, high signal." },
-                     { "title": "References", "content": "Founders love him, very supportive." },
-                     { "title": "Check Velocity", "content": "Fast mover, no complex DD." }
+                    { "title": "Operator Skill", "content": "Can help with B2B Sales strategy." },
+                    { "title": "Deal Flow", "content": "Sees 100+ deals/mo, high signal." },
+                    { "title": "References", "content": "Founders love him, very supportive." },
+                    { "title": "Check Velocity", "content": "Fast mover, no complex DD." }
                 ],
                 "matchLabel": "Perfect Match"
             }
         ]
 
-        Investors:
+        Investors to Analyze (${count}):
         ${JSON.stringify(context, null, 2)}
         `;
     }

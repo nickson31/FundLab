@@ -54,12 +54,23 @@ export async function matchAngels(
         const stageScore = calculateStageScore(typedAngel, params.stageKeywords);
         const locationScore = calculateLocationScore(typedAngel, params.locationKeywords);
 
-        const totalScore = (
+        const rawScore = (
             categoryScore * 0.45 +
             (isNaN(angelScoreNormalized) ? 0 : angelScoreNormalized) * 0.25 +
             stageScore * 0.20 +
             locationScore * 0.10
         );
+
+        // SIMULATED BOOST (User Request: 75-99 range)
+        // Maps input [0.1 ... 0.6] -> [0.75 ... 0.99]
+        let totalScore = 0.75 + (rawScore * 0.4);
+
+        // Deterministic variation
+        const variation = (typedAngel.name || "").length % 5 / 100;
+        totalScore += variation;
+
+        // Clamp strict to 0.75 - 0.99
+        totalScore = Math.max(0.75, Math.min(0.99, totalScore));
 
         // Find specific matching keywords for UI display
         const matchedKeywords: string[] = [];

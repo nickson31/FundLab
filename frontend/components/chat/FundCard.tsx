@@ -102,15 +102,25 @@ export default function FundCard(props: FundCardProps) {
                     </div>
 
                     {/* 2. One Line Summary */}
-                    <p className="mt-5 text-lg font-medium text-indigo-900/80 dark:text-indigo-200 leading-snug">
+                    <p className="mt-4 text-lg font-medium text-indigo-900/80 dark:text-indigo-200 leading-snug">
                         {summary}
                     </p>
+
+                    {/* 3. Strategic Analysis (Moved from Dropdown to Visible) */}
+                    <div className="mt-4 p-3 bg-indigo-50/50 dark:bg-white/5 rounded-xl border border-indigo-100 dark:border-white/5">
+                        <h4 className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest mb-1 flex items-center gap-1">
+                            <Sparkles className="w-3 h-3" /> Strategic Analysis
+                        </h4>
+                        <p className="text-sm text-indigo-800 dark:text-zinc-400 leading-relaxed">
+                            {explanation}
+                        </p>
+                    </div>
                 </div>
 
-                {/* 3. Expertise Chips (UPPERCASE) */}
-                <div className="px-6 py-2 flex flex-wrap gap-2">
+                {/* 4. Expertise Chips (UPPERCASE) */}
+                <div className="px-6 pb-2 flex flex-wrap gap-2">
                     {expertise.length > 0 ? expertise.map((tag: string, i: number) => (
-                        <span key={i} className={cn("px-4 py-1.5 rounded-full text-xs font-bold border uppercase tracking-wide", safeChipColors[i % safeChipColors.length])}>
+                        <span key={i} className={cn("px-3 py-1 rounded-md text-[11px] font-bold border uppercase tracking-wide", safeChipColors[i % safeChipColors.length])}>
                             {tag.toUpperCase()}
                         </span>
                     )) : (
@@ -126,12 +136,12 @@ export default function FundCard(props: FundCardProps) {
                         onClick={() => setIsExpanded(!isExpanded)}
                         className="flex items-center gap-2 text-sm font-bold text-indigo-600 dark:text-indigo-400 hover:text-indigo-800 dark:hover:text-indigo-300 transition-colors focus:outline-none"
                     >
-                        {isExpanded ? "Hide Fund Analysis" : "View Fund Analysis"}
+                        {isExpanded ? "Hide Fund Insights" : "View Fund Insights"}
                         {isExpanded ? <ChevronUp className="w-4 h-4" /> : <ChevronDown className="w-4 h-4" />}
                     </button>
                 </div>
 
-                {/* --- COLLAPSIBLE CONTENT (DROPDOWN) --- */}
+                {/* --- COLLAPSIBLE CONTENT (DROPDOWN) --- %}
                 <AnimatePresence>
                     {isExpanded && (
                         <motion.div
@@ -141,83 +151,75 @@ export default function FundCard(props: FundCardProps) {
                             className="bg-slate-50/30 dark:bg-black/20 overflow-hidden border-t border-indigo-50 dark:border-white/5"
                         >
                             <div className="p-6 space-y-6">
+                                
+                                {/* Deep Summary REMOVED from here, moved up */}
 
-                                {/* Deep Summary (Moved to Dropdown) */}
-                                <div>
-                                    <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Strategic Analysis</h4>
-                                    <p className="text-sm text-indigo-900/80 dark:text-slate-300 leading-relaxed">
-                                        {explanation}
-                                    </p>
-                                </div>
+                {/* Golden Nuggets (Moved to Dropdown) */}
 
-                                {/* Golden Nuggets (Moved to Dropdown) */}
-                                {nuggets.length > 0 && (
+                {/* Golden Nuggets (Moved to Dropdown) */}
+                {nuggets.length > 0 && (
+                    <div>
+                        <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-3">Portfolio Highlights</h4>
+                        <div className="grid gap-3">
+                            {nuggets.map((nugget: any, i: number) => (
+                                <div key={i} className="flex items-start gap-3 bg-indigo-50/50 dark:bg-white/5 p-3 rounded-xl border border-indigo-100 dark:border-white/5">
+                                    <Zap className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
                                     <div>
-                                        <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-3">Portfolio Highlights</h4>
-                                        <div className="grid gap-3">
-                                            {nuggets.map((nugget: any, i: number) => (
-                                                <div key={i} className="flex items-start gap-3 bg-indigo-50/50 dark:bg-white/5 p-3 rounded-xl border border-indigo-100 dark:border-white/5">
-                                                    <Zap className="w-4 h-4 text-amber-500 mt-0.5 shrink-0" />
-                                                    <div>
-                                                        <span className="block text-xs font-bold text-indigo-900 dark:text-white mb-0.5">{nugget.title}</span>
-                                                        <span className="text-xs text-indigo-700/80 dark:text-slate-400">{nugget.content}</span>
-                                                    </div>
-                                                </div>
-                                            ))}
-                                        </div>
+                                        <span className="block text-xs font-bold text-indigo-900 dark:text-white mb-0.5">{nugget.title}</span>
+                                        <span className="text-xs text-indigo-700/80 dark:text-slate-400">{nugget.content}</span>
                                     </div>
-                                )}
-
-                                {/* Extended Analysis (Moved to Dropdown) */}
-                                {extendedAnalysis && extendedAnalysis.length > 0 && (
-                                    <div>
-                                        <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Extended Metrics</h4>
-                                        <div className="grid grid-cols-1 gap-2">
-                                            {extendedAnalysis.map((item: any, i: number) => (
-                                                <div key={i} className="flex justify-between items-center p-2 rounded-lg border-b border-indigo-50 dark:border-white/5 last:border-0">
-                                                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300 uppercase">{item.title}</span>
-                                                    <span className="text-xs text-indigo-900 dark:text-slate-300 text-right">{item.content}</span>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    </div>
-                                )}
-
-                                {/* ACTION BUTTONS (Moved to Dropdown) */}
-                                <div className="pt-4 flex items-center gap-3">
-                                    <Button
-                                        onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(fund); }}
-                                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 rounded-2xl shadow-xl shadow-indigo-500/30 active:scale-95 transition-all text-base"
-                                    >
-                                        <span className="flex items-center gap-2">
-                                            <Sparkles className="w-5 h-5 text-indigo-200" />
-                                            Draft Application
-                                        </span>
-                                    </Button>
-
-                                    {/* URL Button for Funds */}
-                                    {websiteUrl && (
-                                        <a href={websiteUrl} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
-                                            <Button variant="outline" className="h-14 w-14 rounded-2xl border-2 border-indigo-50 hover:border-indigo-200 hover:bg-indigo-50 text-indigo-300 hover:text-indigo-600 transition-all p-0 flex items-center justify-center">
-                                                <Globe className="w-6 h-6" />
-                                            </Button>
-                                        </a>
-                                    )}
-
-                                    {linkedInUrl && (
-                                        <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
-                                            <Button variant="outline" className="h-14 w-14 rounded-2xl border-2 border-indigo-50 hover:border-indigo-200 hover:bg-indigo-50 text-indigo-300 hover:text-indigo-600 transition-all p-0 flex items-center justify-center">
-                                                <Linkedin className="w-6 h-6" />
-                                            </Button>
-                                        </a>
-                                    )}
                                 </div>
-                            </div>
-                        </motion.div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* Extended Analysis (Moved to Dropdown) */}
+                {extendedAnalysis && extendedAnalysis.length > 0 && (
+                    <div>
+                        <h4 className="text-xs font-bold text-indigo-400 uppercase tracking-widest mb-2">Extended Metrics</h4>
+                        <div className="grid grid-cols-1 gap-2">
+                            {extendedAnalysis.map((item: any, i: number) => (
+                                <div key={i} className="flex justify-between items-center p-2 rounded-lg border-b border-indigo-50 dark:border-white/5 last:border-0">
+                                    <span className="text-xs font-bold text-indigo-600 dark:text-indigo-300 uppercase">{item.title}</span>
+                                    <span className="text-xs text-indigo-900 dark:text-slate-300 text-right">{item.content}</span>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                )}
+
+                {/* ACTION BUTTONS (Moved to Dropdown) */}
+                <div className="pt-4 flex items-center gap-3">
+                    <Button
+                        onClick={(e) => { e.stopPropagation(); onDraftMessage && onDraftMessage(fund); }}
+                        className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-6 rounded-2xl shadow-xl shadow-indigo-500/30 active:scale-95 transition-all text-base"
+                    >
+                        <span className="flex items-center gap-2">
+                            <Sparkles className="w-5 h-5 text-indigo-200" />
+                            Draft Application
+                        </span>
+                    </Button>
+
+                    {/* URL Button for Funds */}
+                    {websiteUrl && (
+                        <a href={websiteUrl} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                            <Button variant="outline" className="h-14 w-14 rounded-2xl border-2 border-indigo-50 hover:border-indigo-200 hover:bg-indigo-50 text-indigo-300 hover:text-indigo-600 transition-all p-0 flex items-center justify-center">
+                                <Globe className="w-6 h-6" />
+                            </Button>
+                        </a>
                     )}
-                </AnimatePresence>
 
+                    {linkedInUrl && (
+                        <a href={linkedInUrl} target="_blank" rel="noopener noreferrer" className="shrink-0" onClick={(e) => e.stopPropagation()}>
+                            <Button variant="outline" className="h-14 w-14 rounded-2xl border-2 border-indigo-50 hover:border-indigo-200 hover:bg-indigo-50 text-indigo-300 hover:text-indigo-600 transition-all p-0 flex items-center justify-center">
+                                <Linkedin className="w-6 h-6" />
+                            </Button>
+                        </a>
+                    )}
+                </div>
             </div>
         </motion.div>
-    );
+    )
 }
+
