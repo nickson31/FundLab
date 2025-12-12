@@ -15,6 +15,7 @@ interface InvestorCardProps {
     score: number;
     breakdown: MatchBreakdown;
     onDraftMessage?: (investor: Investor) => void;
+    onShowEmail?: (investor: Investor) => void;
     onSave?: (investor: Investor) => void;
     isSaved?: boolean;
 }
@@ -22,7 +23,7 @@ interface InvestorCardProps {
 const getInitials = (n: string) => n.split(' ').map(p => p[0]).join('').toUpperCase().slice(0, 2);
 
 export default function InvestorCard(props: InvestorCardProps) {
-    const { investor, score, onDraftMessage } = props;
+    const { investor, score, onDraftMessage, onShowEmail } = props;
     const [isExpanded, setIsExpanded] = useState(false);
 
     if (!investor) return null;
@@ -195,11 +196,16 @@ export default function InvestorCard(props: InvestorCardProps) {
                                     </Button>
 
                                     {email && (
-                                        <a href={`mailto:${email}`} onClick={(e) => e.stopPropagation()}>
-                                            <Button variant="outline" className="h-14 w-14 rounded-xl border-indigo-200 text-indigo-600 hover:bg-indigo-50">
-                                                <Mail className="w-6 h-6" />
-                                            </Button>
-                                        </a>
+                                        <Button
+                                            variant="outline"
+                                            onClick={(e) => {
+                                                e.stopPropagation();
+                                                onShowEmail && onShowEmail(investor);
+                                            }}
+                                            className="h-14 w-14 rounded-xl border-indigo-200 text-indigo-600 hover:bg-indigo-50"
+                                        >
+                                            <Mail className="w-6 h-6" />
+                                        </Button>
                                     )}
 
                                     {linkedInUrl && (

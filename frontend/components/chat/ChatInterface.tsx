@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Send, Sparkles, PenSquare, Search, AlertCircle, Zap, TrendingUp, Users, Building2 } from 'lucide-react';
 import SearchToggle from './SearchToggle';
+import { EmailWindow } from './EmailWindow';
 import InvestorCard from './InvestorCard';
 import MessageModal from './MessageModal';
 import { Button } from '@/components/ui/button';
@@ -23,6 +24,11 @@ export default function ChatInterface() {
     const [error, setError] = useState<string | null>(null);
     const [isTyping, setIsTyping] = useState(false);
 
+    // Email Window State
+    const [emailWindowOpen, setEmailWindowOpen] = useState(false);
+    const [emailWindowMinimized, setEmailWindowMinimized] = useState(false);
+    const [emailInvestor, setEmailInvestor] = useState<any>(null);
+
     const openModal = (investor?: any) => {
         setSelectedInvestor(investor);
         setIsModalOpen(true);
@@ -31,6 +37,12 @@ export default function ChatInterface() {
     const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setQuery(e.target.value);
         setIsTyping(e.target.value.length > 0);
+    };
+
+    const handleShowEmail = (investor: any) => {
+        setEmailInvestor(investor);
+        setEmailWindowOpen(true);
+        setEmailWindowMinimized(false);
     };
 
     const handleSearch = async (e?: React.FormEvent) => {
@@ -213,6 +225,7 @@ export default function ChatInterface() {
                                                     score={result.score}
                                                     breakdown={result.breakdown}
                                                     onDraftMessage={openModal}
+                                                    onShowEmail={handleShowEmail}
                                                     onSave={async (inv) => { /* ... */ }}
                                                 />
                                             ))}
@@ -240,6 +253,16 @@ export default function ChatInterface() {
                 onClose={() => setIsModalOpen(false)}
                 preSelectedInvestor={selectedInvestor}
                 currentUserId="00000000-0000-0000-0000-000000000000" // Passing dummy ID to match prop
+            />
+
+            <EmailWindow
+                isOpen={emailWindowOpen}
+                isMinimized={emailWindowMinimized}
+                onClose={() => setEmailWindowOpen(false)}
+                onMinimize={() => setEmailWindowMinimized(true)}
+                onMaximize={() => setEmailWindowMinimized(false)}
+                email={emailInvestor?.email || null}
+                name={emailInvestor?.name || emailInvestor?.fullName || 'Investor'}
             />
 
             {/* Input Area */}
