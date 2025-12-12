@@ -135,7 +135,7 @@ export default function InvestorCard(props: InvestorCardProps) {
                 {/* --- FOOTER: Toggle --- */}
                 <button
                     onClick={() => setIsExpanded(!isExpanded)}
-                    className="w-full py-4 border-t border-indigo-50 dark:border-white/5 bg-slate-50/50 dark:bg-white/[0.02] hover:bg-slate-100 dark:hover:bg-white/5 transition-colors flex items-center justify-center gap-2 text-xs font-bold text-indigo-500 uppercase tracking-widest group-hover:text-indigo-600"
+                    className="w-full py-4 border-t border-indigo-50 dark:border-white/5 bg-white/80 dark:bg-white/[0.02] hover:bg-white dark:hover:bg-white/5 transition-colors flex items-center justify-center gap-2 text-xs font-bold text-indigo-500 uppercase tracking-widest group-hover:text-indigo-600"
                 >
                     {isExpanded ? "Close Deep Dive" : "View Details & Insights"}
                     <ChevronDown className={cn("w-4 h-4 transition-transform duration-300", isExpanded && "rotate-180")} />
@@ -148,7 +148,7 @@ export default function InvestorCard(props: InvestorCardProps) {
                             initial={{ height: 0, opacity: 0 }}
                             animate={{ height: "auto", opacity: 1 }}
                             exit={{ height: 0, opacity: 0 }}
-                            className="bg-slate-50 dark:bg-black/20 text-left border-t border-indigo-50 dark:border-white/5 overflow-hidden"
+                            className="bg-white dark:bg-black/20 text-left border-t border-indigo-50 dark:border-white/5 overflow-hidden"
                         >
                             <div className="p-8 space-y-8">
 
