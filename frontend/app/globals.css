@@ -43,33 +43,33 @@
   }
 
   .dark {
-    /* Dark Mode - Deep Void (No Gray) */
-    --background: 260 40% 4%;
+    /* Dark Mode - True Black (OLED) */
+    --background: 0 0% 0%;
     --foreground: 210 40% 98%;
 
-    --card: 260 40% 6%;
+    --card: 0 0% 3%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 260 40% 6%;
+    --popover: 0 0% 3%;
     --popover-foreground: 210 40% 98%;
 
     --primary: 247 74% 65%;
-    --primary-foreground: 210 40% 98%;
+    --primary-foreground: 0 0% 0%;
 
-    --secondary: 247 30% 15%;
+    --secondary: 247 20% 10%;
     --secondary-foreground: 210 40% 98%;
 
-    --muted: 247 30% 15%;
+    --muted: 247 20% 10%;
     --muted-foreground: 215 20.2% 65.1%;
 
-    --accent: 247 30% 15%;
+    --accent: 247 20% 10%;
     --accent-foreground: 210 40% 98%;
 
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 247 30% 15%;
-    --input: 247 30% 15%;
+    --border: 0 0% 12%;
+    --input: 247 20% 10%;
     --ring: 247 74% 65%;
   }
 }
