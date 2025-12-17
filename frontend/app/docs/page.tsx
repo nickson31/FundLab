@@ -1,277 +1,265 @@
-'use client';
+"use strict";
+"use client";
 
-import React, { useState } from 'react';
-import MacShell from '@/components/layout/MacShell';
-import { Lock, Shield, CheckCircle2, Clock, Globe, Fingerprint, Smartphone, AlertTriangle, FileText, ChevronDown, ChevronRight, Flag } from 'lucide-react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { cn } from '@/lib/utils';
+import {
+    FileText,
+    Lock,
+    CheckCircle2,
+    Clock,
+    AlertCircle,
+    ChevronRight,
+    Shield,
+    Smartphone,
+    Loader2
+} from 'lucide-react';
+import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 
-// --- DATA STRUCTURE FROM ROADMAP ---
+// --- ENGLISH DATA STRUCTURE ---
 const DOC_PHASES = [
     {
-        id: 'phase0',
-        title: 'Fase 0: Constitución y Legal Andorra',
-        description: 'Legalidad, Protección de Socios y Estructura Fiscal.',
+        id: 'phaseRec',
+        title: 'Personal Docs (Nikita)',
+        description: 'Identity verification and work permits for non-resident executive.',
+        locked: true, // Special lock for Nikita
         items: [
-            { name: 'Solicitud de Reserva de Denominación Social', status: 'completed', priority: 'Critical' },
-            { name: 'Gastos Pre-Constitución (Socios)', status: 'completed', priority: 'High', isNew: true },
-            { name: 'Solicitud de Inversión Extranjera (SIE)', status: 'pending', priority: 'Low' },
-            { name: 'Pacto de Socios (Shareholders\' Agreement)', status: 'completed', priority: 'High' },
-            { name: 'Estatutos Sociales (By-Laws)', status: 'completed', priority: 'High' },
-            { name: 'Certificado Bancario de Desembolso', status: 'pending', priority: 'High' },
-            { name: 'Escritura Pública de Constitución', status: 'pending', priority: 'High' },
-            { name: 'Inscripción en el Registre de Societats', status: 'pending', priority: 'High' },
-            { name: 'Solicitud de NRT', status: 'pending', priority: 'High' },
-            { name: 'Inscripción en el Registre de Comerç', status: 'pending', priority: 'High' },
-            { name: 'Alta en la CASS', status: 'pending', priority: 'Medium' },
+            { name: 'Management Fees Agreement', desc: 'Contract for service provision between Nikita and the HoldCo.', status: 'pending', priority: 'High' },
+            { name: 'Foreign Work Permit', desc: 'Application for non-resident work permit (Fronterizo).', status: 'pending', priority: 'Medium' },
+            { name: 'Criminal Record Certificate', desc: 'Apostilled document verifying no criminal history.', status: 'completed', priority: 'High', flag: '🇷🇺' },
+            { name: 'Apostilled Degrees & CV', desc: 'University diplomas and CV formatted for immigration.', status: 'completed', priority: 'Medium' },
         ]
     },
     {
-        id: 'phaseRec',
-        title: 'Fase Rec: Documentación Personal',
-        description: 'Permisos y Contratación (Ejecutivo No Residente).',
+        id: 'phase0',
+        title: 'Phase 0: Incorporation & Legal',
+        description: 'Structure, Partner Protection, and Fiscal Registration.',
         items: [
-            { name: 'Contrato de Prestación de Servicios', status: 'pending', priority: 'High' },
-            { name: 'Permiso de Trabajo (Fronterizo/Extranjero)', status: 'pending', priority: 'Media' },
-            { name: 'Antecedentes Penales (Apostillado)', status: 'completed', priority: 'High' },
-            { name: 'CV y Títulos Apostillados', status: 'completed', priority: 'Media' },
+            { name: 'Solicitud de Reserva de Denominación Social', desc: 'Official reservation of the company name "FundLab".', status: 'completed', priority: 'Critical', flag: '🇦🇩' },
+            { name: 'Pre-Constitution Expenses', desc: 'List of deductible expenses incurred before formation.', status: 'completed', priority: 'High' },
+            { name: 'Foreign Investment Request (SIE)', desc: 'Government approval for foreign investment.', status: 'pending', priority: 'Low' },
+            { name: 'Shareholders\' Agreement', desc: 'Private pact regulating partner relationships and exit strategies.', status: 'completed', priority: 'High' },
+            { name: 'By-Laws (Estatutos Sociales)', desc: 'Official rules governing the company\'s management.', status: 'completed', priority: 'High' },
+            { name: 'Bank Deposit Certificate', desc: 'Proof of share capital deposit (€3,000).', status: 'pending', priority: 'High' },
+            { name: 'Public Deed of Incorporation', desc: 'Notarial act formally creating the legal entity.', status: 'pending', priority: 'High' },
+            { name: 'Company Registry Inscription', desc: 'Final registration in the "Registre de Societats".', status: 'pending', priority: 'High' },
+            { name: 'Tax Register (NRT) Request', desc: 'Obtaining the Tax ID number.', status: 'pending', priority: 'High' },
+            { name: 'Commerce Register Inscription', desc: 'License to operate commercially.', status: 'pending', priority: 'High' },
+            { name: 'Social Security (CASS) Registration', desc: 'Company registration with social security.', status: 'pending', priority: 'Medium' },
         ]
     },
     {
         id: 'phase1',
-        title: 'Fase 1: Data Compliance & IP',
-        description: 'Cumplimiento LQPD/GDPR y Protección del Activo.',
+        title: 'Phase 1: Compliance & IP',
+        description: 'GDPR/LQPD Compliance and Asset Protection.',
         items: [
-            { name: 'Registro de Actividades de Tratamiento (RAT)', status: 'pending', priority: 'Critical' },
-            { name: 'Evaluación de Impacto (AIPD / DPIA)', status: 'pending', priority: 'Critical' },
-            { name: 'Test de Legitimidad (LIA)', status: 'pending', priority: 'High' },
-            { name: 'Política de Privacidad (Web/App)', status: 'pending', priority: 'High' },
-            { name: 'Política de Cookies', status: 'pending', priority: 'Medium' },
-            { name: 'Compliance Check (LinkedIn/Crunchbase)', status: 'pending', priority: 'High' },
-            { name: 'Contratos de Encargado (DPA)', status: 'pending', priority: 'High' },
-            { name: 'Registro de Propiedad Intelectual', status: 'pending', priority: 'High' },
-            { name: 'Estrategia de Ciberseguridad (Piotr)', status: 'pending', priority: 'Critical' },
-            { name: 'NDA y Cesión IP - Pavel & Piotr', status: 'completed', priority: 'Critical' },
-            { name: 'NDAs Inversores/Terceros', status: 'completed', priority: 'Media' },
+            { name: 'Record of Processing Activities (RAT)', desc: 'Internal log of all data processing activities.', status: 'pending', priority: 'Critical' },
+            { name: 'Data Protection Impact Assessment (DPIA)', desc: 'Risk analysis for high-risk data processing.', status: 'pending', priority: 'Critical' },
+            { name: 'Legitimate Interest Assessment (LIA)', desc: 'Justification for data scraping activities.', status: 'pending', priority: 'High' },
+            { name: 'Privacy Policy (Web/App)', desc: 'Public document explaining data handling to users.', status: 'pending', priority: 'High' },
+            { name: 'Cookie Policy', desc: 'Consent management for tracker cookies.', status: 'pending', priority: 'Medium' },
+            { name: 'Compliance Check (External Sources)', desc: 'Legal verification of scraping LinkedIn/Crunchbase.', status: 'pending', priority: 'High' },
+            { name: 'Data Processing Agreements (DPA)', desc: 'Contracts with third-party vendors (AWS, Supabase).', status: 'pending', priority: 'High' },
+            { name: 'Intellectual Property Registry', desc: 'Registration of code and brand assets.', status: 'pending', priority: 'High' },
+            { name: 'Cybersecurity Strategy (Piotr)', desc: 'Defense plan against data breaches.', status: 'pending', priority: 'Critical' },
+            { name: 'NDA & IP Assignment (Team)', desc: 'Agreements for Pavel & Piotr transferring code rights.', status: 'completed', priority: 'Critical' },
+            { name: 'Third-Party NDAs', desc: 'Standard confidentiality agreements for partners.', status: 'completed', priority: 'Medium' },
         ]
     },
     {
         id: 'phase2',
-        title: 'Fase 2: Estrategia y Negocio',
-        description: 'Documentación para inversores y hoja de ruta interna.',
+        title: 'Phase 2: Strategy & Business',
+        description: 'Investor documentation and internal roadmap.',
         items: [
-            { name: 'Business Model Canvas', status: 'completed', priority: 'Medium' },
-            { name: 'Pitch Deck (Investor Ready)', status: 'completed', priority: 'High' },
-            { name: 'Product Roadmap (12 Meses)', status: 'completed', priority: 'High' },
-            { name: 'Estrategia Anti-Scraping (Piotr)', status: 'pending', priority: 'High' },
-            { name: 'Proyecciones Financieras (P&L)', status: 'completed', priority: 'High' },
-            { name: 'Proyecciones Financieras (Cashflow)', status: 'completed', priority: 'Critical' },
-            { name: 'Unit Economics Analysis', status: 'completed', priority: 'High' },
-            { name: 'Competitor Analysis Matrix', status: 'completed', priority: 'Medium' },
+            { name: 'Business Model Canvas', desc: 'One-page strategic plan.', status: 'completed', priority: 'Medium' },
+            { name: 'Pitch Deck (Investor Ready)', desc: 'Presentation for fundraising rounds.', status: 'completed', priority: 'High' },
+            { name: 'Product Roadmap (12 Months)', desc: 'Timeline of features and milestones.', status: 'completed', priority: 'High' },
+            { name: 'Anti-Scraping Strategy (Piotr)', desc: 'Technical measures to prevent competitor scraping.', status: 'pending', priority: 'High' },
+            { name: 'Financial Projections (P&L)', desc: 'Profit and Loss forecast.', status: 'completed', priority: 'High' },
+            { name: 'Cashflow Forecast', desc: 'Detailed cash management plan.', status: 'completed', priority: 'Critical' },
+            { name: 'Unit Economics Analysis', desc: 'LTV, CAC, and margin analysis.', status: 'completed', priority: 'High' },
+            { name: 'Competitor Analysis Matrix', desc: 'Comparison with key market players.', status: 'completed', priority: 'Medium' },
         ]
     },
     {
         id: 'phase3',
-        title: 'Fase 3: Operaciones y Clientes',
-        description: 'Relación comercial y seguridad jurídica del servicio.',
+        title: 'Phase 3: Operations & Clients',
+        description: 'Commercial relationships and legal security.',
         items: [
-            { name: 'Términos y Condiciones (SaaS T&C)', status: 'completed', priority: 'Critical' },
-            { name: 'Acuerdo de Nivel de Servicio (SLA)', status: 'completed', priority: 'Medium' },
-            { name: 'Contrato de Mandato de Fundraising', status: 'completed', priority: 'High' },
-            { name: 'Manual de Onboarding', status: 'completed', priority: 'Medium' },
-            { name: 'Política de Acceptable Use (AUP)', status: 'completed', priority: 'Low' },
-            { name: 'Plan de Incentivos (Phantom Shares)', status: 'completed', priority: 'Low' },
+            { name: 'SaaS Terms & Conditions', desc: 'Contract governing user access to the platform.', status: 'completed', priority: 'Critical' },
+            { name: 'Service Level Agreement (SLA)', desc: 'Commitment to uptime and support response.', status: 'completed', priority: 'Medium' },
+            { name: 'Fundraising Mandate Contract', desc: 'Agreement for fundraising services.', status: 'completed', priority: 'High' },
+            { name: 'Onboarding Manual', desc: 'Guide for new clients.', status: 'completed', priority: 'Medium' },
+            { name: 'Acceptable Use Policy (AUP)', desc: 'Rules against misuse of the platform.', status: 'completed', priority: 'Low' },
+            { name: 'Phantom Shares Plan', desc: 'Incentive plan for key employees.', status: 'completed', priority: 'Low' },
         ]
     }
 ];
 
 export default function DocsPage() {
-    const [expandedPhases, setExpandedPhases] = useState<Record<string, boolean>>({
-        phase0: true,
-        phaseRec: true,
-        phase1: false,
-        phase2: false,
-        phase3: false
-    });
+    const [simulatingAuth, setSimulatingAuth] = useState(false);
 
-    const togglePhase = (id: string) => {
-        setExpandedPhases(prev => ({ ...prev, [id]: !prev[id] }));
-    };
-
-    const handleDocClick = () => {
-        // Show simple browser alert or just do nothing but visuals since it's "locked"
-        // User requested: "Quiero decirle que estan bloqueados..."
-        // We will show a toast-like overlay or something visually clearer ?
-        // Let's use a subtle state to show a "Access Denied" badge nearby or shake animation.
+    const handleNikitaAuth = () => {
+        setSimulatingAuth(true);
+        // Simulate "stuck" state - no timeout to turn it off automatically, 
+        // effectively simulating the user being "stuck" pending mobile action.
     };
 
     return (
-        <MacShell>
-            <div className="flex-1 h-full overflow-hidden bg-slate-50 dark:bg-black/20 flex flex-col relative">
+        <div className="min-h-screen bg-indigo-50/50 dark:bg-black p-6 md:p-12 font-sans overflow-x-hidden">
 
-                {/* HEADER: Security Status */}
-                <div className="bg-white/80 dark:bg-slate-900/60 border-b border-indigo-100 dark:border-white/5 p-6 backdrop-blur-md z-10 sticky top-0">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <h1 className="text-2xl font-bold text-indigo-950 dark:text-white mb-1 flex items-center gap-2">
-                                <FileText className="w-6 h-6 text-indigo-600" />
-                                Corporate Documentation
-                            </h1>
-                            <p className="text-sm text-indigo-400 dark:text-slate-400">Legal, IP, and Strategic Assets Registry</p>
-                        </div>
-
-                        {/* Security Badge */}
-                        <div className="flex items-center gap-3 px-4 py-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700/50 rounded-lg">
-                            <div className="relative">
-                                <Shield className="w-5 h-5 text-amber-600 dark:text-amber-500" />
-                                <div className="absolute -top-1 -right-1 w-2 h-2 bg-amber-500 rounded-full animate-pulse" />
-                            </div>
-                            <div className="flex flex-col">
-                                <span className="text-xs font-bold text-amber-800 dark:text-amber-200 uppercase tracking-wider">Vault Locked</span>
-                                <span className="text-[10px] text-amber-600/80 dark:text-amber-400">Waiting for 2FA (Ignasi's Device)</span>
-                            </div>
-                        </div>
+            {/* --- HEADER --- */}
+            <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="max-w-7xl mx-auto mb-16"
+            >
+                <div className="flex items-center gap-3 mb-4">
+                    <div className="p-3 rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/30">
+                        <FileText className="w-6 h-6" />
                     </div>
+                    <h1 className="text-4xl font-black text-indigo-950 dark:text-white tracking-tight">
+                        Documentation <span className="text-indigo-600 dark:text-indigo-400">& Compliance</span>
+                    </h1>
                 </div>
+                <p className="text-lg text-indigo-900/60 dark:text-zinc-400 max-w-2xl ml-1">
+                    Centralized repository for all legal, fiscal, and operational documents.
+                    <span className="inline-flex items-center gap-1 ml-2 px-2 py-0.5 rounded-full bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400 text-xs font-bold uppercase tracking-wider">
+                        <Shield className="w-3 h-3" /> Secure Vault
+                    </span>
+                </p>
+                <Link href="/" className="inline-block mt-4 text-indigo-500 hover:text-indigo-700 dark:text-indigo-400 dark:hover:text-indigo-300 transition-colors font-medium text-sm">
+                    ← Back to Dashboard
+                </Link>
+            </motion.div>
 
-                {/* CONTENT */}
-                <div className="flex-1 overflow-y-auto p-6 space-y-8 pb-20">
+            {/* --- MAIN CONTENT GRID --- */}
+            <div className="max-w-7xl mx-auto space-y-12">
 
-                    {/* SECURITY WARNING BANNER */}
+                {DOC_PHASES.map((phase, index) => (
                     <motion.div
-                        initial={{ opacity: 0, y: -10 }}
+                        key={phase.id}
+                        initial={{ opacity: 0, y: 30 }}
                         animate={{ opacity: 1, y: 0 }}
-                        className="rounded-xl border border-red-100 dark:border-red-900/30 bg-red-50/50 dark:bg-red-900/10 p-4 flex items-start gap-4"
+                        transition={{ delay: index * 0.1 }}
+                        className="group"
                     >
-                        <div className="p-2 bg-red-100 dark:bg-red-900/30 rounded-full text-red-600 dark:text-red-400 mt-1">
-                            <Smartphone className="w-5 h-5" />
+                        {/* PHASE HEADER CARD */}
+                        <div className={`
+                            relative overflow-hidden rounded-3xl p-8 mb-6
+                            ${phase.id === 'phaseRec'
+                                ? 'bg-gradient-to-br from-indigo-600 to-purple-700 text-white shadow-xl shadow-indigo-900/20'
+                                : 'bg-white dark:bg-white/5 border border-indigo-100 dark:border-white/10 shadow-lg shadow-indigo-900/5'
+                            }
+                        `}>
+                            {/* Texture for Nikita's Card */}
+                            {phase.id === 'phaseRec' && (
+                                <div className="absolute inset-0 opacity-10">
+                                    <svg className="w-full h-full" width="100%" height="100%" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                        <pattern id="grid-pattern" width="40" height="40" patternUnits="userSpaceOnUse">
+                                            <path d="M0 40L40 0H20L0 20M40 40V20L20 40" stroke="currentColor" strokeWidth="2" />
+                                        </pattern>
+                                        <rect width="100%" height="100%" fill="url(#grid-pattern)" />
+                                    </svg>
+                                </div>
+                            )}
+
+                            <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+                                <div>
+                                    <h2 className={`text-2xl font-bold mb-2 ${phase.id === 'phaseRec' ? 'text-white' : 'text-indigo-950 dark:text-white'}`}>
+                                        {phase.title}
+                                    </h2>
+                                    <p className={`text-lg ${phase.id === 'phaseRec' ? 'text-indigo-100' : 'text-indigo-900/60 dark:text-zinc-400'}`}>
+                                        {phase.description}
+                                    </p>
+                                </div>
+
+                                {/* NIKITA AUTH SIMULATION BUTTON */}
+                                {phase.id === 'phaseRec' && (
+                                    <div className="flex-shrink-0">
+                                        {!simulatingAuth ? (
+                                            <Button
+                                                onClick={handleNikitaAuth}
+                                                className="bg-white text-indigo-600 hover:bg-indigo-50 border-none font-bold shadow-lg"
+                                            >
+                                                <Lock className="w-4 h-4 mr-2" /> Authenticate Nikita
+                                            </Button>
+                                        ) : (
+                                            <div className="flex items-center gap-3 px-4 py-2 bg-indigo-900/30 rounded-lg border border-indigo-400/30 animate-pulse">
+                                                <Smartphone className="w-5 h-5 text-indigo-200" />
+                                                <div className="flex flex-col">
+                                                    <span className="text-xs font-bold text-indigo-200 uppercase tracking-wider">Check Mobile</span>
+                                                    <div className="flex items-center gap-2">
+                                                        <span className="text-sm font-medium text-white">Waiting for approval...</span>
+                                                        <Loader2 className="w-3 h-3 text-indigo-300 animate-spin" />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+                                    </div>
+                                )}
+                            </div>
                         </div>
-                        <div>
-                            <h3 className="text-sm font-bold text-red-900 dark:text-red-200 mb-1">Security Verification Required</h3>
-                            <p className="text-sm text-red-800/80 dark:text-red-300/70 leading-relaxed">
-                                Adhering to our Cybersec Policy v2.0 (Piotr's Protocol), document encryption keys are rotated hourly.
-                                <br />
-                                <strong>Action Required:</strong> Please approve the push notification sent to Ignasi's authorized device to decrypt the file contents.
-                            </p>
+
+                        {/* DOCUMENTS GRID */}
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 px-2">
+                            {phase.items.map((doc, i) => (
+                                <div
+                                    key={i}
+                                    className={`
+                                        relative group/card p-5 rounded-2xl border transition-all duration-300
+                                        ${phase.id === 'phaseRec' && simulatingAuth
+                                            ? 'opacity-50 blur-[1px]' // Dimmed while waiting
+                                            : 'hover:shadow-lg hover:-translate-y-1'
+                                        }
+                                        bg-white/60 dark:bg-white/5 border-white/40 dark:border-white/5 backdrop-blur-md
+                                    `}
+                                >
+                                    {/* STATUS INDICATOR */}
+                                    <div className="flex justify-between items-start mb-4">
+                                        <div className={`
+                                            p-2 rounded-lg 
+                                            ${doc.status === 'completed'
+                                                ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/20 dark:text-emerald-400'
+                                                : 'bg-amber-100 text-amber-600 dark:bg-amber-500/20 dark:text-amber-400'}
+                                        `}>
+                                            {doc.status === 'completed' ? <CheckCircle2 className="w-5 h-5" /> : <Clock className="w-5 h-5" />}
+                                        </div>
+                                        {doc.flag && <span className="text-xl" title="Original Language">{doc.flag}</span>}
+                                    </div>
+
+                                    {/* CONTENT */}
+                                    <h3 className="font-bold text-indigo-950 dark:text-white mb-2 leading-tight">
+                                        {doc.name}
+                                    </h3>
+                                    <p className="text-sm text-indigo-900/60 dark:text-zinc-500 mb-4 line-clamp-2">
+                                        {doc.desc}
+                                    </p>
+
+                                    {/* BOTTOM META */}
+                                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-indigo-50 dark:border-white/5">
+                                        <span className={`text-[10px] font-bold uppercase tracking-wider 
+                                            ${doc.priority === 'Critical' ? 'text-red-500' : 'text-indigo-400'}
+                                        `}>
+                                            {doc.priority} Priority
+                                        </span>
+                                        <Lock className="w-4 h-4 text-indigo-200 dark:text-white/10" />
+                                    </div>
+
+                                    {/* NIKITA LOCK OVERLAY */}
+                                    {phase.id === 'phaseRec' && !simulatingAuth && (
+                                        <div className="absolute inset-0 bg-white/10 dark:bg-black/40 backdrop-blur-[2px] rounded-2xl flex items-center justify-center z-10">
+                                            <Lock className="w-8 h-8 text-white drop-shadow-lg opacity-80" />
+                                        </div>
+                                    )}
+                                </div>
+                            ))}
                         </div>
                     </motion.div>
+                ))}
 
-                    {/* PHASES GRID */}
-                    <div className="grid grid-cols-1 gap-6 max-w-5xl mx-auto">
-                        {DOC_PHASES.map((phase) => (
-                            <motion.div
-                                key={phase.id}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                className="bg-white dark:bg-[#0A0A0A] border border-indigo-100 dark:border-white/5 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-all"
-                            >
-                                {/* Phase Header */}
-                                <button
-                                    onClick={() => togglePhase(phase.id)}
-                                    className="w-full flex items-center justify-between p-6 bg-slate-50/50 dark:bg-white/5 border-b border-indigo-50 dark:border-white/5 transition-colors hover:bg-slate-100/50 dark:hover:bg-white/10"
-                                >
-                                    <div className="flex items-center gap-4">
-                                        <div className={cn(
-                                            "w-10 h-10 rounded-xl flex items-center justify-center text-indigo-600 dark:text-indigo-400 bg-indigo-100/50 dark:bg-white/10",
-                                            phase.id === 'phase0' && "text-emerald-600 bg-emerald-100/50",
-                                            phase.id === 'phase3' && "text-purple-600 bg-purple-100/50"
-                                        )}>
-                                            {phase.id === 'phase0' ? <Building2Icon /> :
-                                                phase.id === 'phase1' ? <Fingerprint className="w-5 h-5" /> :
-                                                    phase.id === 'phase2' ? <Clock className="w-5 h-5" /> :
-                                                        <CheckCircle2 className="w-5 h-5" />}
-                                        </div>
-                                        <div className="text-left">
-                                            <h3 className="text-lg font-bold text-indigo-950 dark:text-white">{phase.title}</h3>
-                                            <p className="text-sm text-indigo-400 dark:text-slate-500">{phase.description}</p>
-                                        </div>
-                                    </div>
-                                    {expandedPhases[phase.id] ? <ChevronDown className="w-5 h-5 text-indigo-300" /> : <ChevronRight className="w-5 h-5 text-indigo-300" />}
-                                </button>
-
-                                {/* Phase Items */}
-                                <AnimatePresence>
-                                    {expandedPhases[phase.id] && (
-                                        <motion.div
-                                            initial={{ height: 0, opacity: 0 }}
-                                            animate={{ height: "auto", opacity: 1 }}
-                                            exit={{ height: 0, opacity: 0 }}
-                                            className="border-t border-indigo-50 dark:border-white/5"
-                                        >
-                                            <div className="divide-y divide-indigo-50 dark:divide-white/5">
-                                                {phase.items.map((item, idx) => (
-                                                    <div
-                                                        key={idx}
-                                                        onClick={handleDocClick}
-                                                        className={cn(
-                                                            "group flex items-center justify-between p-4 hover:bg-slate-50 dark:hover:bg-white/5 transition-colors cursor-not-allowed relative overflow-hidden",
-                                                            item.status === 'completed' ? "bg-white dark:bg-transparent" : "bg-slate-50/30 dark:bg-black/20"
-                                                        )}
-                                                    >
-                                                        <div className="flex items-center gap-4 relative z-10">
-                                                            <div className={cn(
-                                                                "w-2 h-2 rounded-full",
-                                                                item.status === 'completed' ? "bg-emerald-500" : "bg-amber-500"
-                                                            )} />
-                                                            <div className="flex flex-col">
-                                                                <span className={cn(
-                                                                    "text-sm font-medium",
-                                                                    item.status === 'completed' ? "text-indigo-950 dark:text-slate-200" : "text-slate-500 dark:text-slate-500"
-                                                                )}>
-                                                                    {item.name}
-                                                                </span>
-                                                                <div className="flex items-center gap-2 mt-1">
-                                                                    <span className={cn(
-                                                                        "text-[10px] px-1.5 py-0.5 rounded border uppercase tracking-wider",
-                                                                        item.priority === 'Critical' ? "bg-red-50 text-red-600 border-red-100 dark:bg-red-900/20 dark:border-red-900/50" :
-                                                                            item.priority === 'High' ? "bg-orange-50 text-orange-600 border-orange-100 dark:bg-orange-900/20 dark:border-orange-900/50" :
-                                                                                "bg-blue-50 text-blue-600 border-blue-100 dark:bg-blue-900/20 dark:border-blue-900/50"
-                                                                    )}>
-                                                                        {item.priority}
-                                                                    </span>
-                                                                    {item.status === 'completed' && (
-                                                                        <div className="flex items-center gap-1 opacity-50 group-hover:opacity-100 transition-opacity">
-                                                                            <span title="English" className="text-xs grayscale group-hover:grayscale-0 transition-all">🇬🇧</span>
-                                                                            <span title="Español" className="text-xs grayscale group-hover:grayscale-0 transition-all">🇪🇸</span>
-                                                                            <span title="Català" className="text-xs grayscale group-hover:grayscale-0 transition-all font-mono text-[9px] border border-slate-200 px-0.5 rounded">CAT</span>
-                                                                        </div>
-                                                                    )}
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        {/* Lock Icon */}
-                                                        <div className="flex items-center gap-3 relative z-10">
-                                                            {item.status === 'completed' ? (
-                                                                <div className="flex items-center text-indigo-300 dark:text-slate-600 gap-2">
-                                                                    <span className="text-xs font-medium">Encrypted</span>
-                                                                    <Lock className="w-4 h-4" />
-                                                                </div>
-                                                            ) : (
-                                                                <div className="flex items-center text-slate-300 dark:text-slate-700 gap-2">
-                                                                    <span className="text-xs">Pending</span>
-                                                                    <Clock className="w-4 h-4" />
-                                                                </div>
-                                                            )}
-                                                        </div>
-
-                                                        {/* Disabled Overlay on Click */}
-                                                        <div className="absolute inset-0 z-0 bg-transparent" />
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        </motion.div>
-                                    )}
-                                </AnimatePresence>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
             </div>
-        </MacShell>
+        </div>
     );
 }
-
-// Icon Helper
-function Building2Icon() { return <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z" /><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2" /><path d="M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2" /><path d="M10 6h4" /><path d="M10 10h4" /><path d="M10 14h4" /><path d="M10 18h4" /></svg> }
