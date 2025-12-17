@@ -85,19 +85,33 @@ export default function DocsPage() {
     const [terminalLogs, setTerminalLogs] = useState<string[]>([]);
 
     // Terminal Log Simulation
-    const addLog = (msg: string) => setTerminalLogs(prev => [...prev.slice(-4), `> ${msg}`]);
+    const addLog = (msg: string) => setTerminalLogs(prev => [...prev.slice(-8), `> ${msg}`]);
 
     const handleAuth = () => {
         if (terminalState !== 'idle') return;
         setTerminalState('connecting');
-        setTerminalLogs(['> INIT_SECURE_Handshake...']);
+        setTerminalLogs(['> ESTABLISHING_SECURE_uplink...']);
+
+        const sequence = [
+            { t: 800, msg: 'Resolving host: secure.fundlab.internal... [OK]' },
+            { t: 1400, msg: 'Handshake: SYN_ACK received from 192.168.x.x' },
+            { t: 2000, msg: 'Encrypting channel (AES-256-GCM)... DONE' },
+            { t: 2600, msg: 'Verifying Identity_Token... [VALID]' },
+            { t: 3200, msg: 'Initiating Biometric_Challenge...' },
+            { t: 3800, msg: 'Scanning local devices for AUTHORIZED_KEY...' },
+            { t: 4500, msg: 'Found device: "Nikita_Redmi_13C" (ID: #RD-13C-99X)' },
+            { t: 5200, msg: 'Sending PUSH_NOTIFICATION (Priority: CRITICAL)...' },
+        ];
+
+        sequence.forEach(({ t, msg }) => {
+            setTimeout(() => addLog(msg), t);
+        });
 
         setTimeout(() => {
-            addLog('Verifying biometric hash...');
             setTerminalState('awaiting');
-            addLog('AWAITING_DEVICE_SIGNATURE...');
-            addLog('Ping: Nikita_iPhone_15_Pro [UNREACHABLE]');
-        }, 1500);
+            addLog('WARN: Device feedback latency > 200ms');
+            addLog('STATUS: AWAITING__PHYSICAL__CONFIRMATION...');
+        }, 5500);
     };
 
     return (
@@ -163,7 +177,7 @@ export default function DocsPage() {
                                                 <span className="text-sm font-bold tracking-widest">ACCESS_RESTRICTED: Biometric Required</span>
                                             </div>
 
-                                            <div className="bg-black/80 rounded border border-white/10 p-4 h-32 overflow-hidden flex flex-col justify-end">
+                                            <div className="bg-black/80 rounded border border-white/10 p-4 h-48 overflow-hidden flex flex-col justify-end">
                                                 {terminalLogs.length === 0 && <span className="text-zinc-600 text-xs animate-pulse">_System Idle. Waiting for input...</span>}
                                                 {terminalLogs.map((log, i) => (
                                                     <div key={i} className="text-xs text-green-400 font-mono">
@@ -195,7 +209,7 @@ export default function DocsPage() {
                                                 <div className="flex flex-col items-center justify-center p-6 border border-yellow-900/30 bg-yellow-900/5 rounded-lg w-full">
                                                     <Smartphone className="w-8 h-8 text-yellow-500 mb-3 animate-bounce" />
                                                     <span className="text-xs text-yellow-200 font-bold uppercase tracking-widest text-center">Check Mobile Device</span>
-                                                    <span className="text-[10px] text-yellow-500/60 mt-1">Session ID: #8X-99</span>
+                                                    <span className="text-[10px] text-yellow-500/60 mt-1">Found: Redmi 13C</span>
                                                 </div>
                                             )}
                                         </div>
