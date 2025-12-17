@@ -51,9 +51,15 @@ const VAULT_DATA: Record<string, { title: string; desc: string; locked: boolean;
         items: [
             { name: 'Reserva Denominación Social', desc: 'Government approval of "FundLab" trademark.', status: 'completed', priority: 'Critical', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '420 KB', type: 'PDF', date: '2025-12-01' },
             { name: 'Pre-Constitution Expenses', desc: 'Deductible invoices audit trail.', status: 'completed', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '2.1 MB', type: 'XLSX', date: '2025-12-05' },
-            { name: 'Foreign Investment (SIE)', desc: 'Government authorization decree.', status: 'pending', priority: 'Low', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'PENDING', date: '---' },
+            { name: 'Foreign Investment (SIE)', desc: 'Government authorization decree.', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'PENDING', date: '---' },
             { name: 'Shareholders Agreement', desc: 'Partner cap table and exit clauses.', status: 'completed', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '5.6 MB', type: 'PDF', date: '2025-12-08' },
+            { name: 'By-Laws (Estatutos Sociales)', desc: 'Official rules governing the company management.', status: 'completed', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '1.8 MB', type: 'DOCX', date: '2025-12-09' },
             { name: 'Bank Deposit Certificate', desc: 'Andorran Bank capital proof (€3,000).', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'QUEUED', date: '---' },
+            { name: 'Public Deed of Incorporation', desc: 'Notarial act formally creating the legal entity.', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'PENDING', date: '---' },
+            { name: 'Company Registry Inscription', desc: 'Final registration in the "Registre de Societats".', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'PENDING', date: '---' },
+            { name: 'Tax Register (NRT) Request', desc: 'Obtaining the Tax ID number (F-1).', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'PENDING', date: '---' },
+            { name: 'Commerce Register Inscription', desc: 'License to operate commercially.', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'PENDING', date: '---' },
+            { name: 'Social Security (CASS)', desc: 'Company & Director registration.', status: 'pending', priority: 'Medium', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'PENDING', date: '---' },
         ]
     },
     'folder_compliance': {
@@ -65,7 +71,13 @@ const VAULT_DATA: Record<string, { title: string; desc: string; locked: boolean;
             { name: 'DPIA (Impact Assessment)', desc: 'Risk analysis for investor data scraping.', status: 'pending', priority: 'Critical', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'DRAFT', date: '---' },
             { name: 'LIA (Legitimate Interest)', desc: 'Legal justification for public data indexing.', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'DRAFT', date: '---' },
             { name: 'Privacy Policy', desc: 'Public website T&Cs and Privacy.', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'DRAFT', date: '---' },
+            { name: 'Cookie Policy', desc: 'Consent management for trackers.', status: 'pending', priority: 'Medium', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '---', type: 'DRAFT', date: '---' },
+            { name: 'Compliance Check (External)', desc: 'Validation of LinkedIn/Crunchbase T&Cs.', status: 'pending', priority: 'High', flags: ['🇬🇧', '🇪🇸'], size: '---', type: 'DRAFT', date: '---' },
+            { name: 'Data Processing Agreements (DPA)', desc: 'Contracts with vendors (AWS, Supabase).', status: 'pending', priority: 'High', flags: ['🇬🇧', '🇪🇸'], size: '---', type: 'DRAFT', date: '---' },
+            { name: 'Intellectual Property Registry', desc: 'Software Escrow or IP Registration.', status: 'pending', priority: 'High', flags: ['🇦🇩', '🇪🇸', '🇬🇧'], size: '---', type: 'PENDING', date: '---' },
             { name: 'Cybersecurity Manual (Piotr)', desc: 'Internal security protocols and breach response.', status: 'pending', priority: 'Critical', flags: ['🇬🇧'], size: '---', type: 'ENCRYPTED', date: '---' },
+            { name: 'NDA (Team - Pavel & Piotr)', desc: 'Protection of secrets & algorithm.', status: 'completed', priority: 'Critical', flags: ['🇬🇧', '🇪🇸'], size: '2.5 MB', type: 'PDF', date: '2025-11-01' },
+            { name: 'NDA (Investors/Third Party)', desc: 'Standard agreements for sharing metrics.', status: 'completed', priority: 'Medium', flags: ['🇬🇧', '🇪🇸'], size: '150 KB', type: 'DOCX', date: '2025-12-01' },
         ]
     },
     'folder_biz': {
@@ -73,9 +85,26 @@ const VAULT_DATA: Record<string, { title: string; desc: string; locked: boolean;
         desc: 'Investor Deck, Roadmap & Financials',
         locked: false,
         items: [
-            { name: 'Pitch Deck (Master)', desc: 'Investor ready presentation.', status: 'completed', priority: 'High', flags: ['🇬🇧'], size: '12.4 MB', type: 'PDF', date: '2025-12-15' },
-            { name: 'Financial Projections (P&L)', desc: '5-year forecast.', status: 'completed', priority: 'High', flags: ['🇬🇧'], size: '3.2 MB', type: 'XLSX', date: '2025-12-14' },
+            { name: 'Business Model Canvas', desc: 'Strategic plan on a page.', status: 'completed', priority: 'Medium', flags: ['🇬🇧', '🇪🇸'], size: '1.1 MB', type: 'PDF', date: '2025-12-12' },
+            { name: 'Pitch Deck (Master)', desc: 'Investor ready presentation.', status: 'completed', priority: 'High', flags: ['🇬🇧', '🇪🇸'], size: '12.4 MB', type: 'PDF', date: '2025-12-15' },
+            { name: 'Product Roadmap (12 Months)', desc: 'Feature planning (V1, V2, V3).', status: 'completed', priority: 'High', flags: ['🇬🇧', '🇪🇸'], size: '4.2 MB', type: 'PDF', date: '2025-12-14' },
+            { name: 'Financial Projections (P&L)', desc: '5-year forecast.', status: 'completed', priority: 'High', flags: ['🇬🇧', '🇪🇸'], size: '3.2 MB', type: 'XLSX', date: '2025-12-14' },
+            { name: 'Cashflow Forecast (3 Months)', desc: 'Treasury & Oxygen plan.', status: 'completed', priority: 'Critical', flags: ['🇬🇧', '🇪🇸'], size: '1.8 MB', type: 'XLSX', date: '2025-12-16' },
+            { name: 'Unit Economics Analysis', desc: 'LTV, CAC, Churn metrics.', status: 'completed', priority: 'High', flags: ['🇬🇧', '🇪🇸'], size: '2.1 MB', type: 'PDF', date: '2025-12-13' },
+            { name: 'Competitor Analysis Matrix', desc: 'Benchmark vs Signal/NFX.', status: 'completed', priority: 'Medium', flags: ['🇬🇧', '🇪🇸'], size: '3.5 MB', type: 'PDF', date: '2025-12-10' },
             { name: 'Anti-Scraping Strategy', desc: 'Counter-intelligence tech specification.', status: 'pending', priority: 'High', flags: ['🇬🇧'], size: '---', type: 'WIP', date: '---' },
+        ]
+    },
+    'folder_ops': {
+        title: 'OPERATIONS_CLIENTS',
+        desc: 'SaaS Contracts, SLAs & Onboarding',
+        locked: false,
+        items: [
+            { name: 'SaaS Terms & Conditions', desc: 'Main client service contract.', status: 'completed', priority: 'Critical', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '450 KB', type: 'PDF', date: '2025-12-05' },
+            { name: 'Service Level Agreement (SLA)', desc: 'Uptime & support guarantees.', status: 'completed', priority: 'Medium', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '320 KB', type: 'PDF', date: '2025-12-05' },
+            { name: 'Client Onboarding Manual', desc: 'Step-by-step setup guide.', status: 'completed', priority: 'Medium', flags: ['🇬🇧', '🇪🇸'], size: '5.5 MB', type: 'PDF', date: '2025-12-15' },
+            { name: 'Acceptable Use Policy (AUP)', desc: 'Anti-spam & usage rules.', status: 'completed', priority: 'Low', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '220 KB', type: 'PDF', date: '2025-12-05' },
+            { name: 'Phantom Shares Plan', desc: 'Employee incentive scheme.', status: 'completed', priority: 'Low', flags: ['🇦🇩', '🇬🇧', '🇪🇸'], size: '1.4 MB', type: 'PDF', date: '2025-12-01' },
         ]
     }
 };
